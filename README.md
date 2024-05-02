@@ -2,4 +2,5 @@
 
 Programming exercise of HTL Spengergasse
 
-UML CLASS DIAGRAM https://github.com/Fischdaling/FivePanels/assets/147077110/e37bbd8a-4675-4d16-9f86-1fbe31ff016a
+UML CLASS DIAGRAM 
+![UML_Diagramm](https://github.com/Fischdaling/FivePanels/assets/147077110/27ae3142-9ebe-40f4-bb5c-ad68aba4cf12)
