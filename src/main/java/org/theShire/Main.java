@@ -3,7 +3,6 @@ package org.theShire;
 public class Main {
     public static void main(String[] args) {
         System.out.println("Hello world!");
-        int i=1;
+        System.out.println("Samuel shall not Change Me");
     }
-
 }
