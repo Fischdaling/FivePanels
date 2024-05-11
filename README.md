@@ -3,4 +3,5 @@
 Programming exercise of HTL Spengergasse
 
 UML CLASS DIAGRAM 
-[plantuml_export(6).txt](https://github.com/Fischdaling/FivePanels/files/15283455/plantuml_export.6.txt)
+
+![UML-Diagramm](https://github.com/Fischdaling/FivePanels/assets/147077110/60a33478-8192-4999-8f4a-511f22684123)
