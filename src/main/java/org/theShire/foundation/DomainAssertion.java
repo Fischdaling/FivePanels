@@ -61,15 +61,6 @@ public abstract class DomainAssertion<T> {
         }
         // Expression Assertions -------------------------------------------------------
 
-        // EAGER message evaluation:
-        // Eager means that the error message is evaluated even if the expression is true
-        // public static void isTrue(boolean expression, String errorMsg) {
-        //     if (!expression)
-        //         throw new AssertionException(errorMsg);
-        // }
-        // LAZY message evaluation:
-        // Lazy means that the error message is only evaluated if the expression is false
-
         public static void isTrue(boolean expression, Supplier<String> errorMsg) {
             if (!expression)
                 throw new AssertionException(errorMsg.get());
