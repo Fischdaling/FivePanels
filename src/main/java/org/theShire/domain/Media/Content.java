@@ -20,6 +20,7 @@ public class Content extends BaseEntity {
     }
 
     public void setText(Text text) {
+        //TODO Assertions
         this.text = text;
     }
 
@@ -28,11 +29,12 @@ public class Content extends BaseEntity {
     }
 
     public void setMedia(Media media) {
+        //TODO Assertions
         this.media = media;
     }
 
     public String contentToString(){
-
+        //TODO toString
         return null;
     }
 }
