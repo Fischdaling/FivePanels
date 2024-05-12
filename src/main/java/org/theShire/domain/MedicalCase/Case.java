@@ -1,8 +1,10 @@
 package org.theShire.domain.MedicalCase;
 
 import org.theShire.domain.BaseEntity;
+import org.theShire.domain.Media.Content;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
