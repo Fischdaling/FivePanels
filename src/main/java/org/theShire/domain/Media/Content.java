@@ -33,5 +33,6 @@ public class Content extends BaseEntity {
 
     public String contentToString(){
 
+        return null;
     }
 }
