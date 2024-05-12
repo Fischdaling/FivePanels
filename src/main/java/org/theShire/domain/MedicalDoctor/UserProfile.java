@@ -2,6 +2,7 @@ package org.theShire.domain.MedicalDoctor;
 
 import org.theShire.domain.Media.Media;
 import org.theShire.domain.RichType.*;
+import org.theShire.foundation.Knowledges;
 
 import java.util.Set;
 
