@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class CaseVote {
-    private LinkedHashSet<Answers> answers;
+    private LinkedHashSet<Answer> answers;
     private HashMap<UUID, Set<Vote>> votes;
     private int maxAnswers;
     private double prozentCount;
