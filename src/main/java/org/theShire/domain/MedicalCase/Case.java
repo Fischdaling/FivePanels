@@ -1,15 +1,17 @@
 package org.theShire.domain.MedicalCase;
-
 import org.theShire.domain.BaseEntity;
+import org.theShire.domain.Media.Content;
+import org.theShire.foundation.Knowledges;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 public class Case extends BaseEntity {
     private String title;
     private List<Content> content;
-    private Set<Specialization> specialization;
+    private Set<Knowledges> Knowledges;
     private int viewcount;
     private UUID ownerid;
     private Set<UUID> members;
@@ -40,12 +42,12 @@ public class Case extends BaseEntity {
         this.content = content;
     }
 
-    public Set<Specialization> getSpecialization() {
-        return specialization;
+    public Set<Knowledges> getKnowledges() {
+        return Knowledges;
     }
 
-    public void setSpecialization(Set<Specialization> specialization) {
-        this.specialization = specialization;
+    public void setKnowledges(Set<Knowledges> Knowledges) {
+        this.Knowledges = Knowledges;
     }
 
     public int getViewcount() {
