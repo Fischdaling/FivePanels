@@ -2,6 +2,7 @@ package org.theShire.domain;
 
 import org.theShire.foundation.DomainAssertion;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.UUID;
 
 
@@ -33,4 +34,16 @@ public class BaseEntity {
         this.updatedAt = updatedAt;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BaseEntity that = (BaseEntity) o;
+        return Objects.equals(entityId, that.entityId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(entityId);
+    }
 }

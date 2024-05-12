@@ -16,5 +16,30 @@ public class Chat extends BaseEntity {
         super(Instant.now());
     }
 
+    public Chat(Instant createdAt, Set<User> people, List<Message> chatHistory) {
+        super(createdAt);
+        this.people = people;
+        this.chatHistory = chatHistory;
+    }
 
+    public Set<User> getPeople() {
+        return people;
+    }
+
+    public void setPeople(Set<User> people) {
+        this.people = people;
+    }
+
+    public List<Message> getChatHistory() {
+        return chatHistory;
+    }
+
+    public void setChatHistory(List<Message> chatHistory) {
+        this.chatHistory = chatHistory;
+    }
+
+    enum ChatType{
+        SINGLECHAT,
+        GROUPCHAT
+    }
 }
