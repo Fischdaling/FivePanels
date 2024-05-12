@@ -1,5 +1,8 @@
 package org.theShire.foundation;
 
+import java.sql.Time;
+import java.time.Instant;
+import java.time.Year;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -74,6 +77,26 @@ public abstract class DomainAssertion<T> {
                 throw new AssertionException(STR. "\{ paramName }is existing in list");
             }
             return o;
+        }
+
+
+        // Time Assertions -------------------------------------------------------------
+        public static <T extends Instant>T isBeforeNow(T time, String paramName){
+            isNotNull(time,paramName);
+
+            if (time.isBefore(Instant.now()))
+                throw new AssertionException(STR."\{paramName} is in the past");
+            return time;
+        }
+
+        public static <T extends Instant>T isBeforeTime(T time1, T time2, String paramName){
+            isNotNull(time1, paramName);
+            isNotNull(time2, paramName);
+
+            if (time1.isBefore(time2))
+                throw new AssertionException(STR."\{paramName} time 1: \{time1} is before time 2: \{time2}");
+
+            return time1;
         }
 
     }
