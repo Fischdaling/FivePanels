@@ -6,7 +6,9 @@ import java.util.Set;
 import java.util.UUID;
 
 public class Category {
+    //A UUID for each Category
     private UUID categoryID;
+    //A Set of UUIDs (saves all categories)
     private Set<UUID> setOfCategory;
 
     //getter & setter -------------------

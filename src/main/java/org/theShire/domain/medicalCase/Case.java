@@ -9,15 +9,25 @@ import java.util.Set;
 import java.util.UUID;
 
 public class Case extends BaseEntity {
+    //the title provides information about the topic of the case, cannot be left blank and has a max length
     private String title;
+    //A list of Content (contains text and metadata)
     private List<Content> content;
+    //A list of Knowledges (portraits different medical knowledges in form of hashtags)
     private Set<Knowledges> Knowledges;
+    //portraits how often a given case was viewed
     private int viewcount;
+    //wields the UUID of the user that is the owner of a given case
     private UUID ownerid;
+    //wields all UUIDs of every member that is part of the case
     private Set<UUID> members;
+    //portraits how many users liked a given case
     private int likeCount;
+    //remembers which user has already liked a case by their id (prevents a user to like the same case more often)
     private Set<UUID> userLiked;
+    //A set of categories (contains different categories of medical cases)
     private Set<Category> category;
+    //portraits the total votes of all members combined
     private CaseVote caseVote;
 
 
