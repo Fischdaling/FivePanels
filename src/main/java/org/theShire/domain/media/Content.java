@@ -6,7 +6,7 @@ import org.w3c.dom.Text;
 import java.time.Instant;
 
 public class Content extends BaseEntity {
-    private Text text;
+    private Text text; // The text of the content
     private Media media;
 
     public Content(Text text, Media media) {
