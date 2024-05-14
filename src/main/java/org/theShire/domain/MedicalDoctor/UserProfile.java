@@ -20,13 +20,13 @@ public class UserProfile {
     private Set<Knowledges> experience;
 
     public UserProfile(Language language, Location location, Media profilePicture, Password password, Name firstName, Name lastName, Email email, Set<EducationalTitle> educationalTitle) {
-        this.language = language;
-        this.location = location;
+        this.language = new Language(language);
+        this.location = new Location(location);
         this.profilePicture = profilePicture;
         this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
+        this.firstName = new Name(firstName);
+        this.lastName = new Name(lastName);
+        this.email = new Email(email);
         this.educationalTitle = educationalTitle;
     }
 
