@@ -1,10 +1,9 @@
-package org.theShire.domain.MedicalDoctor;
+package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.BaseEntity;
 
 import java.time.Instant;
 
-import static org.theShire.foundation.DomainAssertion.hasMaxLength;
 import static org.theShire.foundation.DomainAssertion.isNotNull;
 
 public class Relation extends BaseEntity {

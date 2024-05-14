@@ -1,4 +1,4 @@
-package org.theShire.domain.Media;
+package org.theShire.domain.media;
 
 public class Media {
 private String metaData;

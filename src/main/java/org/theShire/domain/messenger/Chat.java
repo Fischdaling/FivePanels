@@ -1,7 +1,7 @@
-package org.theShire.domain.Messenger;
+package org.theShire.domain.messenger;
 
 import org.theShire.domain.BaseEntity;
-import org.theShire.domain.MedicalDoctor.User;
+import org.theShire.domain.medicalDoctor.User;
 
 import java.time.Instant;
 import java.util.List;

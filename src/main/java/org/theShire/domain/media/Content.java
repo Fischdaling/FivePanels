@@ -1,4 +1,4 @@
-package org.theShire.domain.Media;
+package org.theShire.domain.media;
 
 import org.theShire.domain.BaseEntity;
 import org.w3c.dom.Text;

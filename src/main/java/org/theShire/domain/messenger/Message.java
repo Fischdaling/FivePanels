@@ -1,13 +1,13 @@
-package org.theShire.domain.Messenger;
+package org.theShire.domain.messenger;
 
-import org.theShire.domain.Media.Content;
+import org.theShire.domain.media.Content;
 import org.theShire.domain.BaseEntity;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-import static org.theShire.domain.Messenger.Message.Stage.*;
+import static org.theShire.domain.messenger.Message.Stage.*;
 
 public class Message extends BaseEntity {
 

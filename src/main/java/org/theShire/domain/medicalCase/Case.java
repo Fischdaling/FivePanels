@@ -1,6 +1,6 @@
-package org.theShire.domain.MedicalCase;
+package org.theShire.domain.medicalCase;
 import org.theShire.domain.BaseEntity;
-import org.theShire.domain.Media.Content;
+import org.theShire.domain.media.Content;
 import org.theShire.foundation.Knowledges;
 
 import java.time.Instant;

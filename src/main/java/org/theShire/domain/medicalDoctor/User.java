@@ -1,9 +1,13 @@
-package org.theShire.domain.MedicalDoctor;
+package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.BaseEntity;
-import org.theShire.domain.MedicalCase.Case;
-import org.theShire.domain.Messenger.Chat;
+import org.theShire.domain.exception.MediaException;
+import org.theShire.domain.exception.MedicalDoctorException;
+import org.theShire.domain.medicalCase.Case;
+import org.theShire.domain.messenger.Chat;
+import org.theShire.foundation.DomainAssertion;
 
+import javax.print.attribute.standard.Media;
 import java.time.Instant;
 import java.util.Set;
 import static org.theShire.foundation.DomainAssertion.*;
@@ -16,6 +20,7 @@ public class User extends BaseEntity {
     private Set<Chat> chats;
     private Set<Case> ownedCases;
     private Set<Case> memberOfCase;
+    private MedicalDoctorException e;
 
 
     public User() {
@@ -72,12 +77,12 @@ public class User extends BaseEntity {
     // Methods ------------------------------------------------------------
 
     public void addChat(Chat chat){
-        isNotInCollection(chat, chats,"Chat already in Set");
+        isNotInCollection(chat, chats,"Chat already in Set", e);
         this.chats.add(chat);
     }
 
     public void addContact(UserRelationShip contact){
-        isNotInCollection(contact, contacts,"Contact already in Set");
+        isNotInCollection(contact, contacts,"Contact already in Set", e);
         this.contacts.add(contact);
     }
 }

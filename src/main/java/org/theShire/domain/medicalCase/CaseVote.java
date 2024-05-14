@@ -1,4 +1,4 @@
-package org.theShire.domain.MedicalCase;
+package org.theShire.domain.medicalCase;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;

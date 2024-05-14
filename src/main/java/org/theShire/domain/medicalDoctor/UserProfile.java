@@ -1,7 +1,7 @@
-package org.theShire.domain.MedicalDoctor;
+package org.theShire.domain.medicalDoctor;
 
-import org.theShire.domain.Media.Media;
-import org.theShire.domain.RichType.*;
+import org.theShire.domain.media.Media;
+import org.theShire.domain.richType.*;
 import org.theShire.foundation.Knowledges;
 
 import java.util.Set;
@@ -20,13 +20,13 @@ public class UserProfile {
     private Set<Knowledges> experience;
 
     public UserProfile(Language language, Location location, Media profilePicture, Password password, Name firstName, Name lastName, Email email, Set<EducationalTitle> educationalTitle) {
-        this.language = new Language(language);
-        this.location = new Location(location);
+        this.language = language;
+        this.location = location;
         this.profilePicture = profilePicture;
         this.password = password;
-        this.firstName = new Name(firstName);
-        this.lastName = new Name(lastName);
-        this.email = new Email(email);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
         this.educationalTitle = educationalTitle;
     }
 

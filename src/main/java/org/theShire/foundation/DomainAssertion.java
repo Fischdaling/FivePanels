@@ -1,100 +1,109 @@
 package org.theShire.foundation;
 
-import java.sql.Time;
+import java.lang.reflect.InvocationTargetException;
 import java.time.Instant;
-import java.time.Year;
-import java.util.List;
+import java.util.Collection;
 import java.util.function.Supplier;
 
 import static java.lang.StringTemplate.STR;
 
 public abstract class DomainAssertion<T> {
-
-        // Null Assertions -------------------------------------------------------------
+        //Variable Exceptions
+        private static <E extends RuntimeException> E variableException(Class<E> clazz, String message) {
+            try {
+                java.lang.reflect.Constructor<E> constructor = clazz.getConstructor(String.class);
+                return constructor.newInstance(message);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                     NoSuchMethodException e) {
+                throw new RuntimeException("Failed to instantiate exception", e);
+            }
+        }
+            // Null Assertions -------------------------------------------------------------
 
         // public static Object isNotNull(Object value, String paramName) {
-        public static <T> T isNotNull(T value, String paramName) {
-                if (value == null)
-                    throw new AssertionException(STR."\{paramName} is null");
-
+        public static <T, E extends RuntimeException> T isNotNull(T value, String paramName, Class<E> clazz) {
+                if (value == null) {
+                    throw variableException(clazz,STR."\{paramName} is null");
+                }
                 return value;
         }
 
 
         // String Assertions -----------------------------------------------------------
 
-        public static String isNotBlank(String value, String paramName) {
-            isNotNull(value, paramName);
+        public static <E extends RuntimeException>String isNotBlank(String value, String paramName, Class<E> clazz) {
+            isNotNull(value, paramName, clazz);
 
             if (value.isBlank())
-                throw new AssertionException(STR."\{paramName} is blank");
+                throw variableException(clazz,STR."\{paramName} is blank");
 
             return value;
         }
 
-        public static String hasMaxLength(String value, int maxLength, String paramName) {
+        public static <E extends RuntimeException> String hasMaxLength(String value, int maxLength, String paramName, Class<E> clazz) {
 
-            isNotBlank(value, paramName);
+            isNotBlank(value, paramName, clazz);
 
             if (value.length() > maxLength)
-                throw new AssertionException(STR."\{paramName} is greater than \{maxLength}");
+                throw variableException(clazz,STR."\{paramName} is greater than \{maxLength}");
 
             return value;
         }
 
         // number Assertions --------------------------------------------------------------
-        public static <T extends Number&Comparable<T> > T greaterZero(T value, String paramName){
-            return greaterZero(value, ()->STR."\{paramName} is smaller than 0");
+        public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterZero(T value, String paramName, Class<E> clazz){
+            return greaterZero(value, ()->STR."\{paramName} is smaller than 0", clazz);
         }
 
-        public static <T extends Number&Comparable<T> > T greaterZero(T value, Supplier<String> errorMsg){
+        public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterZero(T value, Supplier<String> errorMsg, Class<E> clazz){
 
             if (value.doubleValue() <= 0){
-                throw new AssertionException(errorMsg.get());
+                throw variableException(clazz,errorMsg.get());
             }
             return value;
         }
 
-        public static <T extends Number&Comparable<T> > T greaterThan(T value,T value1, String paramName) {
+        public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterThan(T value,T value1, String paramName, Class<E> clazz) {
 
             if (value.compareTo(value1) <= 0) {
-                throw new AssertionException(STR. "\{ paramName } is smaller than \{value1}" );
+                throw variableException(clazz,STR. "\{ paramName } is smaller than \{value1}" );
             }
             return value;
         }
         // Expression Assertions -------------------------------------------------------
 
-        public static void isTrue(boolean expression, Supplier<String> errorMsg) {
+        public static <E extends RuntimeException> void isTrue(boolean expression, Supplier<String> errorMsg, Class<E> clazz) {
             if (!expression)
-                throw new AssertionException(errorMsg.get());
+                throw variableException(clazz,errorMsg.get());
         }
 
         // list Assertions -------------------------------------------------------------
-        public static <T>T isNotInList(T o, List<T> list, String paramName){
-            isNotNull(o,paramName);
+        // Type erasure
+        public static <T, E extends RuntimeException>T isNotInCollection(T o, Collection<T> list, String paramName, Class<E> clazz){
+            isNotNull(o,paramName, clazz);
 
             if (list.contains(o)) {
-                throw new AssertionException(STR. "\{ paramName }is existing in list");
+                throw variableException(clazz,STR. "\{ paramName }is existing in list");
             }
             return o;
         }
 
 
         // Time Assertions -------------------------------------------------------------
-        public static <T extends Instant>T isBeforeNow(T time, String paramName){
-            isNotNull(time,paramName);
+        public static <T extends Instant, E extends RuntimeException>T isBeforeNow(T time, String paramName, Class<E> clazz){
+            isNotNull(time,paramName, clazz);
 
             if (time.isBefore(Instant.now()))
-                throw new AssertionException(STR."\{paramName} is in the past");
+                throw variableException(clazz,STR."\{paramName} is in the past");
             return time;
         }
 
-        public static <T extends Instant>T isBeforeTime(T time1, T time2, String paramName){
-            isNotNull(time1, paramName);
-            isNotNull(time2, paramName);
+        public static <T extends Instant, E extends RuntimeException>T isBeforeTime(T time1, T time2, String paramName, Class<E> clazz){
+            isNotNull(time1, paramName, clazz);
+            isNotNull(time2, paramName, clazz);
 
             if (time1.isBefore(time2))
-                throw new AssertionException(STR."\{paramName} time 1: \{time1} is before time 2: \{time2}");
+                throw variableException(clazz,STR."\{paramName} time 1: \{time1} is before time 2: \{time2}");
 
             return time1;
         }

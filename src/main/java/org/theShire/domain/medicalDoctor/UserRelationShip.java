@@ -1,4 +1,4 @@
-package org.theShire.domain.MedicalDoctor;
+package org.theShire.domain.medicalDoctor;
 
 import java.util.HashMap;
 import java.util.UUID;

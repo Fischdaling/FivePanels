@@ -1,7 +1,9 @@
-package org.theShire.domain.RichType;
+package org.theShire.domain.richType;
+
+import java.util.List;
 
 public class EducationalTitle {
-    private String educationalTitle;
+    private List<String> educationalTitle;
 
     public EducationalTitle(String educationalTitle) {
         setEducationalTitle(educationalTitle);
@@ -11,7 +13,9 @@ public class EducationalTitle {
         return educationalTitle;
     }
 
-    public void setEducationalTitle(String educationalTitle) {
-        this.educationalTitle = educationalTitle;
+    public void addEducationalTitle(String educationalTitle) {
+        this.educationalTitle.add(educationalTitle);
     }
+
+
 }

@@ -1,4 +1,4 @@
-package org.theShire.domain.Exception;
+package org.theShire.domain.exception;
 
 public class MessengerException extends RuntimeException{
     public MessengerException(String message) {
