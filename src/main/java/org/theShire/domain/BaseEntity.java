@@ -5,6 +5,8 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
+import static org.theShire.foundation.DomainAssertion.isBeforeTime;
+
 
 public class BaseEntity {
     private UUID entityId;
@@ -30,7 +32,6 @@ public class BaseEntity {
     }
 
     public void setUpdatedAt(Instant updatedAt) {
-        DomainAssertion.isBeforeTime(updatedAt,getCreatedAt(),"updatedAt");
         this.updatedAt = updatedAt;
     }
 

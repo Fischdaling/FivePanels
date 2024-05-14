@@ -10,8 +10,6 @@ public class UserProfile {
 
     private Name firstName;
     private Name lastName;
-    private Email email;
-    private Password password;
     private Set<EducationalTitle> educationalTitle;
     private Media profilePicture;
     private Location location;
@@ -19,14 +17,12 @@ public class UserProfile {
     private Set<Knowledges> specialization;
     private Set<Knowledges> experience;
 
-    public UserProfile(Language language, Location location, Media profilePicture, Password password, Name firstName, Name lastName, Email email, Set<EducationalTitle> educationalTitle) {
+    public UserProfile(Language language, Location location, Media profilePicture, Name firstName, Name lastName, Set<EducationalTitle> educationalTitle) {
         this.language = language;
         this.location = location;
         this.profilePicture = profilePicture;
-        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
         this.educationalTitle = educationalTitle;
     }
 
@@ -44,22 +40,6 @@ public class UserProfile {
 
     public void setLastName(Name lastName) {
         this.lastName = lastName;
-    }
-
-    public Password getPassword() {
-        return password;
-    }
-
-    public void setPassword(Password password) {
-        this.password = password;
-    }
-
-    public Email getEmail() {
-        return email;
-    }
-
-    public void setEmail(Email email) {
-        this.email = email;
     }
 
     public Set<EducationalTitle> getEducationalTitle() {

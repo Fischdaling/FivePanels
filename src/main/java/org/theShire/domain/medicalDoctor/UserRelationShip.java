@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.UUID;
 
 public class UserRelationShip {
+    /*      UUID(User)    RELATION
+     *       1          TYPE:OUTGOING,RELATEDUSER:2
+     *       2          TYPE:INCOMING,RELATEDUSER:1
+     */
     private HashMap<UUID,Relation> relationShip;
 
     public UserRelationShip(HashMap<UUID, Relation> relationShip) {
