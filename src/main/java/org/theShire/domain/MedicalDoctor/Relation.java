@@ -4,6 +4,9 @@ import org.theShire.domain.BaseEntity;
 
 import java.time.Instant;
 
+import static org.theShire.foundation.DomainAssertion.hasMaxLength;
+import static org.theShire.foundation.DomainAssertion.isNotNull;
+
 public class Relation extends BaseEntity {
 
     private RelationType type;
@@ -22,6 +25,7 @@ public class Relation extends BaseEntity {
     }
 
     public void setType(RelationType type) {
+        isNotNull(this.type, "Relation type can't be null");
         this.type = type;
     }
 

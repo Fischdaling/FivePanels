@@ -6,6 +6,7 @@ import org.theShire.domain.Messenger.Chat;
 
 import java.time.Instant;
 import java.util.Set;
+import static org.theShire.foundation.DomainAssertion.*;
 
 public class User extends BaseEntity {
 
@@ -44,6 +45,7 @@ public class User extends BaseEntity {
 
     public void setScore(int score) {
         //TODO ASSERTION
+
         this.score = score;
     }
 
@@ -51,10 +53,7 @@ public class User extends BaseEntity {
         return contacts;
     }
 
-    public void setContacts(Set<UserRelationShip> contacts) {
-        //TODO ASSERTION
-        this.contacts = contacts;
-    }
+
 
     public Set<Chat> getChats() {
         return chats;
@@ -73,7 +72,12 @@ public class User extends BaseEntity {
     // Methods ------------------------------------------------------------
 
     public void addChat(Chat chat){
-        //TODO ASSERTION
+        isNotInCollection(chat, chats,"Chat already in Set");
         this.chats.add(chat);
+    }
+
+    public void addContact(UserRelationShip contact){
+        isNotInCollection(contact, contacts,"Contact already in Set");
+        this.contacts.add(contact);
     }
 }
