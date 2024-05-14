@@ -1,4 +1,5 @@
 package org.theShire.domain.MedicalCase;
+
 import org.theShire.domain.BaseEntity;
 import org.theShire.domain.Media.Content;
 import org.theShire.foundation.Knowledges;
@@ -8,10 +9,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import static org.theShire.foundation.DomainAssertion.*;
+
 public class Case extends BaseEntity {
     private String title;
     private List<Content> content;
-    private Set<Knowledges> Knowledges;
+    private Set<Knowledges> knowledges;
     private int viewcount;
     private UUID ownerid;
     private Set<UUID> members;
@@ -31,6 +34,7 @@ public class Case extends BaseEntity {
     }
 
     public void setTitle(String title) {
+        hasMaxLength(title, 30, "title");
         this.title = title;
     }
 
@@ -38,24 +42,22 @@ public class Case extends BaseEntity {
         return content;
     }
 
-    public void setContent(List<Content> content) {
-        this.content = content;
+    public void addContent(Content content) {
+        isNotNull(content, "content");
+        this.content.add(content);
     }
 
     public Set<Knowledges> getKnowledges() {
-        return Knowledges;
+        return knowledges;
     }
 
-    public void setKnowledges(Set<Knowledges> Knowledges) {
-        this.Knowledges = Knowledges;
+    public void addKnowledges(Knowledges knowledges) {
+        isNotNull(knowledges, "knowledges");
+        this.knowledges.add(knowledges);
     }
 
     public int getViewcount() {
         return viewcount;
-    }
-
-    public void setViewcount(int Viewcount) {
-        this.viewcount = Viewcount;
     }
 
     public UUID getOwnerid() {
@@ -63,6 +65,7 @@ public class Case extends BaseEntity {
     }
 
     public void setOwnerid(UUID ownerid) {
+        isNotNull(ownerid, "ownerid");
         this.ownerid = ownerid;
     }
 
@@ -70,32 +73,26 @@ public class Case extends BaseEntity {
         return members;
     }
 
-    public void setMembers(Set<UUID> members) {
-        this.members = members;
+    public void setMembers(UUID members) {
+        isNotNull(members, "members");
+        this.members.add(members);
     }
 
     public int getLikeCount() {
         return likeCount;
     }
 
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-    }
-
     public Set<UUID> getUserLiked() {
         return userLiked;
-    }
-
-    public void setUserLiked(Set<UUID> userLiked) {
-        this.userLiked = userLiked;
     }
 
     public Set<Category> getCategory() {
         return category;
     }
 
-    public void setCategory(Set<Category> category) {
-        this.category = category;
+    public void addCategory(Category category) {
+        isNotNull(category, "category");
+        this.category.add(category);
     }
 
     public CaseVote getCaseVote() {
@@ -103,6 +100,7 @@ public class Case extends BaseEntity {
     }
 
     public void setCaseVote(CaseVote caseVote) {
+        isNotNull(caseVote, "caseVote");
         this.caseVote = caseVote;
     }
     //------------------
