@@ -11,8 +11,11 @@ import static org.theShire.domain.messenger.Message.Stage.*;
 
 public class Message extends BaseEntity {
 
+    //The ID from the Sender
     private UUID senderId;
+    //The stage the Message is in (SENT,ARRIVED,READ)
     private Stage stage;
+    //The Content of the message (Text or Media)
     private List<Content> contents;
 
     public Message() {

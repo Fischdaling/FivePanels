@@ -8,8 +8,9 @@ import java.util.List;
 import java.util.Set;
 
 public class Chat extends BaseEntity {
-
+    // The Users in the chat
     private Set<User> people;
+    // All past sent messanges
     private List<Message> chatHistory;
 
     public Chat() {
