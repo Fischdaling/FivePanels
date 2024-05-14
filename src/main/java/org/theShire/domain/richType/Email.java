@@ -1,3 +1,14 @@
 package org.theShire.domain.richType;
 
-public record Email(String email) {}
+import org.theShire.domain.exception.MedicalDoctorException;
+
+import static org.theShire.foundation.DomainAssertion.*;
+
+public record Email(String value) {
+    public Email(String value) {
+        hasMaxLength(value,50,"email", MedicalDoctorException.class);
+        containsSymbol(value,'@',"email", MedicalDoctorException.class);
+        containsSymbol(value,'.',"email", MedicalDoctorException.class);
+        this.value = value;
+    }
+}

@@ -50,6 +50,22 @@ public abstract class DomainAssertion<T> {
             return value;
         }
 
+        public static <E extends RuntimeException> String hasMinLength(String value, int minLength, String paramName, Class<E> clazz) {
+            isNotBlank(value, paramName, clazz);
+
+            if (value.length() <= minLength)
+                throw variableException(clazz,STR."\{paramName} is smaller than \{minLength}");
+
+            return value;
+        }
+
+        public static <E extends RuntimeException> String containsSymbol(String value, char symbol, String paramName, Class<E> clazz) {
+            isNotBlank(value, paramName, clazz);
+            if (!value.contains(String.valueOf(symbol))){
+                throw variableException(clazz, STR."\{paramName} does not contain \{symbol}");
+            }
+            return value;
+        }
         // number Assertions --------------------------------------------------------------
         public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterZero(T value, String paramName, Class<E> clazz){
             return greaterZero(value, ()->STR."\{paramName} is smaller than 0", clazz);

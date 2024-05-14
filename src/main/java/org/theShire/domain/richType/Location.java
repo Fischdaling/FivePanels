@@ -1,3 +1,11 @@
 package org.theShire.domain.richType;
+import org.theShire.domain.exception.MedicalDoctorException;
 
-public record Location(Location location) {}
+import static org.theShire.foundation.DomainAssertion.*;
+
+public record Location(String value) {
+    public Location(String value) {
+        hasMaxLength(value,50,"Location", MedicalDoctorException.class);
+        this.value = value;
+    }
+}

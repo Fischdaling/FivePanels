@@ -9,8 +9,11 @@ import static org.theShire.foundation.DomainAssertion.isBeforeTime;
 
 
 public class BaseEntity {
+    // The Unique Identifier of the entity
     private UUID entityId;
+    // The time the entity was created at
     private Instant createdAt;
+    // The last time the entity was updated
     private Instant updatedAt;
 
     public BaseEntity(Instant createdAt) {

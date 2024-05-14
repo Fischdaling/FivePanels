@@ -12,6 +12,8 @@ public class Chat extends BaseEntity {
     private Set<User> people;
     // All past sent messanges
     private List<Message> chatHistory;
+    // If the chat is a Group or single chat
+    private ChatType chatType;
 
     public Chat() {
         super(Instant.now());

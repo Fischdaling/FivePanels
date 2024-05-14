@@ -1,3 +1,12 @@
 package org.theShire.domain.richType;
 
-public record Language(Language language) {}
+import org.theShire.domain.exception.MedicalDoctorException;
+
+import static org.theShire.foundation.DomainAssertion.*;
+
+public record Language(String value) {
+    public Language(String value) {
+        hasMaxLength(value,50,"Language", MedicalDoctorException.class);
+        this.value = value;
+    }
+}
