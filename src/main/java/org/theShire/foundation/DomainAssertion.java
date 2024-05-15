@@ -156,7 +156,7 @@ public abstract class DomainAssertion<T> {
             if (strength.getScore() <3){
                 throw variableException(clazz, strength.getFeedback().toString());
             }
-            return BCrypt.withDefaults().hashToString(12, value.toCharArray());
+            return value;
         }
     }
 
