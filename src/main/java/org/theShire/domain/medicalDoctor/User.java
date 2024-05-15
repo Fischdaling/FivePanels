@@ -1,14 +1,11 @@
 package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.BaseEntity;
-import org.theShire.domain.exception.MediaException;
-import org.theShire.domain.exception.MedicalDoctorException;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.richType.Email;
 import org.theShire.domain.richType.Password;
-import org.theShire.foundation.DomainAssertion;
 
 import javax.print.attribute.standard.Media;
 import java.time.Instant;
@@ -42,7 +39,7 @@ public class User extends BaseEntity {
         super(Instant.now());
     }
 
-    public User(Instant createdAt,Password password,Email email, UserProfile profile, Set<UserRelationShip> contacts) {
+    public User(Instant createdAt, Password password, Email email, UserProfile profile, Set<UserRelationShip> contacts) {
         super(createdAt);
         this.password = password;
         this.email = email;
@@ -57,8 +54,7 @@ public class User extends BaseEntity {
     }
 
     public void setProfile(UserProfile profile) {
-        //TODO ASSERTION
-        this.profile = profile;
+        this.profile = isNotNull(profile, "profile", exTypeUser);
     }
 
     public int getScore() {
@@ -66,15 +62,12 @@ public class User extends BaseEntity {
     }
 
     public void setScore(int score) {
-        //TODO ASSERTION
-
-        this.score = score;
+        this.score = greaterEqualsZero(score, "score", exTypeUser);
     }
 
     public Set<UserRelationShip> getContacts() {
         return contacts;
     }
-
 
 
     public Set<Chat> getChats() {
@@ -92,19 +85,19 @@ public class User extends BaseEntity {
     }
 
     // Methods ------------------------------------------------------------
+    public void createCase(String title, List<Content> content, UUID... members) {
 
-    public void addChat(Chat chat){
-        isNotInCollection(chat, chats,"Chat already in Set", exTypeUser);
-        this.chats.add(chat);
+        this.ownedCases.add(new Case(this.getEntityId(), title, content, members));
     }
 
-    public void addContact(UserRelationShip contact){
-        isNotInCollection(contact, contacts,"Contact already in Set", exTypeUser);
+    public void addChat(Chat chat) {
+        this.chats.add(isNotInCollection(chat, chats, "Chat already in Set", exTypeUser));
+    }
+
+    public void addContact(UserRelationShip contact) {
+        isNotInCollection(contact, contacts, "Contact already in Set", exTypeUser);
         this.contacts.add(contact);
     }
 
-    public void createCase(String title, List<Content> content, UUID...members){
 
-        this.ownedCases.add(new Case(this.getEntityId(),title, content, members));
-    }
 }

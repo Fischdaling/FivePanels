@@ -34,7 +34,7 @@ public class UserProfile {
     }
 
     public void setFirstName(Name firstName) {
-        this.firstName = isNotNull(firstName, "firstname", exTypeUser);
+        this.firstName = isNotNull(firstName, "firstName", exTypeUser);
     }
 
     public Name getLastName() {
@@ -42,15 +42,11 @@ public class UserProfile {
     }
 
     public void setLastName(Name lastName) {
-        this.lastName = lastName;
+        this.lastName = isNotNull(lastName,"lastName", exTypeUser);
     }
 
     public Set<EducationalTitle> getEducationalTitle() {
         return educationalTitle;
-    }
-
-    public void setEducationalTitle(Set<EducationalTitle> educationalTitle) {
-        this.educationalTitle = educationalTitle;
     }
 
     public Media getProfilePicture() {
@@ -91,5 +87,8 @@ public class UserProfile {
 
     public void setExperience(Set<Knowledges> experience) {
         this.experience = experience;
+    }
+    public void addEducationalTitle(EducationalTitle educationalTitle) {
+        this.educationalTitle.add(isNotNull(educationalTitle,"educationalTitle", exTypeUser));
     }
 }
