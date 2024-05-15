@@ -84,7 +84,6 @@ public abstract class DomainAssertion<T> {
         }
 
         public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterZero(T value, Supplier<String> errorMsg, Class<E> clazz){
-            isNotNull(value,errorMsg.get(),clazz);
 
             if (value.doubleValue() <= 0){
                 throw variableException(clazz,errorMsg.get());
