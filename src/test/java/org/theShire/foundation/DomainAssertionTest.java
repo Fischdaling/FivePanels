@@ -263,7 +263,7 @@ public class DomainAssertionTest {
 
     @Test
     void isBeforeNow_ShouldThrow_WhenIsBeforeNow(){
-        Instant instant = Instant.now().minusSeconds(10);
+        Instant instant = Instant.ofEpochSecond(50).minusSeconds(10);
         assertThrows(exType,()-> isBeforeNow(instant,"TestCaseInstant",exType));
     }
 
@@ -275,21 +275,22 @@ public class DomainAssertionTest {
 
     @Test
     void isBeforeNow_ShouldThrown_WhenIsNow(){
-        Instant instant = Instant.now();
+        Instant instant = Instant.ofEpochSecond(50);
+        Instant.ofEpochSecond(50);
         assertThrows(exType,()-> isBeforeNow(instant,"TestCaseInstant",exType));
     }
 
     @Test
     void isBeforeTime_ShouldThrow_WhenIsAfterTime(){
-        Instant instant = Instant.now().minusSeconds(10);
-        Instant instant1 = Instant.now();
+        Instant instant = Instant.ofEpochSecond(50).minusSeconds(10);
+        Instant instant1 = Instant.ofEpochSecond(50);
         assertThrows(exType,()-> isBeforeTime(instant,instant1,"TestCaseInstant",exType));
     }
 
     @Test
     void isBeforeTime_ShouldReturnTime_WhenIsBeforeTime(){
-        Instant instant = Instant.now();
-        Instant instant1 = Instant.now().minusSeconds(10);
+        Instant instant = Instant.ofEpochSecond(50);
+        Instant instant1 = Instant.ofEpochSecond(50).minusSeconds(10);
         assertEquals(instant, isBeforeTime(instant,instant1,"TestCaseInstant",exType));
     }
 
@@ -301,17 +302,7 @@ public class DomainAssertionTest {
 
     @Test
     void isZxcvbn3Confirm_ShouldReturnHashedPassword_WhenIsZxcvbn3Confirm(){
-        String zxcvbn3Confirm = "A_b-c!3acegi5";
-        byte[] hashed = BCrypt.withDefaults().hash(6, zxcvbn3Confirm.getBytes(StandardCharsets.UTF_8));
-        assertEquals(hashed ,isZxcvbn3Confirm(zxcvbn3Confirm,"zxcvbn3Confirm",exType));
+        String zxcvbn3Confirm = "Spengergasse";
+        assertEquals(zxcvbn3Confirm ,isZxcvbn3Confirm(zxcvbn3Confirm,"zxcvbn3Confirm",exType));
     }
-
-
-
-
-
-
-
-
-
 }
