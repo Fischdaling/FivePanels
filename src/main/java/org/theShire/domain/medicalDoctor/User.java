@@ -1,23 +1,22 @@
 package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.BaseEntity;
-import org.theShire.domain.exception.MediaException;
-import org.theShire.domain.exception.MedicalDoctorException;
+import org.theShire.domain.media.Content;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.messenger.Chat;
-import org.theShire.domain.richType.Email;
-import org.theShire.domain.richType.Password;
-import org.theShire.foundation.DomainAssertion;
+import org.theShire.domain.richType.*;
+import org.theShire.domain.media.Media;
 
-import javax.print.attribute.standard.Media;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
+
+import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.*;
 
 public class User extends BaseEntity {
-    // exeption Type if something throws
-    private static final Class<MedicalDoctorException> exType = MedicalDoctorException.class;
-
     //The Email must contain @ and . cannot be empty and has a max length
     private Email email;
     //The Password must be up to certain standards (not null, not Empty, min length,...)
@@ -40,12 +39,15 @@ public class User extends BaseEntity {
         super(Instant.now());
     }
 
-    public User(Instant createdAt,Password password,Email email, UserProfile profile, Set<UserRelationShip> contacts) {
-        super(createdAt);
+    public User(Password password, Email email, UserProfile profile) {
+        super(Instant.now());
         this.password = password;
         this.email = email;
         this.profile = profile;
-        this.contacts = contacts;
+        Set<UserRelationShip> contacts = new HashSet<>();
+        Set<Chat> chats = new HashSet<>();
+        Set<Case> ownedCases = new HashSet<>();
+        Set<Case> memberOfCase = new HashSet<>();
     }
 
 
@@ -55,8 +57,7 @@ public class User extends BaseEntity {
     }
 
     public void setProfile(UserProfile profile) {
-        //TODO ASSERTION
-        this.profile = profile;
+        this.profile = isNotNull(profile, "profile", exTypeUser);
     }
 
     public int getScore() {
@@ -64,15 +65,12 @@ public class User extends BaseEntity {
     }
 
     public void setScore(int score) {
-        //TODO ASSERTION
-
-        this.score = score;
+        this.score = greaterEqualsZero(score, "score", exTypeUser);
     }
 
     public Set<UserRelationShip> getContacts() {
         return contacts;
     }
-
 
 
     public Set<Chat> getChats() {
@@ -90,14 +88,51 @@ public class User extends BaseEntity {
     }
 
     // Methods ------------------------------------------------------------
+    public void createCase(String title, List<Content> content, UUID... members) {
 
-    public void addChat(Chat chat){
-        isNotInCollection(chat, chats,"Chat already in Set", exType);
-        this.chats.add(chat);
+        this.ownedCases.add(new Case(this.getEntityId(), title, content, members));
     }
 
-    public void addContact(UserRelationShip contact){
-        isNotInCollection(contact, contacts,"Contact already in Set", exType);
+    public void addChat(Chat chat) {
+        this.chats.add(isNotInCollection(chat, chats, "Chat already in Set", exTypeUser));
+    }
+
+    public void addContact(UserRelationShip contact) {
+        isNotInCollection(contact, contacts, "Contact already in Set", exTypeUser);
         this.contacts.add(contact);
     }
+
+    public static void main(String[] args) {
+        //TODO Relation & Compilor
+        Media media = new Media(2000,1500,"I am a Picture", "2000x1500");
+
+        UserProfile profile = new UserProfile(new Language("German"),
+                new Location("Gondor"),media,new Name("Boromir"),
+                new Name("Aragorn"),new EducationalTitle("Dr."),
+                new EducationalTitle("arathorn"));
+
+
+
+        User user = new User(new Password("Spengergasse"),
+                new Email("Boromir@gamil.com"),profile);
+
+
+
+        Media media1 = new Media(1500,100,"I am a Father", "1500x100");
+
+        UserProfile profile1 = new UserProfile(new Language("German"),
+                new Location("Gondor"),media1,new Name("Aarathorn"),
+                new Name("Aragorn"),new EducationalTitle("Dr."),
+                new EducationalTitle("Arathorn"),new EducationalTitle("mag"));
+
+
+
+        User user1 = new User(new Password("Spengergasse123"),
+                new Email("Arathorn@gamil.com"),profile1);
+
+        System.out.println(user1);
+        System.out.println(user);
+
+    }
+
 }

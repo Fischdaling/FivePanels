@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
-public class Chat extends BaseEntity {
+public class Chat extends BaseEntity { //TODO assertions
     // The Users in the chat
     private Set<User> people;
     // All past sent messanges

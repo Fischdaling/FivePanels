@@ -16,6 +16,12 @@ public class BaseEntity {
     // The last time the entity was updated
     private Instant updatedAt;
 
+    public BaseEntity() {
+        entityId = UUID.randomUUID();
+        createdAt = Instant.now();
+        updatedAt = Instant.now();
+    }
+
     public BaseEntity(Instant createdAt) {
         this.entityId = UUID.randomUUID();
         this.createdAt = Instant.now();
@@ -35,6 +41,7 @@ public class BaseEntity {
     }
 
     public void setUpdatedAt(Instant updatedAt) {
+        isBeforeTime(updatedAt,createdAt,"updatedAt", RuntimeException.class);
         this.updatedAt = updatedAt;
     }
 

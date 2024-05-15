@@ -2,20 +2,12 @@ package org.theShire.domain.richType;
 
 import java.util.List;
 
-public class EducationalTitle {
-    private List<String> educationalTitle;
+import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
+import static org.theShire.foundation.DomainAssertion.hasMaxLength;
 
-    public EducationalTitle(String educationalTitle) {
-        setEducationalTitle(educationalTitle);
+
+public record EducationalTitle(String value) {
+    public EducationalTitle(String value) {
+        this.value = hasMaxLength(value,30,"educationalTitle",exTypeUser);
     }
-
-    public String getEducationalTitle() {
-        return educationalTitle;
-    }
-
-    public void addEducationalTitle(String educationalTitle) {
-        this.educationalTitle.add(educationalTitle);
-    }
-
-
 }

@@ -1,69 +1,91 @@
 package org.theShire.domain.medicalCase;
+
 import org.theShire.domain.BaseEntity;
 import org.theShire.domain.media.Content;
+import org.theShire.domain.medicalDoctor.User;
+import org.theShire.foundation.DomainAssertion;
 import org.theShire.foundation.Knowledges;
 
+import java.io.StringReader;
 import java.time.Instant;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+
+import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
+import static org.theShire.foundation.DomainAssertion.*;
 
 public class Case extends BaseEntity {
+
+    //the title provides information about the topic of the case, cannot be left blank and has a max length
     private String title;
+    //A list of Content (contains text and metadata)
     private List<Content> content;
-    private Set<Knowledges> Knowledges;
+    //A list of Knowledges (portraits different medical knowledges in form of hashtags)
+    private Set<Knowledges> knowledges;
+    //portraits how often a given case was viewed
     private int viewcount;
+    //wields the UUID of the user that is the owner of a given case
     private UUID ownerid;
+    //wields all UUIDs of every member that is part of the case
     private Set<UUID> members;
+    //portraits how many users liked a given case
     private int likeCount;
+    //remembers which user has already liked a case by their id (prevents a user to like the same case more often)
     private Set<UUID> userLiked;
+    //A set of categories (contains different categories of medical cases)
     private Set<Category> category;
+    //portraits the total votes of all members combined
     private CaseVote caseVote;
 
 
-    public Case(Instant createdAt) {
+    public Case() {
         super(Instant.now());
     }
 
-    //getter and setter----- //TODO ASSERT
+    public Case(UUID ownerid, String title, List<Content> content, UUID... members) {
+        super(Instant.now());
+        this.ownerid = ownerid;
+        setTitle(title);
+        addContentList(content);
+        this.members = new HashSet<>();
+        addMembers(members);
+    }
+
+
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.title = hasMaxLength(title, 30, "title", exTypeCase);
     }
 
     public List<Content> getContent() {
         return content;
     }
 
-    public void setContent(List<Content> content) {
-        this.content = content;
-    }
 
     public Set<Knowledges> getKnowledges() {
-        return Knowledges;
+        return knowledges;
     }
 
-    public void setKnowledges(Set<Knowledges> Knowledges) {
-        this.Knowledges = Knowledges;
-    }
+//    public void setKnowledges(Set<Knowledges> knowledges) {
+//        this.knowledges = knowledges;
+//    }
 
     public int getViewcount() {
         return viewcount;
     }
 
-    public void setViewcount(int Viewcount) {
-        this.viewcount = Viewcount;
-    }
+//    public void setViewcount(int Viewcount) {
+//        this.viewcount = Viewcount;
+//    }
 
     public UUID getOwnerid() {
         return ownerid;
     }
 
-    public void setOwnerid(UUID ownerid) {
-        this.ownerid = ownerid;
+    public void setOwner(UUID ownerid) {
+        this.ownerid = isNotNull(ownerid, "ownerid", exTypeCase);
     }
 
     public Set<UUID> getMembers() {
@@ -78,16 +100,12 @@ public class Case extends BaseEntity {
         return likeCount;
     }
 
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-    }
+//    public void setLikeCount(int likeCount) {
+//        this.likeCount = likeCount;
+//    }
 
     public Set<UUID> getUserLiked() {
         return userLiked;
-    }
-
-    public void setUserLiked(Set<UUID> userLiked) {
-        this.userLiked = userLiked;
     }
 
     public Set<Category> getCategory() {
@@ -103,7 +121,40 @@ public class Case extends BaseEntity {
     }
 
     public void setCaseVote(CaseVote caseVote) {
-        this.caseVote = caseVote;
+        this.caseVote = isNotNull(caseVote, "caseVote", exTypeCase);
     }
+
     //------------------
+    public void addMember(UUID member) {
+        this.members.add(
+                isNotInCollection(member, this.members, "members", exTypeCase)
+        );
+    }
+
+    public void addMembers(UUID... members) {
+        for (UUID member : members) {
+            addMember(member);
+        }
+    }
+
+    public void addContent(Content content) {
+        this.content.add(isNotNull(content, "content", exTypeCase));
+    }
+
+    public void addContentList(List<Content> contentList) {
+        this.content.addAll(isNotNull(contentList, "contentList", exTypeCase));
+    }
+
+    public void addKnowledge(Knowledges knowledges) {
+        this.knowledges.add(isNotNull(knowledges, "knowledges", exTypeCase));
+    }
+
+    public void addCategory(Category category) {
+        this.category.add(isNotNull(category, "category", exTypeCase));
+    }
+
+    public void like(UUID userLiked) {
+        this.userLiked.add(isNotInCollection(userLiked, this.userLiked, "userLiked", exTypeCase));
+        likeCount++;
+    }
 }

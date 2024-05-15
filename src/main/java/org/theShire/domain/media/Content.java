@@ -1,18 +1,27 @@
 package org.theShire.domain.media;
 
 import org.theShire.domain.BaseEntity;
+
+import static org.theShire.domain.exception.MediaException.exTypeMedia;
+import static org.theShire.foundation.DomainAssertion.*;
+
 import org.w3c.dom.Text;
 
 import java.time.Instant;
 
-public class Content extends BaseEntity {
-    private Text text; // The text of the content
+public class Content extends BaseEntity { //TODO imageWriter
+    private Text text;
+    //wields metadata of the Media class
     private Media media;
 
-    public Content(Text text, Media media) {
+    public Content(Media media) {
+        super(Instant.now());
+        this.media = media;
+    }
+
+    public Content(Text text) {
         super(Instant.now());
         this.text = text;
-        this.media = media;
     }
 
     public Text getText() {
@@ -20,8 +29,7 @@ public class Content extends BaseEntity {
     }
 
     public void setText(Text text) {
-        //TODO Assertions
-        this.text = text;
+        this.text = isNotNull(text, "text", exTypeMedia);
     }
 
     public Media getMedia() {
@@ -29,12 +37,14 @@ public class Content extends BaseEntity {
     }
 
     public void setMedia(Media media) {
-        //TODO Assertions
-        this.media = media;
+        this.media = isNotNull(media, "media", exTypeMedia);
     }
 
-    public String contentToString(){
-        //TODO toString
-        return null;
-    }
+//    @Override
+//    public String toString() {
+//        return "Content{" +
+//                "text=" + text +
+//                ", media=" + media +
+//                '}';
+//    }
 }

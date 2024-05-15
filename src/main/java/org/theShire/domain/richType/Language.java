@@ -6,7 +6,6 @@ import static org.theShire.foundation.DomainAssertion.*;
 
 public record Language(String value) {
     public Language(String value) {
-        hasMaxLength(value,50,"Language", MedicalDoctorException.class);
-        this.value = value;
+        this.value = hasMaxLength(value,50,"Language", MedicalDoctorException.class);
     }
 }

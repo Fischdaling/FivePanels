@@ -1,5 +1,6 @@
 package org.theShire.domain.medicalCase;
 
+import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
 
 import java.util.HashMap;
@@ -8,11 +9,17 @@ import java.util.Set;
 import java.util.UUID;
 
 public class CaseVote {
+    //a LinkedHashSet (it's simply a sorted HashSet) of the answers related to a specific case
     private LinkedHashSet<Answer> answers;
+    //a HashMap of a Set of Votes (so we can differentiate between the members)
     private HashMap<UUID, Set<Vote>> votes;
+    //determines the maximum amount of answers choosable
     private int maxAnswers;
+    //counts the percent in correlation to  maxProzentCount
     private double prozentCount;
+    //the percent limit that cannot be exceeded
     private final double maxProzentCount = 100.0;
+
 
     // getter & setter-----------------------------------
     public LinkedHashSet<Answer> getAnswers() {
@@ -20,7 +27,7 @@ public class CaseVote {
     }
 
     public void addAnswers(Answer answers) {
-        isNotNull(answers, "answers");
+        isNotNull(answers, "answers", exTypeCase);
         this.answers.add(answers);
     }
 
@@ -28,17 +35,12 @@ public class CaseVote {
         return votes;
     }
 
-//TODO NEEDED?
-//    public void setVotes(HashMap<UUID, Set<Vote>> votes) {
-//        this.votes = votes;
-//    }
-
     public int getMaxAnswers() {
         return maxAnswers;
     }
 
     public void setMaxAnswers(int maxAnswers) {
-        greaterZero(maxAnswers, "maxAnswers");
+        greaterZero(maxAnswers, "maxAnswers", exTypeCase);
         this.maxAnswers = maxAnswers;
     }
 
@@ -47,7 +49,7 @@ public class CaseVote {
     }
 
     public void setProzentCount(double prozentCount) {
-        greaterZero(prozentCount, "prozentCount");
+        greaterZero(prozentCount, "prozentCount", exTypeCase);
         this.prozentCount = prozentCount;
     }
 

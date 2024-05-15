@@ -1,7 +1,11 @@
 package org.theShire.foundation;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.junit.jupiter.api.Test;
+import org.theShire.domain.exception.MedicalCaseException;
 
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,53 +13,54 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.foundation.DomainAssertion.*;
 
 public class DomainAssertionTest {
+    private static final Class<MedicalCaseException> exType = MedicalCaseException.class;
     
 
     @Test
     void isNotNull_shouldReturnStr_WhenStrIsNotNull() {
         String str = "Test";
-        assertEquals(str, isNotNull(str,"TestCase"));
+        assertEquals(str, isNotNull(str,"TestCase", exType));
     }
 
     @Test
     void isNotNull_shouldThrowException_WhenStrIsNull() {
         String str = null;
 
-        assertThrows(AssertionException.class, ()->isNotNull(str,"TestCaseThrows"));
+        assertThrows(exType, ()->isNotNull(str,"TestCaseThrows",exType));
     }
 
     @Test
     void isNotNull_shouldReturnInteger_WhenIntegerIsNotNull() {
         Integer i = 1;
-        assertEquals(i, isNotNull(i,"TestCaseInteger"));
+        assertEquals(i, isNotNull(i,"TestCaseInteger",exType));
     }
 
     @Test
     void isNotNull_shouldThrowException_WhenIntegerIsNull() {
         Integer i = null;
 
-        assertThrows(AssertionException.class, ()->isNotNull(i,"TestCaseIntegerThrows"));
+        assertThrows(exType, ()->isNotNull(i,"TestCaseIntegerThrows",exType));
     }
 
     /** IS NOT BLANK**/
     @Test
     void isNotBlank_shouldReturnStr_WhenStrIsNotEmpty() {
         String str = "Test";
-        assertEquals(str, isNotBlank(str,"TestCase"));
+        assertEquals(str, isNotBlank(str,"TestCase",exType));
     }
 
     @Test
     void isNotBlank_shouldThrowException_WhenStrIsNull() {
         String str = null;
 
-        assertThrows(AssertionException.class, ()->isNotBlank(str,"TestCaseThrows"));
+        assertThrows(exType, ()->isNotBlank(str,"TestCaseThrows",exType));
     }
 
     @Test
     void isNotBlank_shouldThrowException_WhenStrIsBlank() {
         String str = "";
 
-        assertThrows(AssertionException.class, ()->isNotBlank(str,"TestCaseThrows"));
+        assertThrows(exType, ()->isNotBlank(str,"TestCaseThrows",exType));
     }
 
     /** HAS MAX LENGTH**/
@@ -63,27 +68,27 @@ public class DomainAssertionTest {
     @Test
     void hasMaxLength_shouldReturnStr_WhenStrIsValid() {
         String str = "Test";
-        assertEquals(str, hasMaxLength(str,4,"TestCase"));
+        assertEquals(str, hasMaxLength(str,4,"TestCase",exType));
     }
 
     @Test
     void hasMaxLength_shouldThrowException_WhenStrIsNull() {
         String str = null;
 
-        assertThrows(AssertionException.class, ()->hasMaxLength(str,4,"TestCaseThrows"));
+        assertThrows(exType, ()->hasMaxLength(str,4,"TestCaseThrows",exType));
     }
 
     @Test
     void hasMaxLength_shouldThrowException_WhenStrIsBlank() {
         String str = "";
 
-        assertThrows(AssertionException.class, ()->hasMaxLength(str,4,"TestCaseThrows"));
+        assertThrows(exType, ()->hasMaxLength(str,4,"TestCaseThrows",exType));
     }
     @Test
     void hasMaxLength_shouldThrowException_WhenStrIsBiggerThenMaxLength() {
         String str = "Test1";
 
-        assertThrows(AssertionException.class, ()->hasMaxLength(str,4,"TestCaseThrows"));
+        assertThrows(exType, ()->hasMaxLength(str,4,"TestCaseThrows",exType));
     }
 
     /** GREATER THAN ZERO**/
@@ -91,55 +96,55 @@ public class DomainAssertionTest {
     @Test
     void greaterZero_ShouldReturnNumber_WhenNumberAboveZero() {
         Integer i = 1;
-        assertEquals(i, greaterZero(i,"TestCaseInteger"));
+        assertEquals(i, greaterZero(i,"TestCaseInteger",exType));
 
         int in = 1;
-        assertEquals(in, greaterZero(in,"TestCaseInt"));
+        assertEquals(in, greaterZero(in,"TestCaseInt",exType));
 
         double d = 1.0;
-        assertEquals(d, greaterZero(d,"TestCaseDouble"));
+        assertEquals(d, greaterZero(d,"TestCaseDouble",exType));
 
         float f = 1f;
-        assertEquals(f, greaterZero(f,"TestCaseFloat"));
+        assertEquals(f, greaterZero(f,"TestCaseFloat",exType));
 
         Long l = (long)1;
-        assertEquals(l, greaterZero(l,"TestCaseLong"));
+        assertEquals(l, greaterZero(l,"TestCaseLong",exType));
     }
 
     @Test
     void greaterZero_ShouldReturnNumber_WhenNumberIsZero() {
         Integer i = 0;
-        assertThrows(AssertionException.class,()->greaterZero(i,"TestCaseInteger"));
+        assertThrows(exType,()->greaterZero(i,"TestCaseInteger",exType));
 
         int in = 0;
-        assertThrows(AssertionException.class,()->greaterZero(in,"TestCaseInt"));
+        assertThrows(exType,()->greaterZero(in,"TestCaseInt",exType));
 
         double d = 0.0;
-        assertThrows(AssertionException.class,()->greaterZero(d,"TestCaseDouble"));
+        assertThrows(exType,()->greaterZero(d,"TestCaseDouble",exType));
 
         float f = 0f;
-        assertThrows(AssertionException.class,()->greaterZero(f,"TestCaseFloat"));
+        assertThrows(exType,()->greaterZero(f,"TestCaseFloat",exType));
 
         Long l = (long)0;
-        assertThrows(AssertionException.class,()->greaterZero(l,"TestCaseLong"));
+        assertThrows(exType,()->greaterZero(l,"TestCaseLong",exType));
     }
 
     @Test
     void greaterZero_ShouldThrowException_WhenNumberBelowZero() {
         Integer i = -1;
-        assertThrows(AssertionException.class,()->greaterZero(i,"TestCaseInteger"));
+        assertThrows(exType,()->greaterZero(i,"TestCaseInteger",exType));
 
         int in = -1;
-        assertThrows(AssertionException.class,()->greaterZero(in,"TestCaseInt"));
+        assertThrows(exType,()->greaterZero(in,"TestCaseInt",exType));
 
         double d = -1.0;
-        assertThrows(AssertionException.class,()->greaterZero(d,"TestCaseDouble"));
+        assertThrows(exType,()->greaterZero(d,"TestCaseDouble",exType));
 
         float f = -1f;
-        assertThrows(AssertionException.class,()->greaterZero(f,"TestCaseFloat"));
+        assertThrows(exType,()->greaterZero(f,"TestCaseFloat",exType));
 
         Long l = (long)-1;
-        assertThrows(AssertionException.class,()->greaterZero(l,"TestCaseLong"));
+        assertThrows(exType,()->greaterZero(l,"TestCaseLong",exType));
     }
 
     /** GREATER THAN **/
@@ -147,83 +152,83 @@ public class DomainAssertionTest {
     void greaterThan_ShouldReturnNumber_WhenFirstNumberAboveSecondNumber() {
         Integer i = 1;
         Integer i1 = 0;
-        assertEquals(i, greaterThan(i,i1,"TestCaseInteger"));
+        assertEquals(i, greaterThan(i,i1,"TestCaseInteger",exType));
 
         int in = 1;
         int in1 = 0;
-        assertEquals(in, greaterThan(in,in1,"TestCaseInt"));
+        assertEquals(in, greaterThan(in,in1,"TestCaseInt",exType));
 
         double d = 1.0;
         double d1 = 0.0;
-        assertEquals(d, greaterThan(d,d1,"TestCaseDouble"));
+        assertEquals(d, greaterThan(d,d1,"TestCaseDouble",exType));
 
         float f = 1f;
         float f1 = 0f;
-        assertEquals(f, greaterThan(f,f1,"TestCaseFloat"));
+        assertEquals(f, greaterThan(f,f1,"TestCaseFloat",exType));
 
         Long l = (long)1;
         Long l1 = (long)0;
-        assertEquals(l, greaterThan(l,l1,"TestCaseLong"));
+        assertEquals(l, greaterThan(l,l1,"TestCaseLong",exType));
     }
 
     @Test
     void greaterThan_ShouldThrowException_WhenFirstNumberIsSecondNumber() {
         Integer i = 1;
         Integer i1 = 1;
-        assertThrows(AssertionException.class, ()->greaterThan(i,i1,"TestCaseInteger"));
+        assertThrows(exType, ()->greaterThan(i,i1,"TestCaseInteger",exType));
 
         int in = 1;
         int in1 = 1;
-        assertThrows(AssertionException.class, ()->greaterThan(in,in1,"TestCaseInt"));
+        assertThrows(exType, ()->greaterThan(in,in1,"TestCaseInt",exType));
 
         double d = 1.0;
         double d1 = 1.0;
-        assertThrows(AssertionException.class, ()->greaterThan(d,d1,"TestCaseDouble"));
+        assertThrows(exType, ()->greaterThan(d,d1,"TestCaseDouble",exType));
 
         float f = 1f;
         float f1 = 1f;
-        assertThrows(AssertionException.class, ()->greaterThan(f,f1,"TestCaseFloat"));
+        assertThrows(exType, ()->greaterThan(f,f1,"TestCaseFloat",exType));
 
         Long l = (long)1;
         Long l1 = (long)1;
-        assertThrows(AssertionException.class, ()->greaterThan(l,l1,"TestCaseLong"));
+        assertThrows(exType, ()->greaterThan(l,l1,"TestCaseLong",exType));
     }
 
     @Test
     void greaterThan_ShouldThrowException_WhenFirstNumberSmallerThanSecondNumber() {
         Integer i = 1;
         Integer i1 = 2;
-        assertThrows(AssertionException.class, ()->greaterThan(i,i1,"TestCaseInteger"));
+        assertThrows(exType, ()->greaterThan(i,i1,"TestCaseInteger",exType));
 
         int in = 1;
         int in1 = 2;
-        assertThrows(AssertionException.class, ()->greaterThan(in,in1,"TestCaseInt"));
+        assertThrows(exType, ()->greaterThan(in,in1,"TestCaseInt",exType));
 
         double d = 1.0;
         double d1 = 2.0;
-        assertThrows(AssertionException.class, ()->greaterThan(d,d1,"TestCaseDouble"));
+        assertThrows(exType, ()->greaterThan(d,d1,"TestCaseDouble",exType));
 
         float f = 1f;
         float f1 = 2f;
-        assertThrows(AssertionException.class, ()->greaterThan(f,f1,"TestCaseFloat"));
+        assertThrows(exType, ()->greaterThan(f,f1,"TestCaseFloat",exType));
 
         Long l = (long)1;
         Long l1 = (long)2;
-        assertThrows(AssertionException.class, ()->greaterThan(l,l1,"TestCaseLong"));
+        assertThrows(exType, ()->greaterThan(l,l1,"TestCaseLong",exType));
     }
 
     @Test
     void isTrue_ShouldThrow_WhenIsFalse(){
         boolean b = false;
 
-        assertThrows(AssertionException.class,()-> isTrue(b,()->"TestCase"));
+        assertThrows(exType,()-> isTrue(b,()->"TestCase",exType));
     }
     @Test
     void isTrue_ShouldNotThrow_WhenIsTrue(){
         boolean b = true;
         try {
-            isTrue(b, () -> "TestCase");
-        }catch (AssertionException e){
+            isTrue(b, () -> "TestCase",exType);
+        }catch (RuntimeException e){
             fail();
         }
     }
@@ -239,7 +244,7 @@ public class DomainAssertionTest {
         list.add(i2);
         list.add(i3);
 
-        assertEquals(i1, isNotInCollection(i1,list,"TestCaseList"));
+        assertEquals(i1, isNotInCollection(i1,list,"TestCaseList",exType));
     }
 
     @Test
@@ -253,7 +258,51 @@ public class DomainAssertionTest {
         list.add(i2);
         list.add(i3);
 
-        assertThrows(AssertionException.class,()-> isNotInCollection(i1,list,"TestCaseList"));
+        assertThrows(exType,()-> isNotInCollection(i1,list,"TestCaseList",exType));
     }
 
+    @Test
+    void isBeforeNow_ShouldThrow_WhenIsBeforeNow(){
+        Instant instant = Instant.ofEpochSecond(50).minusSeconds(10);
+        assertThrows(exType,()-> isBeforeNow(instant,"TestCaseInstant",exType));
+    }
+
+    @Test
+    void isBeforeNow_ShouldReturnTime_WhenIsAfterNow(){
+        Instant instant = Instant.now().plusSeconds(10);
+        assertEquals(instant, isBeforeNow(instant,"TestCaseInstant",exType));
+    }
+
+    @Test
+    void isBeforeNow_ShouldThrown_WhenIsNow(){
+        Instant instant = Instant.ofEpochSecond(50);
+        Instant.ofEpochSecond(50);
+        assertThrows(exType,()-> isBeforeNow(instant,"TestCaseInstant",exType));
+    }
+
+    @Test
+    void isBeforeTime_ShouldThrow_WhenIsAfterTime(){
+        Instant instant = Instant.ofEpochSecond(50).minusSeconds(10);
+        Instant instant1 = Instant.ofEpochSecond(50);
+        assertThrows(exType,()-> isBeforeTime(instant,instant1,"TestCaseInstant",exType));
+    }
+
+    @Test
+    void isBeforeTime_ShouldReturnTime_WhenIsBeforeTime(){
+        Instant instant = Instant.ofEpochSecond(50);
+        Instant instant1 = Instant.ofEpochSecond(50).minusSeconds(10);
+        assertEquals(instant, isBeforeTime(instant,instant1,"TestCaseInstant",exType));
+    }
+
+    @Test
+    void isZxcvbn3Confirm_ShouldThrow_WhenIsNotZxcvbn3Confirm(){
+        String zxcvbn3Confirm = "abc";
+        assertThrows(exType, ()->isZxcvbn3Confirm(zxcvbn3Confirm,"zxcvbn3Confirm",exType));
+    }
+
+    @Test
+    void isZxcvbn3Confirm_ShouldReturnHashedPassword_WhenIsZxcvbn3Confirm(){
+        String zxcvbn3Confirm = "Spengergasse";
+        assertEquals(zxcvbn3Confirm ,isZxcvbn3Confirm(zxcvbn3Confirm,"zxcvbn3Confirm",exType));
+    }
 }

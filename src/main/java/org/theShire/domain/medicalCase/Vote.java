@@ -1,10 +1,16 @@
 package org.theShire.domain.medicalCase;
 
+import org.theShire.domain.exception.MedicalCaseException;
+
+import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
 
 public class Vote {
+    //saves an answer with the verified Rich type Answer
     private Answer answer;
+    //determines how much percent a member wants to add to an answer
     private double percent;
+
 
     //getter & setter-----------------------
     public Answer getAnswer() {
@@ -12,7 +18,7 @@ public class Vote {
     }
 
     public void setAnswer(Answer answer) {
-        this.answer = answer;
+        this.answer = isNotNull(answer,"answer", exTypeCase);
     }
 
     public double getPercent() {
@@ -20,7 +26,7 @@ public class Vote {
     }
 
     public void setPercent(double percent) {
-
+        greaterEqualsZero(percent, "percent",exTypeCase);
         this.percent = percent;
     }
 }

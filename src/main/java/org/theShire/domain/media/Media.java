@@ -1,9 +1,59 @@
 package org.theShire.domain.media;
 
+
+import static org.theShire.domain.exception.MediaException.exTypeMedia;
+import static org.theShire.foundation.DomainAssertion.*;
+
 public class Media {
-private String metaData;
-private int width; // the width of the media in pixels
-private int height; // the height of the media in pixels
-private String allText;  // the entire textual content of the media file
-private String resolution; // the resolution of the media file (for example: "HD", "4K",...)
+    //declares the width of a picture in pixels
+    private int width;
+    //declares the height of a picture in pixels
+    private int height;
+    //an alternative description of a picture in case the picture cannot be displayed
+    private String altText;
+    //defines teh resolution of a picture
+    private String resolution;
+
+
+    public Media(int width, int height, String altText, String resolution) {
+        setWidth(width);
+        setHeight(height);
+        setaltText(altText);
+        setResolution(resolution);
+    }
+
+
+    //getter and setter-----------------------
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = greaterZero(width,"width",exTypeMedia);
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = greaterZero(height,"height",exTypeMedia);
+    }
+
+    public String getaltText() {
+        return altText;
+    }
+
+    public void setaltText(String altText) {
+        this.altText = isNotBlank(altText,"altText", exTypeMedia);
+    }
+
+    public String getResolution() {
+        return resolution;
+    }
+
+    public void setResolution(String resolution) { //TODO calc from height and width
+        this.resolution = isNotBlank(resolution,"resolution", exTypeMedia);
+    }
 }
