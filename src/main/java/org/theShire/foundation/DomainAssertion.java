@@ -84,6 +84,7 @@ public abstract class DomainAssertion<T> {
         }
 
         public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterZero(T value, Supplier<String> errorMsg, Class<E> clazz){
+            isNotNull(value,errorMsg.get(),clazz);
 
             if (value.doubleValue() <= 0){
                 throw variableException(clazz,errorMsg.get());
@@ -96,7 +97,7 @@ public abstract class DomainAssertion<T> {
         }
 
         public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterEqualsZero(T value, Supplier<String> errorMsg, Class<E> clazz){
-
+            isNotNull(value,errorMsg.get(),clazz);
             if (value.doubleValue() < 0){
                 throw variableException(clazz,errorMsg.get());
             }
@@ -104,7 +105,7 @@ public abstract class DomainAssertion<T> {
         }
 
         public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterThan(T value,T value1, String paramName, Class<E> clazz) {
-
+            isNotNull(value,paramName,clazz);
             if (value.compareTo(value1) <= 0) {
                 throw variableException(clazz,STR. "\{ paramName } is smaller than \{value1}" );
             }
