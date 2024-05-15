@@ -13,6 +13,7 @@ import java.util.*;
 import static org.theShire.foundation.DomainAssertion.*;
 
 public class Case extends BaseEntity {
+    //saves the class for exception handling
     private static final Class<MedicalCaseException> exType = MedicalCaseException.class;
 
     //the title provides information about the topic of the case, cannot be left blank and has a max length
