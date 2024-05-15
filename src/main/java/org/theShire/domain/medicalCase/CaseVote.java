@@ -1,8 +1,6 @@
 package org.theShire.domain.medicalCase;
 
-import org.theShire.domain.exception.MedicalCaseException;
-import org.theShire.domain.exception.MedicalDoctorException;
-
+import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
 
 import java.util.HashMap;
@@ -11,7 +9,6 @@ import java.util.Set;
 import java.util.UUID;
 
 public class CaseVote {
-    private static final Class<MedicalCaseException> exType = MedicalCaseException.class;
     //a LinkedHashSet (it's simply a sorted HashSet) of the answers related to a specific case
     private LinkedHashSet<Answer> answers;
     //a HashMap of a Set of Votes (so we can differentiate between the members)
@@ -30,7 +27,7 @@ public class CaseVote {
     }
 
     public void addAnswers(Answer answers) {
-        isNotNull(answers, "answers", exType);
+        isNotNull(answers, "answers", exTypeCase);
         this.answers.add(answers);
     }
 
@@ -43,7 +40,7 @@ public class CaseVote {
     }
 
     public void setMaxAnswers(int maxAnswers) {
-        greaterZero(maxAnswers, "maxAnswers", exType);
+        greaterZero(maxAnswers, "maxAnswers", exTypeCase);
         this.maxAnswers = maxAnswers;
     }
 
@@ -52,7 +49,7 @@ public class CaseVote {
     }
 
     public void setProzentCount(double prozentCount) {
-        greaterZero(prozentCount, "prozentCount", exType);
+        greaterZero(prozentCount, "prozentCount", exTypeCase);
         this.prozentCount = prozentCount;
     }
 

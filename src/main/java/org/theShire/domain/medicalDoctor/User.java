@@ -16,12 +16,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.*;
 
 public class User extends BaseEntity {
-    // exeption Type if something throws
-    private static final Class<MedicalDoctorException> exType = MedicalDoctorException.class;
-
     //The Email must contain @ and . cannot be empty and has a max length
     private Email email;
     //The Password must be up to certain standards (not null, not Empty, min length,...)
@@ -96,12 +94,12 @@ public class User extends BaseEntity {
     // Methods ------------------------------------------------------------
 
     public void addChat(Chat chat){
-        isNotInCollection(chat, chats,"Chat already in Set", exType);
+        isNotInCollection(chat, chats,"Chat already in Set", exTypeUser);
         this.chats.add(chat);
     }
 
     public void addContact(UserRelationShip contact){
-        isNotInCollection(contact, contacts,"Contact already in Set", exType);
+        isNotInCollection(contact, contacts,"Contact already in Set", exTypeUser);
         this.contacts.add(contact);
     }
 

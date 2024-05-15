@@ -2,16 +2,14 @@ package org.theShire.domain.media;
 
 import org.theShire.domain.BaseEntity;
 
+import static org.theShire.domain.exception.MediaException.exTypeMedia;
 import static org.theShire.foundation.DomainAssertion.*;
 
-import org.theShire.domain.exception.MediaException;
 import org.w3c.dom.Text;
 
 import java.time.Instant;
 
 public class Content extends BaseEntity { //TODO imageWriter
-    //saves the class for exception handling
-    private static final Class<MediaException> exType = MediaException.class;
     private Text text;
     //wields metadata of the Media class
     private Media media;
@@ -31,7 +29,7 @@ public class Content extends BaseEntity { //TODO imageWriter
     }
 
     public void setText(Text text) {
-        this.text = isNotNull(text, "text", exType);
+        this.text = isNotNull(text, "text", exTypeMedia);
     }
 
     public Media getMedia() {
@@ -39,7 +37,7 @@ public class Content extends BaseEntity { //TODO imageWriter
     }
 
     public void setMedia(Media media) {
-        this.media = isNotNull(media, "media", exType);
+        this.media = isNotNull(media, "media", exTypeMedia);
     }
 
 //    @Override

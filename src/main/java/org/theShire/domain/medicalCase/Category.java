@@ -1,5 +1,6 @@
 package org.theShire.domain.medicalCase;
 
+import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
 
 import java.util.Set;
@@ -21,6 +22,6 @@ public class Category {
     }
 
     public void addSetOfCategory(UUID setOfCategory) {
-        this.setOfCategory.add(setOfCategory);
+        this.setOfCategory.add(isNotNull(setOfCategory, "setOfCategory", exTypeCase));
     }
 }

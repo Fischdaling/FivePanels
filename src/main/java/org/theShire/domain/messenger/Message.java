@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import static org.theShire.domain.messenger.Message.Stage.*;
 
-public class Message extends BaseEntity {
+public class Message extends BaseEntity {//TODO assertions
 
     //The ID from the Sender
     private UUID senderId;

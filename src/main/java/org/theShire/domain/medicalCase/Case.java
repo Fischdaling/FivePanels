@@ -1,6 +1,6 @@
 package org.theShire.domain.medicalCase;
+
 import org.theShire.domain.BaseEntity;
-import org.theShire.domain.exception.MedicalCaseException;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.foundation.DomainAssertion;
@@ -10,11 +10,10 @@ import java.io.StringReader;
 import java.time.Instant;
 import java.util.*;
 
+import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
 
 public class Case extends BaseEntity {
-    //saves the class for exception handling
-    private static final Class<MedicalCaseException> exType = MedicalCaseException.class;
 
     //the title provides information about the topic of the case, cannot be left blank and has a max length
     private String title;
@@ -41,7 +40,8 @@ public class Case extends BaseEntity {
     public Case() {
         super(Instant.now());
     }
-    public Case(UUID ownerid,String title, List<Content> content, UUID...members) {
+
+    public Case(UUID ownerid, String title, List<Content> content, UUID... members) {
         super(Instant.now());
         this.ownerid = ownerid;
         setTitle(title);
@@ -56,13 +56,12 @@ public class Case extends BaseEntity {
     }
 
     public void setTitle(String title) {
-        this.title = hasMaxLength(title, 30, "title",exType);
+        this.title = hasMaxLength(title, 30, "title", exTypeCase);
     }
 
     public List<Content> getContent() {
         return content;
     }
-
 
 
     public Set<Knowledges> getKnowledges() {
@@ -86,7 +85,7 @@ public class Case extends BaseEntity {
     }
 
     public void setOwner(UUID ownerid) {
-        this.ownerid = isNotNull(ownerid, "ownerid",exType);
+        this.ownerid = isNotNull(ownerid, "ownerid", exTypeCase);
     }
 
     public Set<UUID> getMembers() {
@@ -122,39 +121,40 @@ public class Case extends BaseEntity {
     }
 
     public void setCaseVote(CaseVote caseVote) {
-        this.caseVote = isNotNull(caseVote, "caseVote",exType);
+        this.caseVote = isNotNull(caseVote, "caseVote", exTypeCase);
     }
+
     //------------------
-    public void addMember(UUID member){
+    public void addMember(UUID member) {
         this.members.add(
-            isNotInCollection(member,this.members,"members",exType)
+                isNotInCollection(member, this.members, "members", exTypeCase)
         );
     }
 
-    public void addMembers(UUID...members){
-        for (UUID member: members){
+    public void addMembers(UUID... members) {
+        for (UUID member : members) {
             addMember(member);
         }
     }
 
     public void addContent(Content content) {
-        this.content.add(isNotNull(content, "content",exType));
+        this.content.add(isNotNull(content, "content", exTypeCase));
     }
 
     public void addContentList(List<Content> contentList) {
-        this.content.addAll(isNotNull(contentList, "contentList",exType));
+        this.content.addAll(isNotNull(contentList, "contentList", exTypeCase));
     }
 
     public void addKnowledge(Knowledges knowledges) {
-        this.knowledges.add(isNotNull(knowledges, "knowledges",exType));
+        this.knowledges.add(isNotNull(knowledges, "knowledges", exTypeCase));
     }
 
     public void addCategory(Category category) {
-        this.category.add(isNotNull(category, "category",exType));
+        this.category.add(isNotNull(category, "category", exTypeCase));
     }
 
-    public void like(UUID userLiked){
-        this.userLiked.add(isNotInCollection(userLiked, this.userLiked, "userLiked", exType));
+    public void like(UUID userLiked) {
+        this.userLiked.add(isNotInCollection(userLiked, this.userLiked, "userLiked", exTypeCase));
         likeCount++;
     }
 }
