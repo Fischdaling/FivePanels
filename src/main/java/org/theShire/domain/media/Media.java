@@ -1,12 +1,10 @@
 package org.theShire.domain.media;
 
-import org.theShire.domain.exception.MediaException;
 
+import static org.theShire.domain.exception.MediaException.exTypeMedia;
 import static org.theShire.foundation.DomainAssertion.*;
 
 public class Media {
-    //saves the class for exception handling
-    private static final Class<MediaException> exType = MediaException.class;
     // saves MetaData as a String
     private String metaData;
     //declares the width of a picture in pixels
@@ -34,7 +32,7 @@ public class Media {
     }
 
     public void setMetaData(String metaData) {
-        this.metaData = isNotBlank(metaData, "metadata", exType);
+        this.metaData = isNotBlank(metaData, "metadata", exTypeMedia);
     }
 
     public int getWidth() {
@@ -42,7 +40,7 @@ public class Media {
     }
 
     public void setWidth(int width) {
-        this.width = greaterZero(width,"width",exType);
+        this.width = greaterZero(width,"width",exTypeMedia);
     }
 
     public int getHeight() {
@@ -50,7 +48,7 @@ public class Media {
     }
 
     public void setHeight(int height) {
-        this.height = greaterZero(height,"height",exType);
+        this.height = greaterZero(height,"height",exTypeMedia);
     }
 
     public String getaltText() {
@@ -58,7 +56,7 @@ public class Media {
     }
 
     public void setaltText(String altText) {
-        this.altText = isNotBlank(altText,"altText", exType);
+        this.altText = isNotBlank(altText,"altText", exTypeMedia);
     }
 
     public String getResolution() {
@@ -66,6 +64,6 @@ public class Media {
     }
 
     public void setResolution(String resolution) { //TODO calc from height and width
-        this.resolution = isNotBlank(resolution,"resolution", exType);
+        this.resolution = isNotBlank(resolution,"resolution", exTypeMedia);
     }
 }

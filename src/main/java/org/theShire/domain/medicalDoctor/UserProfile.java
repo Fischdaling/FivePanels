@@ -6,6 +6,9 @@ import org.theShire.foundation.Knowledges;
 
 import java.util.Set;
 
+import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
+import static org.theShire.foundation.DomainAssertion.isNotNull;
+
 public class UserProfile {
 
     private Name firstName;
@@ -31,7 +34,7 @@ public class UserProfile {
     }
 
     public void setFirstName(Name firstName) {
-        this.firstName = firstName;
+        this.firstName = isNotNull(firstName, "firstname", exTypeUser);
     }
 
     public Name getLastName() {

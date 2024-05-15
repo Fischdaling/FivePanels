@@ -2,11 +2,10 @@ package org.theShire.domain.media;
 
 import org.theShire.domain.exception.MediaException;
 
+import static org.theShire.domain.exception.MediaException.exTypeMedia;
 import static org.theShire.foundation.DomainAssertion.*;
 
 public class Text {
-    ////saves the class for exception handling
-    private static final Class<MediaException> exType = MediaException.class;
     //a String that holds text
     private String text;
 
@@ -21,6 +20,6 @@ public class Text {
     }
 
     public void setText(String text) {
-        this.text = isNotBlank(text, "text", exType);
+        this.text = isNotBlank(text, "text", exTypeMedia);
     }
 }

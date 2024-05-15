@@ -6,6 +6,8 @@ import org.theShire.domain.exception.MedicalDoctorException;
 import java.time.Instant;
 import java.util.UUID;
 
+import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
+import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.isNotNull;
 
 public class Relation extends BaseEntity {
@@ -29,8 +31,7 @@ public class Relation extends BaseEntity {
     }
 
     public void setType(RelationType type) {
-        isNotNull(this.type, "Relation type can't be null", MedicalDoctorException.class);
-        this.type = type;
+        this.type = isNotNull(type, "Relation type can't be null", exTypeUser);
     }
 
     enum RelationType{

@@ -7,4 +7,21 @@ public class Answer {
     private UUID answerID;
     //the definition of an answer
     private String definition;
+
+//getter & setter-------------------------- //TODO inheritance &co
+    public UUID getAnswerID() {
+        return answerID;
+    }
+
+    public void setAnswerID(UUID answerID) {
+        this.answerID = answerID;
+    }
+
+    public String getDefinition() {
+        return definition;
+    }
+
+    public void setDefinition(String definition) {
+        this.definition = definition;
+    }
 }
