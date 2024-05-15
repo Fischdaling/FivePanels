@@ -6,6 +6,7 @@ import org.theShire.domain.medicalDoctor.User;
 import org.theShire.foundation.DomainAssertion;
 import org.theShire.foundation.Knowledges;
 
+import java.io.StringReader;
 import java.time.Instant;
 import java.util.*;
 
@@ -49,8 +50,6 @@ public class Case extends BaseEntity {
     }
 
 
-
-    //getter and setter----- //TODO ASSERT
     public String getTitle() {
         return title;
     }
@@ -70,17 +69,17 @@ public class Case extends BaseEntity {
         return knowledges;
     }
 
-    public void setKnowledges(Set<Knowledges> knowledges) {
-        this.knowledges = knowledges;
-    }
+//    public void setKnowledges(Set<Knowledges> knowledges) {
+//        this.knowledges = knowledges;
+//    }
 
     public int getViewcount() {
         return viewcount;
     }
 
-    public void setViewcount(int Viewcount) {
-        this.viewcount = Viewcount;
-    }
+//    public void setViewcount(int Viewcount) {
+//        this.viewcount = Viewcount;
+//    }
 
     public UUID getOwnerid() {
         return ownerid;
@@ -102,16 +101,12 @@ public class Case extends BaseEntity {
         return likeCount;
     }
 
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-    }
+//    public void setLikeCount(int likeCount) {
+//        this.likeCount = likeCount;
+//    }
 
     public Set<UUID> getUserLiked() {
         return userLiked;
-    }
-
-    public void setUserLiked(Set<UUID> userLiked) {
-        this.userLiked = userLiked;
     }
 
     public Set<Category> getCategory() {
@@ -159,4 +154,8 @@ public class Case extends BaseEntity {
         this.category.add(isNotNull(category, "category",exType));
     }
 
+    public void like(UUID userLiked){
+        this.userLiked.add(isNotInCollection(userLiked, this.userLiked, "userLiked", exType));
+        likeCount++;
+    }
 }

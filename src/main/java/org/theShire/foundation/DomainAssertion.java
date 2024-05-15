@@ -86,6 +86,14 @@ public abstract class DomainAssertion<T> {
             return value;
         }
 
+    public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterEqualsZero(T value, String paramName, Class<E> clazz){
+
+        if (value.doubleValue() < 0){
+            throw variableException(clazz,errorMsg.get());
+        }
+        return value;
+    }
+
         public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterThan(T value,T value1, String paramName, Class<E> clazz) {
 
             if (value.compareTo(value1) <= 0) {
