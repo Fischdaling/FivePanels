@@ -1,14 +1,19 @@
 package org.theShire.domain.medicalCase;
 import org.theShire.domain.BaseEntity;
+import org.theShire.domain.exception.MedicalCaseException;
 import org.theShire.domain.media.Content;
+import org.theShire.domain.medicalDoctor.User;
+import org.theShire.foundation.DomainAssertion;
 import org.theShire.foundation.Knowledges;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+
+import static org.theShire.foundation.DomainAssertion.isNotInCollection;
 
 public class Case extends BaseEntity {
+    private static final Class<MedicalCaseException> exType = MedicalCaseException.class;
+
     //the title provides information about the topic of the case, cannot be left blank and has a max length
     private String title;
     //A list of Content (contains text and metadata)
@@ -31,9 +36,19 @@ public class Case extends BaseEntity {
     private CaseVote caseVote;
 
 
-    public Case(Instant createdAt) {
+    public Case() {
         super(Instant.now());
     }
+    public Case(UUID ownerid,String title, List<Content> content, UUID...members) {
+        super(Instant.now());
+        this.ownerid = ownerid;
+        setTitle(title);
+        setContent(content);
+        this.members = new HashSet<>();
+        addMembers(members);
+    }
+
+
 
     //getter and setter----- //TODO ASSERT
     public String getTitle() {
@@ -116,4 +131,15 @@ public class Case extends BaseEntity {
         this.caseVote = caseVote;
     }
     //------------------
+    public void addMember(UUID member){
+        this.members.add(
+            isNotInCollection(member,this.members,"members",exType)
+        );
+    }
+
+    public void addMembers(UUID...members){
+        for (UUID member: members){
+            addMember(member);
+        }
+    }
 }

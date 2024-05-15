@@ -59,10 +59,17 @@ public abstract class DomainAssertion<T> {
             return value;
         }
 
-        public static <E extends RuntimeException> String containsSymbol(String value, char symbol, String paramName, Class<E> clazz) {
+        public static <E extends RuntimeException> String containsSymbol(String value, String paramName, Class<E> clazz, char symbol) {
             isNotBlank(value, paramName, clazz);
             if (!value.contains(String.valueOf(symbol))){
                 throw variableException(clazz, STR."\{paramName} does not contain \{symbol}");
+            }
+            return value;
+        }
+
+        public static <E extends RuntimeException> String containsSymbols(String value, String paramName, Class<E> clazz, char...symbol){
+            for (int i = 0; i < symbol.length; i++) {
+                containsSymbol(value, paramName, clazz, symbol[i]);
             }
             return value;
         }

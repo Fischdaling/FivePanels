@@ -5,7 +5,6 @@ import static org.theShire.foundation.DomainAssertion.*;
 
 public record Location(String value) {
     public Location(String value) {
-        hasMaxLength(value,50,"Location", MedicalDoctorException.class);
-        this.value = value;
+        this.value = hasMaxLength(value,50,"Location", MedicalDoctorException.class);
     }
 }

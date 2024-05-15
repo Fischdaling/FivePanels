@@ -3,6 +3,7 @@ package org.theShire.domain.medicalDoctor;
 import org.theShire.domain.BaseEntity;
 import org.theShire.domain.exception.MediaException;
 import org.theShire.domain.exception.MedicalDoctorException;
+import org.theShire.domain.media.Content;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.richType.Email;
@@ -11,7 +12,10 @@ import org.theShire.foundation.DomainAssertion;
 
 import javax.print.attribute.standard.Media;
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
+
 import static org.theShire.foundation.DomainAssertion.*;
 
 public class User extends BaseEntity {
@@ -99,5 +103,10 @@ public class User extends BaseEntity {
     public void addContact(UserRelationShip contact){
         isNotInCollection(contact, contacts,"Contact already in Set", exType);
         this.contacts.add(contact);
+    }
+
+    public void createCase(String title, List<Content> content, UUID...members){
+
+        this.ownedCases.add(new Case(this.getEntityId(),title, content, members));
     }
 }
