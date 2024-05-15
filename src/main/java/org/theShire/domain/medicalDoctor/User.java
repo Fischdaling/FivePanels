@@ -39,8 +39,8 @@ public class User extends BaseEntity {
         super(Instant.now());
     }
 
-    public User(Instant createdAt, Password password, Email email, UserProfile profile, Set<UserRelationShip> contacts) {
-        super(createdAt);
+    public User(Password password, Email email, UserProfile profile, Set<UserRelationShip> contacts) {
+        super(Instant.now());
         this.password = password;
         this.email = email;
         this.profile = profile;
@@ -98,6 +98,7 @@ public class User extends BaseEntity {
         isNotInCollection(contact, contacts, "Contact already in Set", exTypeUser);
         this.contacts.add(contact);
     }
+
 
 
 }
