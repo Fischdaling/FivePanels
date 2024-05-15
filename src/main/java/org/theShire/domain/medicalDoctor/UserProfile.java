@@ -42,7 +42,7 @@ public class UserProfile {
     }
 
     public void setLastName(Name lastName) {
-        this.lastName = isNotNull(lastName,"lastName", exTypeUser);
+        this.lastName = isNotNull(lastName, "lastName", exTypeUser);
     }
 
     public Set<EducationalTitle> getEducationalTitle() {
@@ -54,7 +54,7 @@ public class UserProfile {
     }
 
     public void setProfilePicture(Media profilePicture) {
-        this.profilePicture = profilePicture;
+        this.profilePicture = isNotNull(profilePicture, "profilePicture", exTypeUser);
     }
 
     public Location getLocation() {
@@ -62,7 +62,7 @@ public class UserProfile {
     }
 
     public void setLocation(Location location) {
-        this.location = location;
+        this.location = isNotNull(location, "location", exTypeUser);
     }
 
     public Language getLanguage() {
@@ -70,25 +70,27 @@ public class UserProfile {
     }
 
     public void setLanguage(Language language) {
-        this.language = language;
+        this.language = isNotNull(language, "language", exTypeUser);
     }
 
     public Set<Knowledges> getSpecialization() {
         return specialization;
     }
 
-    public void setSpecialization(Set<Knowledges> specialization) {
-        this.specialization = specialization;
-    }
-
     public Set<Knowledges> getExperience() {
         return experience;
     }
 
-    public void setExperience(Set<Knowledges> experience) {
-        this.experience = experience;
-    }
+
     public void addEducationalTitle(EducationalTitle educationalTitle) {
-        this.educationalTitle.add(isNotNull(educationalTitle,"educationalTitle", exTypeUser));
+        this.educationalTitle.add(isNotNull(educationalTitle, "educationalTitle", exTypeUser));
+    }
+
+    public void addSpecialization(Knowledges specialization) {
+        this.specialization.add(isNotNull(specialization, "specialization", exTypeUser));
+    }
+
+    public void setExperience(Knowledges experience) {
+        this.experience.add(isNotNull(experience, "experience", exTypeUser));
     }
 }

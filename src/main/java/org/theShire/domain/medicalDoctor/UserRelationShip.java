@@ -11,7 +11,7 @@ public class UserRelationShip {
     private HashMap<UUID,Relation> relationShip;
 
     public UserRelationShip(HashMap<UUID, Relation> relationShip) {
-        this.relationShip = relationShip;
+        setRelationShip(relationShip);
     }
 
     public HashMap<UUID, Relation> getRelationShip() {
@@ -19,6 +19,6 @@ public class UserRelationShip {
     }
 
     public void setRelationShip(HashMap<UUID, Relation> relationShip) {
-        this.relationShip = relationShip;
+        this.relationShip = relationShip; //TODO HELP
     }
 }
