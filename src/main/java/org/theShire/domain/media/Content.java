@@ -9,7 +9,7 @@ import org.w3c.dom.Text;
 
 import java.time.Instant;
 
-public class Content extends BaseEntity {
+public class Content extends BaseEntity { //TODO imageWriter
     //saves the class for exception handling
     private static final Class<MediaException> exType = MediaException.class;
     private Text text;
