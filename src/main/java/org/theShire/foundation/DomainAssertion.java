@@ -7,6 +7,7 @@ import com.nulabinc.zxcvbn.Zxcvbn;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.time.Year;
 import java.util.Collection;
 import java.util.function.Supplier;
 
@@ -128,8 +129,6 @@ public abstract class DomainAssertion<T> {
             return o;
         }
 
-        //TODO TESTS:
-
         // Time Assertions -------------------------------------------------------------
         public static <T extends Instant, E extends RuntimeException>T isBeforeNow(T time, String paramName, Class<E> clazz){
             isNotNull(time,paramName, clazz);
@@ -142,7 +141,6 @@ public abstract class DomainAssertion<T> {
         public static <T extends Instant, E extends RuntimeException>T isBeforeTime(T time1, T time2, String paramName, Class<E> clazz){
             isNotNull(time1, paramName, clazz);
             isNotNull(time2, paramName, clazz);
-
             if (time1.isBefore(time2))
                 throw variableException(clazz,STR."\{paramName} time 1: \{time1} is before time 2: \{time2}");
 

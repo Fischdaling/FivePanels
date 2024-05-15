@@ -1,8 +1,11 @@
 package org.theShire.foundation;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.junit.jupiter.api.Test;
 import org.theShire.domain.exception.MedicalCaseException;
 
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -257,5 +260,58 @@ public class DomainAssertionTest {
 
         assertThrows(exType,()-> isNotInCollection(i1,list,"TestCaseList",exType));
     }
+
+    @Test
+    void isBeforeNow_ShouldThrow_WhenIsBeforeNow(){
+        Instant instant = Instant.now().minusSeconds(10);
+        assertThrows(exType,()-> isBeforeNow(instant,"TestCaseInstant",exType));
+    }
+
+    @Test
+    void isBeforeNow_ShouldReturnTime_WhenIsAfterNow(){
+        Instant instant = Instant.now().plusSeconds(10);
+        assertEquals(instant, isBeforeNow(instant,"TestCaseInstant",exType));
+    }
+
+    @Test
+    void isBeforeNow_ShouldThrown_WhenIsNow(){
+        Instant instant = Instant.now();
+        assertThrows(exType,()-> isBeforeNow(instant,"TestCaseInstant",exType));
+    }
+
+    @Test
+    void isBeforeTime_ShouldThrow_WhenIsAfterTime(){
+        Instant instant = Instant.now().plusSeconds(10);
+        Instant instant1 = Instant.now();
+        assertThrows(exType,()-> isBeforeTime(instant,instant1,"TestCaseInstant",exType));
+    }
+
+    @Test
+    void isBeforeTime_ShouldReturnTime_WhenIsBeforeTime(){
+        Instant instant = Instant.now();
+        Instant instant1 = Instant.now().plusSeconds(10);
+        assertEquals(instant, isBeforeTime(instant,instant1,"TestCaseInstant",exType));
+    }
+
+    @Test
+    void isZxcvbn3Confirm_ShouldThrow_WhenIsNotZxcvbn3Confirm(){
+        String zxcvbn3Confirm = "abc";
+        assertThrows(exType, ()->isZxcvbn3Confirm(zxcvbn3Confirm,"zxcvbn3Confirm",exType));
+    }
+
+    @Test
+    void isZxcvbn3Confirm_ShouldReturnHashedPassword_WhenIsZxcvbn3Confirm(){
+        String zxcvbn3Confirm = "A_b-c!3acegi5";
+        byte[] hashed = BCrypt.withDefaults().hash(6, zxcvbn3Confirm.getBytes(StandardCharsets.UTF_8));
+        assertEquals(hashed ,isZxcvbn3Confirm(zxcvbn3Confirm,"zxcvbn3Confirm",exType));
+    }
+
+
+
+
+
+
+
+
 
 }
