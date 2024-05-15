@@ -7,26 +7,27 @@ import org.theShire.foundation.Knowledges;
 import java.util.Set;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
+import static org.theShire.foundation.DomainAssertion.isNotInCollection;
 import static org.theShire.foundation.DomainAssertion.isNotNull;
 
 public class UserProfile {
 
     private Name firstName;
     private Name lastName;
-    private Set<EducationalTitle> educationalTitle;
+    private Set<EducationalTitle> educationalTitles;
     private Media profilePicture;
     private Location location;
     private Language language;
     private Set<Knowledges> specialization;
     private Set<Knowledges> experience;
 
-    public UserProfile(Language language, Location location, Media profilePicture, Name firstName, Name lastName, Set<EducationalTitle> educationalTitle) {
+    public UserProfile(Language language, Location location, Media profilePicture, Name firstName, Name lastName, EducationalTitle...educationalTitle) {
         this.language = language;
         this.location = location;
         this.profilePicture = profilePicture;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.educationalTitle = educationalTitle;
+        this.addEducationalTitle(educationalTitle[0]);
     }
 
     public Name getFirstName() {
@@ -45,9 +46,6 @@ public class UserProfile {
         this.lastName = isNotNull(lastName, "lastName", exTypeUser);
     }
 
-    public Set<EducationalTitle> getEducationalTitle() {
-        return educationalTitle;
-    }
 
     public Media getProfilePicture() {
         return profilePicture;
@@ -83,8 +81,14 @@ public class UserProfile {
 
 
     public void addEducationalTitle(EducationalTitle educationalTitle) {
-        this.educationalTitle.add(isNotNull(educationalTitle, "educationalTitle", exTypeUser));
+        this.educationalTitles.add(isNotInCollection(educationalTitle, educationalTitles,"educationalTitle", exTypeUser));
     }
+    public void addEducationalTitles(EducationalTitle...educationalTitle) {
+        for (EducationalTitle title : educationalTitle) {
+            addEducationalTitle(title);
+        }
+    }
+
 
     public void addSpecialization(Knowledges specialization) {
         this.specialization.add(isNotNull(specialization, "specialization", exTypeUser));

@@ -4,11 +4,11 @@ import org.theShire.domain.BaseEntity;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.messenger.Chat;
-import org.theShire.domain.richType.Email;
-import org.theShire.domain.richType.Password;
+import org.theShire.domain.richType.*;
+import org.theShire.domain.media.Media;
 
-import javax.print.attribute.standard.Media;
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -39,12 +39,15 @@ public class User extends BaseEntity {
         super(Instant.now());
     }
 
-    public User(Password password, Email email, UserProfile profile, Set<UserRelationShip> contacts) {
+    public User(Password password, Email email, UserProfile profile) {
         super(Instant.now());
         this.password = password;
         this.email = email;
         this.profile = profile;
-        this.contacts = contacts;
+        Set<UserRelationShip> contacts = new HashSet<>();
+        Set<Chat> chats = new HashSet<>();
+        Set<Case> ownedCases = new HashSet<>();
+        Set<Case> memberOfCase = new HashSet<>();
     }
 
 
@@ -99,6 +102,37 @@ public class User extends BaseEntity {
         this.contacts.add(contact);
     }
 
+    public static void main(String[] args) {
+        //TODO Relation & Compilor
+        Media media = new Media(2000,1500,"I am a Picture", "2000x1500");
 
+        UserProfile profile = new UserProfile(new Language("German"),
+                new Location("Gondor"),media,new Name("Boromir"),
+                new Name("Aragorn"),new EducationalTitle("Dr."),
+                new EducationalTitle("arathorn"));
+
+
+
+        User user = new User(new Password("Spengergasse"),
+                new Email("Boromir@gamil.com"),profile);
+
+
+
+        Media media1 = new Media(1500,100,"I am a Father", "1500x100");
+
+        UserProfile profile1 = new UserProfile(new Language("German"),
+                new Location("Gondor"),media1,new Name("Aarathorn"),
+                new Name("Aragorn"),new EducationalTitle("Dr."),
+                new EducationalTitle("Arathorn"),new EducationalTitle("mag"));
+
+
+
+        User user1 = new User(new Password("Spengergasse123"),
+                new Email("Arathorn@gamil.com"),profile1);
+
+        System.out.println(user1);
+        System.out.println(user);
+
+    }
 
 }

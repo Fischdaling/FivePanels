@@ -5,8 +5,6 @@ import static org.theShire.domain.exception.MediaException.exTypeMedia;
 import static org.theShire.foundation.DomainAssertion.*;
 
 public class Media {
-    // saves MetaData as a String
-    private String metaData;
     //declares the width of a picture in pixels
     private int width;
     //declares the height of a picture in pixels
@@ -17,8 +15,7 @@ public class Media {
     private String resolution;
 
 
-    public Media(String metaData, int width, int height, String altText, String resolution) {
-        setMetaData(metaData);
+    public Media(int width, int height, String altText, String resolution) {
         setWidth(width);
         setHeight(height);
         setaltText(altText);
@@ -27,13 +24,6 @@ public class Media {
 
 
     //getter and setter-----------------------
-    public String getMetaData() {
-        return metaData;
-    }
-
-    public void setMetaData(String metaData) {
-        this.metaData = isNotBlank(metaData, "metadata", exTypeMedia);
-    }
 
     public int getWidth() {
         return width;
