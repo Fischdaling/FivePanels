@@ -1,6 +1,11 @@
 package org.theShire.foundation;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.nulabinc.zxcvbn.Strength;
+import com.nulabinc.zxcvbn.Zxcvbn;
+
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.function.Supplier;
@@ -75,7 +80,7 @@ public abstract class DomainAssertion<T> {
         }
         // number Assertions --------------------------------------------------------------
         public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterZero(T value, String paramName, Class<E> clazz){
-            return greaterZero(value, ()->STR."\{paramName} is smaller than 0", clazz);
+            return greaterZero(value, ()->STR."\{paramName} is smaller or Equal than 0", clazz);
         }
 
         public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterZero(T value, Supplier<String> errorMsg, Class<E> clazz){
@@ -86,13 +91,17 @@ public abstract class DomainAssertion<T> {
             return value;
         }
 
-    public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterEqualsZero(T value, String paramName, Class<E> clazz){
-
-        if (value.doubleValue() < 0){
-            throw variableException(clazz,errorMsg.get());
+        public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterEqualsZero(T value, String paramName, Class<E> clazz){
+            return greaterEqualsZero(value, ()->STR."\{paramName} is smaller to Zero",clazz);
         }
-        return value;
-    }
+
+        public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterEqualsZero(T value, Supplier<String> errorMsg, Class<E> clazz){
+
+            if (value.doubleValue() < 0){
+                throw variableException(clazz,errorMsg.get());
+            }
+            return value;
+        }
 
         public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterThan(T value,T value1, String paramName, Class<E> clazz) {
 
@@ -101,7 +110,7 @@ public abstract class DomainAssertion<T> {
             }
             return value;
         }
-        // Expression Assertions -------------------------------------------------------
+    // Expression Assertions -------------------------------------------------------
 
         public static <E extends RuntimeException> void isTrue(boolean expression, Supplier<String> errorMsg, Class<E> clazz) {
             if (!expression)
@@ -119,6 +128,7 @@ public abstract class DomainAssertion<T> {
             return o;
         }
 
+        //TODO TESTS:
 
         // Time Assertions -------------------------------------------------------------
         public static <T extends Instant, E extends RuntimeException>T isBeforeNow(T time, String paramName, Class<E> clazz){
@@ -139,5 +149,15 @@ public abstract class DomainAssertion<T> {
             return time1;
         }
 
+        // Password Assertions--------------------------------------------------------------
+        public static <E extends RuntimeException> byte[] isZxcvbn3Confirm(String value, String paramName, Class<E> clazz) {
+            isNotNull(value, paramName, clazz);
+            Zxcvbn zxcvbn = new Zxcvbn();
+            Strength strength = zxcvbn.measure(value);
+            if (strength.getScore() <3){
+                throw variableException(clazz, strength.getFeedback().toString());
+            }
+            return BCrypt.withDefaults().hash(6, value.getBytes(StandardCharsets.UTF_8));
+        }
     }
 

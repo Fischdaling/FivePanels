@@ -55,8 +55,7 @@ public class Case extends BaseEntity {
     }
 
     public void setTitle(String title) {
-        hasMaxLength(title, 30, "title",exType);
-        this.title = title;
+        this.title = hasMaxLength(title, 30, "title",exType);
     }
 
     public List<Content> getContent() {
@@ -122,8 +121,7 @@ public class Case extends BaseEntity {
     }
 
     public void setCaseVote(CaseVote caseVote) {
-        isNotNull(caseVote, "caseVote",exType);
-        this.caseVote = caseVote;
+        this.caseVote = isNotNull(caseVote, "caseVote",exType);
     }
     //------------------
     public void addMember(UUID member){
