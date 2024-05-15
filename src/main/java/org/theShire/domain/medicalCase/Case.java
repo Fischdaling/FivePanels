@@ -9,7 +9,7 @@ import org.theShire.foundation.Knowledges;
 import java.time.Instant;
 import java.util.*;
 
-import static org.theShire.foundation.DomainAssertion.isNotInCollection;
+import static org.theShire.foundation.DomainAssertion.*;
 
 public class Case extends BaseEntity {
     private static final Class<MedicalCaseException> exType = MedicalCaseException.class;
@@ -19,7 +19,7 @@ public class Case extends BaseEntity {
     //A list of Content (contains text and metadata)
     private List<Content> content;
     //A list of Knowledges (portraits different medical knowledges in form of hashtags)
-    private Set<Knowledges> Knowledges;
+    private Set<Knowledges> knowledges;
     //portraits how often a given case was viewed
     private int viewcount;
     //wields the UUID of the user that is the owner of a given case
@@ -43,7 +43,7 @@ public class Case extends BaseEntity {
         super(Instant.now());
         this.ownerid = ownerid;
         setTitle(title);
-        setContent(content);
+        addContentList(content);
         this.members = new HashSet<>();
         addMembers(members);
     }
@@ -56,6 +56,7 @@ public class Case extends BaseEntity {
     }
 
     public void setTitle(String title) {
+        hasMaxLength(title, 30, "title",exType);
         this.title = title;
     }
 
@@ -63,16 +64,14 @@ public class Case extends BaseEntity {
         return content;
     }
 
-    public void setContent(List<Content> content) {
-        this.content = content;
-    }
+
 
     public Set<Knowledges> getKnowledges() {
-        return Knowledges;
+        return knowledges;
     }
 
-    public void setKnowledges(Set<Knowledges> Knowledges) {
-        this.Knowledges = Knowledges;
+    public void setKnowledges(Set<Knowledges> knowledges) {
+        this.knowledges = knowledges;
     }
 
     public int getViewcount() {
@@ -87,8 +86,8 @@ public class Case extends BaseEntity {
         return ownerid;
     }
 
-    public void setOwnerid(UUID ownerid) {
-        this.ownerid = ownerid;
+    public void setOwner(UUID ownerid) {
+        this.ownerid = isNotNull(ownerid, "ownerid",exType);
     }
 
     public Set<UUID> getMembers() {
@@ -128,6 +127,7 @@ public class Case extends BaseEntity {
     }
 
     public void setCaseVote(CaseVote caseVote) {
+        isNotNull(caseVote, "caseVote",exType);
         this.caseVote = caseVote;
     }
     //------------------
@@ -142,4 +142,21 @@ public class Case extends BaseEntity {
             addMember(member);
         }
     }
+
+    public void addContent(Content content) {
+        this.content.add(isNotNull(content, "content",exType));
+    }
+
+    public void addContentList(List<Content> contentList) {
+        this.content.addAll(isNotNull(contentList, "contentList",exType));
+    }
+
+    public void addKnowledge(Knowledges knowledges) {
+        this.knowledges.add(isNotNull(knowledges, "knowledges",exType));
+    }
+
+    public void addCategory(Category category) {
+        this.category.add(isNotNull(category, "category",exType));
+    }
+
 }

@@ -23,7 +23,7 @@ public abstract class DomainAssertion<T> {
         // public static Object isNotNull(Object value, String paramName) {
         public static <T, E extends RuntimeException> T isNotNull(T value, String paramName, Class<E> clazz) {
                 if (value == null) {
-                    throw variableException(clazz,STR."\{paramName} is null");
+                    throw variableException(clazz,STR."\{paramName} cannot be null");
                 }
                 return value;
         }
