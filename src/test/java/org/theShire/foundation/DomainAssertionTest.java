@@ -281,7 +281,7 @@ public class DomainAssertionTest {
 
     @Test
     void isBeforeTime_ShouldThrow_WhenIsAfterTime(){
-        Instant instant = Instant.now().plusSeconds(10);
+        Instant instant = Instant.now().minusSeconds(10);
         Instant instant1 = Instant.now();
         assertThrows(exType,()-> isBeforeTime(instant,instant1,"TestCaseInstant",exType));
     }
@@ -289,7 +289,7 @@ public class DomainAssertionTest {
     @Test
     void isBeforeTime_ShouldReturnTime_WhenIsBeforeTime(){
         Instant instant = Instant.now();
-        Instant instant1 = Instant.now().plusSeconds(10);
+        Instant instant1 = Instant.now().minusSeconds(10);
         assertEquals(instant, isBeforeTime(instant,instant1,"TestCaseInstant",exType));
     }
 

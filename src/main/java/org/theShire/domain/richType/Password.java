@@ -9,6 +9,6 @@ import static org.theShire.foundation.DomainAssertion.isZxcvbn3Confirm;
 
 public record Password(String value) {
     public Password(String value) {
-        this.value = Arrays.toString(isZxcvbn3Confirm(value, "Password", MedicalDoctorException.class));
+        this.value = isZxcvbn3Confirm(value, "Password", MedicalDoctorException.class);
     }
 }

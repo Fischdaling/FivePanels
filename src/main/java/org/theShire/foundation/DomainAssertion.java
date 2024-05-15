@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.Year;
 import java.util.Collection;
+import java.util.SimpleTimeZone;
 import java.util.function.Supplier;
 
 import static java.lang.StringTemplate.STR;
@@ -148,14 +149,14 @@ public abstract class DomainAssertion<T> {
         }
 
         // Password Assertions--------------------------------------------------------------
-        public static <E extends RuntimeException> byte[] isZxcvbn3Confirm(String value, String paramName, Class<E> clazz) {
+        public static <E extends RuntimeException> String isZxcvbn3Confirm(String value, String paramName, Class<E> clazz) {
             isNotNull(value, paramName, clazz);
             Zxcvbn zxcvbn = new Zxcvbn();
             Strength strength = zxcvbn.measure(value);
             if (strength.getScore() <3){
                 throw variableException(clazz, strength.getFeedback().toString());
             }
-            return BCrypt.withDefaults().hash(6, value.getBytes(StandardCharsets.UTF_8));
+            return BCrypt.withDefaults().hashToString(12, value.toCharArray());
         }
     }
 
