@@ -97,9 +97,14 @@ public class User extends BaseEntity {
         this.chats.add(isNotInCollection(chat, chats, "Chat already in Set", exTypeUser));
     }
 
-    public void addContact(UserRelationShip contact) {
+    public void sendRequest(UserRelationShip contact) {
+        //TODO IF BOTH RELATIONTYPES ARE ESTABLISHED ADD TO CONTACT LIST
         isNotInCollection(contact, contacts, "Contact already in Set", exTypeUser);
         this.contacts.add(contact);
+    }
+
+    public void acceptRequest(UserRelationShip contact) {
+        //TODO IF USERRELATION HAS AN ENTRY WITH INCOMING AND THIS USER ID CAN BE ACCEPTED
     }
 
     public static void main(String[] args) {
@@ -129,6 +134,7 @@ public class User extends BaseEntity {
 
         User user1 = new User(new Password("Spengergasse123"),
                 new Email("Arathorn@gamil.com"),profile1);
+
 
         System.out.println(user1);
         System.out.println(user);

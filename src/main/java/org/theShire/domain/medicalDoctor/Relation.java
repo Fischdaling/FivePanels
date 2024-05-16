@@ -20,8 +20,8 @@ public class Relation extends BaseEntity {
         super(Instant.now());
     }
 
-    public Relation(Instant createdAt, RelationType type, UUID relatedUserId) {
-        super(createdAt);
+    public Relation(RelationType type, UUID relatedUserId) {
+        super(Instant.now());
         this.type = type;
         this.relatedUserId = relatedUserId;
     }
