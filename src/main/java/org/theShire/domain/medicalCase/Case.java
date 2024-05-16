@@ -43,8 +43,9 @@ public class Case extends BaseEntity {
 
     public Case(UUID ownerid, String title, List<Content> content, UUID... members) {
         super(Instant.now());
-        this.ownerid = ownerid;
+        setOwner(ownerid);
         setTitle(title);
+        this.content = new ArrayList<>();
         addContentList(content);
         this.members = new HashSet<>();
         addMembers(members);
@@ -156,5 +157,22 @@ public class Case extends BaseEntity {
     public void like(UUID userLiked) {
         this.userLiked.add(isNotInCollection(userLiked, this.userLiked, "userLiked", exTypeCase));
         likeCount++;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Case{");
+        sb.append("title='").append(title).append('\'');
+        sb.append("content=").append(content);
+        sb.append("knowledges=").append(knowledges);
+        sb.append("viewcount=").append(viewcount);
+        sb.append("ownerid=").append(ownerid);
+        sb.append("members=").append(members);
+        sb.append("likeCount=").append(likeCount);
+        sb.append("userLiked=").append(userLiked);
+        sb.append("category=").append(category);
+        sb.append("caseVote=").append(caseVote);
+        sb.append('}');
+        return sb.toString();
     }
 }

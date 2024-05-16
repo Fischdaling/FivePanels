@@ -56,4 +56,15 @@ public class Media {
     public void setResolution(String resolution) { //TODO calc from height and width
         this.resolution = isNotBlank(resolution,"resolution", exTypeMedia);
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Media{");
+        sb.append("width=").append(width);
+        sb.append(", height=").append(height);
+        sb.append(", altText='").append(altText).append('\'');
+        sb.append(", resolution='").append(resolution).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

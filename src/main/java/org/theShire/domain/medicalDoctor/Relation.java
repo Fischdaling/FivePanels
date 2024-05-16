@@ -34,6 +34,7 @@ public class Relation extends BaseEntity {
         this.type = isNotNull(type, "Relation type can't be null", exTypeUser);
     }
 
+
     enum RelationType{
         OUTGOING,
         INCOMING,

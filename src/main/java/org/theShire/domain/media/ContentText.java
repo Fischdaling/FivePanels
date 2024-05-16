@@ -1,16 +1,14 @@
 package org.theShire.domain.media;
 
-import org.theShire.domain.exception.MediaException;
-
 import static org.theShire.domain.exception.MediaException.exTypeMedia;
 import static org.theShire.foundation.DomainAssertion.*;
 
-public class Text {
+public class ContentText {
     //a String that holds text
     private String text;
 
 
-    public Text(String text) {
+    public ContentText(String text) {
         setText(text);
     }
 

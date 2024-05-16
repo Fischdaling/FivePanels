@@ -2,16 +2,14 @@ package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.BaseEntity;
 import org.theShire.domain.media.Content;
+import org.theShire.domain.media.ContentText;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.richType.*;
 import org.theShire.domain.media.Media;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.*;
@@ -41,13 +39,14 @@ public class User extends BaseEntity {
 
     public User(Password password, Email email, UserProfile profile) {
         super(Instant.now());
+        contacts = new HashSet<>();
+        chats = new HashSet<>();
+        ownedCases = new HashSet<>();
+        memberOfCase = new HashSet<>();
         this.password = password;
         this.email = email;
         this.profile = profile;
-        Set<UserRelationShip> contacts = new HashSet<>();
-        Set<Chat> chats = new HashSet<>();
-        Set<Case> ownedCases = new HashSet<>();
-        Set<Case> memberOfCase = new HashSet<>();
+
     }
 
 
@@ -97,18 +96,27 @@ public class User extends BaseEntity {
         this.chats.add(isNotInCollection(chat, chats, "Chat already in Set", exTypeUser));
     }
 
-    public void sendRequest(UserRelationShip contact) {
-        //TODO IF BOTH RELATIONTYPES ARE ESTABLISHED ADD TO CONTACT LIST
-        isNotInCollection(contact, contacts, "Contact already in Set", exTypeUser);
-        this.contacts.add(contact);
-    }
 
-    public void acceptRequest(UserRelationShip contact) {
-        //TODO IF USERRELATION HAS AN ENTRY WITH INCOMING AND THIS USER ID CAN BE ACCEPTED
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("User{").append(System.lineSeparator());
+        isNotNull(profile, "profile", exTypeUser);
+        sb.append("profile=").append(profile).append(System.lineSeparator());
+        sb.append("email=").append(email).append(System.lineSeparator());
+        sb.append("password=").append(password).append(System.lineSeparator());
+        sb.append("profile=").append(profile).append(System.lineSeparator());
+        sb.append("score=").append(score).append(System.lineSeparator());
+        sb.append("contacts=").append(contacts).append(System.lineSeparator());
+        sb.append("chats=").append(chats).append(System.lineSeparator());
+        sb.append("ownedCases=").append(ownedCases).append(System.lineSeparator());
+        sb.append("memberOfCase=").append(memberOfCase).append(System.lineSeparator());
+        sb.append('}');
+        return sb.toString();
     }
 
     public static void main(String[] args) {
-        //TODO Relation & Compilor
+        //TODO Relation
         Media media = new Media(2000,1500,"I am a Picture", "2000x1500");
 
         UserProfile profile = new UserProfile(new Language("German"),
@@ -134,6 +142,16 @@ public class User extends BaseEntity {
 
         User user1 = new User(new Password("Spengergasse123"),
                 new Email("Arathorn@gamil.com"),profile1);
+
+
+        List<Content> contents = new ArrayList<Content>();
+        contents.add(new Content(new ContentText("My First Text")));
+        contents.add(new Content(new ContentText("My Second Text")));
+        contents.add(new Content(new Media(200,100,"My First Media", "200x100")));
+
+        user.createCase("my First Case", contents,user1.getEntityId());
+
+        UserRelationShip relationShip = new UserRelationShip(user.getEntityId(),user1.getEntityId());
 
 
         System.out.println(user1);
