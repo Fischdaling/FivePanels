@@ -3,6 +3,7 @@ package org.theShire.domain.medicalCase;
 import org.theShire.domain.BaseEntity;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.medicalDoctor.User;
+import org.theShire.domain.messenger.Chat;
 import org.theShire.foundation.DomainAssertion;
 import org.theShire.foundation.Knowledges;
 
@@ -24,9 +25,9 @@ public class Case extends BaseEntity {
     //portraits how often a given case was viewed
     private int viewcount;
     //wields the UUID of the user that is the owner of a given case
-    private UUID ownerid;
+    private User owner;
     //wields all UUIDs of every member that is part of the case
-    private Set<UUID> members;
+    private Set<User> members;
     //portraits how many users liked a given case
     private int likeCount;
     //remembers which user has already liked a case by their id (prevents a user to like the same case more often)
@@ -41,9 +42,11 @@ public class Case extends BaseEntity {
         super(Instant.now());
     }
 
-    public Case(UUID ownerid, String title, List<Content> content, UUID... members) {
+    public Case(User owner, String title, List<Content> content, User... members) {
         super(Instant.now());
-        setOwner(ownerid);
+        Chat caseChat = new Chat(members);
+        caseChat.addPerson(owner);
+        setOwner(owner);
         setTitle(title);
         this.content = new ArrayList<>();
         addContentList(content);
@@ -81,19 +84,19 @@ public class Case extends BaseEntity {
 //        this.viewcount = Viewcount;
 //    }
 
-    public UUID getOwnerid() {
-        return ownerid;
+    public User getOwnerid() {
+        return owner;
     }
 
-    public void setOwner(UUID ownerid) {
-        this.ownerid = isNotNull(ownerid, "ownerid", exTypeCase);
+    public void setOwner(User owner) {
+        this.owner = isNotNull(owner, "owner", exTypeCase);
     }
 
-    public Set<UUID> getMembers() {
+    public Set<User> getMembers() {
         return members;
     }
 
-    public void setMembers(Set<UUID> members) {
+    public void setMembers(Set<User> members) {
         this.members = members;
     }
 
@@ -126,14 +129,14 @@ public class Case extends BaseEntity {
     }
 
     //------------------
-    public void addMember(UUID member) {
+    public void addMember(User member) {
         this.members.add(
                 isNotInCollection(member, this.members, "members", exTypeCase)
         );
     }
 
-    public void addMembers(UUID... members) {
-        for (UUID member : members) {
+    public void addMembers(User... members) {
+        for (User member : members) {
             addMember(member);
         }
     }
@@ -166,7 +169,7 @@ public class Case extends BaseEntity {
         sb.append("content=").append(content);
         sb.append("knowledges=").append(knowledges);
         sb.append("viewcount=").append(viewcount);
-        sb.append("ownerid=").append(ownerid);
+        sb.append("owner=").append(owner);
         sb.append("members=").append(members);
         sb.append("likeCount=").append(likeCount);
         sb.append("userLiked=").append(userLiked);

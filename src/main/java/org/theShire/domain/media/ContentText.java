@@ -20,4 +20,9 @@ public class ContentText {
     public void setText(String text) {
         this.text = isNotBlank(text, "text", exTypeMedia);
     }
+
+    @Override
+    public String toString() {
+       return text;
+    }
 }

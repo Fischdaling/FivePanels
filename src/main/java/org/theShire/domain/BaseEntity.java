@@ -63,9 +63,9 @@ public class BaseEntity {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("BaseEntity{").
                 append(" entityId: ").append(entityId).append(System.lineSeparator()).
-                append("createdAt").append(createdAt).append(System.lineSeparator()).
-                append("updatedAt").append(updatedAt).append(System.lineSeparator())
-                .append("}");
+//                append("createdAt").append(createdAt).append(System.lineSeparator()).
+//                append("updatedAt").append(updatedAt).append(System.lineSeparator()).
+                append("}");
         return stringBuilder.toString();
     }
 }

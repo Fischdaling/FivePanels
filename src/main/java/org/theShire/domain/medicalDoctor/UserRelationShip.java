@@ -1,21 +1,44 @@
 package org.theShire.domain.medicalDoctor;
 
+import org.theShire.domain.messenger.Chat;
+import org.theShire.foundation.DomainAssertion;
+
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 
-import static org.theShire.domain.medicalDoctor.Relation.RelationType.INCOMING;
-import static org.theShire.domain.medicalDoctor.Relation.RelationType.OUTGOING;
+import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
+import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;
 
 public class UserRelationShip {
     /*      UUID(User)    RELATION
-     *       1          TYPE:OUTGOING,RELATEDUSER:2
-     *       2          TYPE:INCOMING,RELATEDUSER:1
+     *       1          TYPE:OUTGOING
+     *       2          TYPE:INCOMING
      */
     public HashMap<UUID,Relation> relationShip;
-
-    public UserRelationShip(UUID sender, UUID receiver) {
+    public User sender,receiver;
+    
+    public UserRelationShip(User sender, User receiver) {
         relationShip = new HashMap<>();
-        sendRequest(sender, receiver);
+        setSender(sender);
+        setReceiver(receiver);
+        sendRequest(sender.getEntityId(), receiver.getEntityId());
+    }
+
+    public User getSender() {
+        return sender;
+    }
+
+    public void setSender(User sender) {
+        this.sender = DomainAssertion.isNotNull(sender,"receiver",exTypeUser);
+    }
+
+    public User getReceiver() {
+        return receiver;
+    }
+
+    public void setReceiver(User receiver) {
+        this.receiver = DomainAssertion.isNotNull(receiver,"receiver",exTypeUser);
     }
 
     public HashMap<UUID, Relation> getRelationShip() {
@@ -26,20 +49,20 @@ public class UserRelationShip {
         this.relationShip = relationShip; //TODO HELP
     }
 
-    public void sendRequest(UUID sender, UUID reciever) {
+    public void sendRequest(UUID sender, UUID receiver) {
         //TODO ASSERTION
-        relationShip.put(sender,new Relation(Relation.RelationType.OUTGOING,reciever));
-        relationShip.put(reciever,new Relation(Relation.RelationType.INCOMING,sender));
+        relationShip.put(sender, new Relation(OUTGOING,receiver));
+        relationShip.put(receiver, new Relation(INCOMING,sender));
     }
 
-    public void acceptRequest(UUID sender, UUID reciever) {
+    public void acceptRequest(UUID sender, UUID receiver) {
         //TODO ASSERTION
-        if (relationShip.containsKey(reciever)){
-            if (relationShip.get(reciever).getType().equals(Relation.RelationType.INCOMING)){
-                relationShip.replace(sender,new Relation(Relation.RelationType.ESTABLISHED,reciever));
-                relationShip.replace(reciever,new Relation(Relation.RelationType.ESTABLISHED,sender));
+        if (relationShip.containsKey(receiver)){
+            if (relationShip.get(receiver).getType().equals(Relation.RelationType.INCOMING)){
+                relationShip.replace(sender,new Relation(ESTABLISHED, receiver));
+                relationShip.replace(receiver,new Relation(ESTABLISHED, sender));
 
-                // TODO add chat & add to contacts
+                new Chat(this.sender,this.receiver);
             }
         }
     }

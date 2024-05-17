@@ -4,6 +4,7 @@ import org.theShire.domain.media.Content;
 import org.theShire.domain.BaseEntity;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,11 +23,18 @@ public class Message extends BaseEntity {//TODO assertions
         super(Instant.now());
     }
 
-    public Message(Instant createdAt, UUID senderId, List<Content> contents) {
-        super(createdAt);
+    public Message(UUID senderId, Content...contents) {
+        super(Instant.now());
+        this.contents = new ArrayList<>();
         this.senderId = senderId;
         this.stage = SENT;
-        this.contents = contents;
+        addContents(contents);
+    }
+
+    private void addContents(Content...contents) {
+        for (Content content : contents) {
+            addContent(content);
+        }
     }
 
     public UUID getSenderId() {
@@ -56,6 +64,16 @@ public class Message extends BaseEntity {//TODO assertions
     public void addContent(Content content){
         //TODO ASSERTIONS
         this.contents.add(content);
+    }
+
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Message: ");
+        sb.append(System.lineSeparator()).append(/*DB.getUser(senderId)*/ senderId);
+        sb.append(System.lineSeparator()).append(stage);
+        sb.append(System.lineSeparator()).append(contents);
+        return sb.toString();
     }
 
     enum Stage{

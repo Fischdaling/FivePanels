@@ -39,11 +39,15 @@ public class Content extends BaseEntity { //TODO imageWriter
         this.media = isNotNull(media, "media", exTypeMedia);
     }
 
-//    @Override
-//    public String toString() {
-//        return "Content{" +
-//                "text=" + text +
-//                ", media=" + media +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Content: ");
+        if (text != null){
+            sb.append(text);
+        }
+        if (media != null){
+            sb.append(media);
+        }
+        return sb.toString();
+    }
 }
