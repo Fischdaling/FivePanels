@@ -5,12 +5,11 @@ import org.theShire.domain.BaseEntity;
 import static org.theShire.domain.exception.MediaException.exTypeMedia;
 import static org.theShire.foundation.DomainAssertion.*;
 
-import org.w3c.dom.Text;
 
 import java.time.Instant;
 
 public class Content extends BaseEntity { //TODO imageWriter
-    private Text text;
+    private ContentText text;
     //wields metadata of the Media class
     private Media media;
 
@@ -19,16 +18,16 @@ public class Content extends BaseEntity { //TODO imageWriter
         this.media = media;
     }
 
-    public Content(Text text) {
+    public Content(ContentText text) {
         super(Instant.now());
         this.text = text;
     }
 
-    public Text getText() {
+    public ContentText getContentText() {
         return text;
     }
 
-    public void setText(Text text) {
+    public void setContentText(ContentText text) {
         this.text = isNotNull(text, "text", exTypeMedia);
     }
 
@@ -40,11 +39,15 @@ public class Content extends BaseEntity { //TODO imageWriter
         this.media = isNotNull(media, "media", exTypeMedia);
     }
 
-//    @Override
-//    public String toString() {
-//        return "Content{" +
-//                "text=" + text +
-//                ", media=" + media +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("Content: ");
+        if (text != null){
+            sb.append(text);
+        }
+        if (media != null){
+            sb.append(media);
+        }
+        return sb.toString();
+    }
 }

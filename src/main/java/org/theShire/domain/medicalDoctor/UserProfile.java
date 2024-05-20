@@ -4,6 +4,7 @@ import org.theShire.domain.media.Media;
 import org.theShire.domain.richType.*;
 import org.theShire.foundation.Knowledges;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
@@ -27,6 +28,7 @@ public class UserProfile {
         this.profilePicture = profilePicture;
         this.firstName = firstName;
         this.lastName = lastName;
+        educationalTitles = new LinkedHashSet<>();
         this.addEducationalTitle(educationalTitle[0]);
     }
 
@@ -96,5 +98,19 @@ public class UserProfile {
 
     public void setExperience(Knowledges experience) {
         this.experience.add(isNotNull(experience, "experience", exTypeUser));
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("firstName=").append(firstName).append(System.lineSeparator());
+        sb.append("lastName=").append(lastName).append(System.lineSeparator());
+        sb.append("educationalTitles=").append(educationalTitles).append(System.lineSeparator());
+        sb.append("profilePicture=").append(profilePicture).append(System.lineSeparator());
+        sb.append("location=").append(location).append(System.lineSeparator());
+        sb.append("language=").append(language).append(System.lineSeparator());
+        sb.append("specialization=").append(specialization).append(System.lineSeparator());
+        sb.append("experience=").append(experience).append(System.lineSeparator());
+        return sb.toString();
     }
 }

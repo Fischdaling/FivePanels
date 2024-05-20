@@ -1,11 +1,19 @@
 package org.theShire.domain.messenger;
 
 import org.theShire.domain.BaseEntity;
+import org.theShire.domain.media.Content;
 import org.theShire.domain.medicalDoctor.User;
+import org.theShire.foundation.DomainAssertion;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static org.theShire.domain.exception.MessengerException.exTypeMes;
+import static org.theShire.foundation.DomainAssertion.isNotInCollection;
+import static org.theShire.foundation.DomainAssertion.isNotNull;
 
 public class Chat extends BaseEntity { //TODO assertions
     // The Users in the chat
@@ -19,26 +27,48 @@ public class Chat extends BaseEntity { //TODO assertions
         super(Instant.now());
     }
 
-    public Chat(Instant createdAt, Set<User> people, List<Message> chatHistory) {
-        super(createdAt);
-        this.people = people;
-        this.chatHistory = chatHistory;
+    public Chat(User ... chatters) {
+        super(Instant.now());
+        people = new HashSet<User>();
+        chatHistory = new ArrayList<Message>();
+
+        addChatters(chatters);
+    }
+
+    private void addChatters(User...chatters) {
+        for (User chatter : chatters) {
+            addChatter(chatter);
+        }
+    }
+    private void addChatter(User chatter) {
+        people.add(isNotInCollection(chatter,this.people,"chatter",exTypeMes));
+        chatter.addChat(this);
     }
 
     public Set<User> getPeople() {
         return people;
     }
 
-    public void setPeople(Set<User> people) {
-        this.people = people;
-    }
-
     public List<Message> getChatHistory() {
         return chatHistory;
     }
 
-    public void setChatHistory(List<Message> chatHistory) {
-        this.chatHistory = chatHistory;
+    public void addChatHistory(Message message) {
+        chatHistory.add(isNotNull(message,"message",exTypeMes));
+    }
+
+    public void sendMessage(Message message){
+        addChatHistory(isNotNull(message,"content",exTypeMes));
+        message.setStage(Message.Stage.SENT);
+    }
+    public void addPerson(User chatter){
+        people.add(isNotNull(chatter,"chatter",exTypeMes));
+    }
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Chat:");
+        sb.append(chatHistory);
+        return sb.toString();
     }
 
     enum ChatType{

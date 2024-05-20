@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.support.kotlinCompilerOptions
+
 plugins {
     id("java")
 }
@@ -15,6 +17,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation("com.nulab-inc:zxcvbn:1.9.0")
     implementation("at.favre.lib:bcrypt:0.10.2")
+    implementation("org.antlr:stringtemplate:4.0.2")
 }
 java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -23,10 +26,11 @@ java {
 }
 tasks.withType<JavaCompile> {
     options.compilerArgs.add("--enable-preview")
+    options.javaModuleVersion.set("21")
 }
+
 
 tasks.test {
     useJUnitPlatform()
     jvmArgs("--enable-preview")
 }
-

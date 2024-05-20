@@ -1,18 +1,15 @@
 package org.theShire.foundation;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
+
 import com.nulabinc.zxcvbn.Strength;
 import com.nulabinc.zxcvbn.Zxcvbn;
 
 import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.time.Year;
 import java.util.Collection;
-import java.util.SimpleTimeZone;
+import java.util.HashSet;
 import java.util.function.Supplier;
 
-import static java.lang.StringTemplate.STR;
 
 public abstract class DomainAssertion<T> {
         //Variable Exceptions
@@ -30,7 +27,7 @@ public abstract class DomainAssertion<T> {
         // public static Object isNotNull(Object value, String paramName) {
         public static <T, E extends RuntimeException> T isNotNull(T value, String paramName, Class<E> clazz) {
                 if (value == null) {
-                    throw variableException(clazz,STR."\{paramName} cannot be null");
+                    throw variableException(clazz,paramName+" cannot be null");
                 }
                 return value;
         }
@@ -42,7 +39,7 @@ public abstract class DomainAssertion<T> {
             isNotNull(value, paramName, clazz);
 
             if (value.isBlank())
-                throw variableException(clazz,STR."\{paramName} is blank");
+                throw variableException(clazz,paramName+" is blank");
 
             return value;
         }
@@ -52,7 +49,7 @@ public abstract class DomainAssertion<T> {
             isNotBlank(value, paramName, clazz);
 
             if (value.length() > maxLength)
-                throw variableException(clazz,STR."\{paramName} is greater than \{maxLength}");
+                throw variableException(clazz,paramName+" is greater than "+maxLength);
 
             return value;
         }
@@ -61,7 +58,7 @@ public abstract class DomainAssertion<T> {
             isNotBlank(value, paramName, clazz);
 
             if (value.length() <= minLength)
-                throw variableException(clazz,STR."\{paramName} is smaller than \{minLength}");
+                throw variableException(clazz,paramName+" is smaller than "+minLength);
 
             return value;
         }
@@ -69,7 +66,7 @@ public abstract class DomainAssertion<T> {
         public static <E extends RuntimeException> String containsSymbol(String value, String paramName, Class<E> clazz, char symbol) {
             isNotBlank(value, paramName, clazz);
             if (!value.contains(String.valueOf(symbol))){
-                throw variableException(clazz, STR."\{paramName} does not contain \{symbol}");
+                throw variableException(clazz, paramName+" does not contain "+symbol);
             }
             return value;
         }
@@ -82,7 +79,7 @@ public abstract class DomainAssertion<T> {
         }
         // number Assertions --------------------------------------------------------------
         public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterZero(T value, String paramName, Class<E> clazz){
-            return greaterZero(value, ()->STR."\{paramName} is smaller or Equal than 0", clazz);
+            return greaterZero(value, ()->paramName+" is smaller or Equal than 0", clazz);
         }
 
         public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterZero(T value, Supplier<String> errorMsg, Class<E> clazz){
@@ -94,7 +91,7 @@ public abstract class DomainAssertion<T> {
         }
 
         public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterEqualsZero(T value, String paramName, Class<E> clazz){
-            return greaterEqualsZero(value, ()->STR."\{paramName} is smaller to Zero",clazz);
+            return greaterEqualsZero(value, ()->paramName+"is smaller to Zero",clazz);
         }
 
         public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterEqualsZero(T value, Supplier<String> errorMsg, Class<E> clazz){
@@ -108,7 +105,7 @@ public abstract class DomainAssertion<T> {
         public static <T extends Number&Comparable<T>, E extends RuntimeException> T greaterThan(T value,T value1, String paramName, Class<E> clazz) {
             isNotNull(value,paramName,clazz);
             if (value.compareTo(value1) <= 0) {
-                throw variableException(clazz,STR. "\{ paramName } is smaller than \{value1}" );
+                throw variableException(clazz, paramName+" is smaller than "+value1 );
             }
             return value;
         }
@@ -121,11 +118,11 @@ public abstract class DomainAssertion<T> {
 
         // list Assertions -------------------------------------------------------------
         // Type erasure
-        public static <T, E extends RuntimeException>T isNotInCollection(T o, Collection<T> list, String paramName, Class<E> clazz){
+        public static <T, E extends RuntimeException, C extends Collection<T>>T isNotInCollection(T o, C list, String paramName, Class<E> clazz){
             isNotNull(o,paramName, clazz);
 
             if (list.contains(o)) {
-                throw variableException(clazz,STR. "\{ paramName }is existing in list");
+                throw variableException(clazz, paramName+"is existing in list");
             }
             return o;
         }
@@ -135,7 +132,7 @@ public abstract class DomainAssertion<T> {
             isNotNull(time,paramName, clazz);
 
             if (time.isBefore(Instant.now()))
-                throw variableException(clazz,STR."\{paramName} is in the past");
+                throw variableException(clazz,paramName+"is in the past");
             return time;
         }
 
@@ -143,7 +140,7 @@ public abstract class DomainAssertion<T> {
             isNotNull(time1, paramName, clazz);
             isNotNull(time2, paramName, clazz);
             if (time1.isBefore(time2))
-                throw variableException(clazz,STR."\{paramName} time 1: \{time1} is before time 2: \{time2}");
+                throw variableException(clazz,paramName+" time 1:"+ time1+" is before time 2: "+time2);
 
             return time1;
         }

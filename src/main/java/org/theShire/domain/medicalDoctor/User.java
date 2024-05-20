@@ -2,16 +2,15 @@ package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.BaseEntity;
 import org.theShire.domain.media.Content;
+import org.theShire.domain.media.ContentText;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.messenger.Chat;
+import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
 import org.theShire.domain.media.Media;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.*;
@@ -41,13 +40,14 @@ public class User extends BaseEntity {
 
     public User(Password password, Email email, UserProfile profile) {
         super(Instant.now());
+        contacts = new HashSet<>();
+        chats = new HashSet<>();
+        ownedCases = new HashSet<>();
+        memberOfCase = new HashSet<>();
         this.password = password;
         this.email = email;
         this.profile = profile;
-        Set<UserRelationShip> contacts = new HashSet<>();
-        Set<Chat> chats = new HashSet<>();
-        Set<Case> ownedCases = new HashSet<>();
-        Set<Case> memberOfCase = new HashSet<>();
+
     }
 
 
@@ -73,8 +73,12 @@ public class User extends BaseEntity {
     }
 
 
-    public Set<Chat> getChats() {
-        return chats;
+    public Chat getChatByID(UUID id) {
+        return chats.stream().filter(chat -> chat.getEntityId().equals(id)).findFirst().orElse(null);
+    }
+
+    public List<Chat> getChatByUser(User name) {
+        return chats.stream().filter(chat -> chat.getPeople().contains(name)).toList();
     }
 
 
@@ -88,51 +92,33 @@ public class User extends BaseEntity {
     }
 
     // Methods ------------------------------------------------------------
-    public void createCase(String title, List<Content> content, UUID... members) {
+    public void createCase(String title, List<Content> content, User... members) {
 
-        this.ownedCases.add(new Case(this.getEntityId(), title, content, members));
+        this.ownedCases.add(new Case(this, title, content, members));
     }
 
     public void addChat(Chat chat) {
         this.chats.add(isNotInCollection(chat, chats, "Chat already in Set", exTypeUser));
     }
 
-    public void addContact(UserRelationShip contact) {
-        isNotInCollection(contact, contacts, "Contact already in Set", exTypeUser);
-        this.contacts.add(contact);
+
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("User{").append(System.lineSeparator());
+        isNotNull(profile, "profile", exTypeUser);
+        sb.append("profile=").append(profile).append(System.lineSeparator());
+        sb.append("email=").append(email).append(System.lineSeparator());
+        sb.append("password=").append(password).append(System.lineSeparator());
+        sb.append("profile=").append(profile).append(System.lineSeparator());
+        sb.append("score=").append(score).append(System.lineSeparator());
+        sb.append("contacts=").append(contacts).append(System.lineSeparator());
+        sb.append("chats=").append(chats).append(System.lineSeparator());
+//        sb.append("ownedCases=").append(ownedCases).append(System.lineSeparator());
+        sb.append("memberOfCase=").append(memberOfCase).append(System.lineSeparator());
+        sb.append('}');
+        return sb.toString();
     }
 
-    public static void main(String[] args) {
-        //TODO Relation & Compilor
-        Media media = new Media(2000,1500,"I am a Picture", "2000x1500");
-
-        UserProfile profile = new UserProfile(new Language("German"),
-                new Location("Gondor"),media,new Name("Boromir"),
-                new Name("Aragorn"),new EducationalTitle("Dr."),
-                new EducationalTitle("arathorn"));
-
-
-
-        User user = new User(new Password("Spengergasse"),
-                new Email("Boromir@gamil.com"),profile);
-
-
-
-        Media media1 = new Media(1500,100,"I am a Father", "1500x100");
-
-        UserProfile profile1 = new UserProfile(new Language("German"),
-                new Location("Gondor"),media1,new Name("Aarathorn"),
-                new Name("Aragorn"),new EducationalTitle("Dr."),
-                new EducationalTitle("Arathorn"),new EducationalTitle("mag"));
-
-
-
-        User user1 = new User(new Password("Spengergasse123"),
-                new Email("Arathorn@gamil.com"),profile1);
-
-        System.out.println(user1);
-        System.out.println(user);
-
-    }
 
 }
