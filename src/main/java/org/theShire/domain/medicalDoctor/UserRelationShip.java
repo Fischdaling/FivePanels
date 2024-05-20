@@ -50,13 +50,27 @@ public class UserRelationShip {
     }
 
     public void sendRequest(UUID sender, UUID receiver) {
-        //TODO ASSERTION
+        DomainAssertion.isNotNull(sender, "sender", exTypeUser);
+        DomainAssertion.isNotNull(receiver, "receiver", exTypeUser);
+
+        DomainAssertion.isTrue(!sender.equals(receiver), () -> "sender and receiver can't be the same!", exTypeUser);
+
+        DomainAssertion.isTrue(relationShip.containsKey(sender), () -> "sender has no relationship", exTypeUser);
+        DomainAssertion.isTrue(relationShip.containsKey(receiver), () -> "receiver has no relationship", exTypeUser);
+
         relationShip.put(sender, new Relation(OUTGOING,receiver));
         relationShip.put(receiver, new Relation(INCOMING,sender));
     }
 
     public void acceptRequest(UUID sender, UUID receiver) {
-        //TODO ASSERTION
+        DomainAssertion.isNotNull(sender, "sender", exTypeUser);
+        DomainAssertion.isNotNull(receiver, "receiver", exTypeUser);
+
+        DomainAssertion.isTrue(relationShip.containsKey(sender), () -> "sender has no relationship", exTypeUser);
+        DomainAssertion.isTrue(relationShip.containsKey(receiver), () -> "receiver has no relationship", exTypeUser);
+
+
+
         if (relationShip.containsKey(receiver)){
             if (relationShip.get(receiver).getType().equals(Relation.RelationType.INCOMING)){
                 relationShip.replace(sender,new Relation(ESTABLISHED, receiver));
