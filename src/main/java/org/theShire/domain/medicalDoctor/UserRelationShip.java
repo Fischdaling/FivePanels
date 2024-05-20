@@ -55,8 +55,8 @@ public class UserRelationShip {
 
         DomainAssertion.isTrue(!sender.equals(receiver), () -> "sender and receiver can't be the same!", exTypeUser);
 
-        DomainAssertion.isTrue(relationShip.containsKey(sender), () -> "sender has no relationship", exTypeUser);
-        DomainAssertion.isTrue(relationShip.containsKey(receiver), () -> "receiver has no relationship", exTypeUser);
+        DomainAssertion.isTrue(relationShip.containsKey(sender), () -> "sender already has a relationship", exTypeUser);
+        DomainAssertion.isTrue(relationShip.containsKey(receiver), () -> "receiver already has a relationship", exTypeUser);
 
         relationShip.put(sender, new Relation(OUTGOING,receiver));
         relationShip.put(receiver, new Relation(INCOMING,sender));
@@ -69,7 +69,7 @@ public class UserRelationShip {
         DomainAssertion.isTrue(relationShip.containsKey(sender), () -> "sender has no relationship", exTypeUser);
         DomainAssertion.isTrue(relationShip.containsKey(receiver), () -> "receiver has no relationship", exTypeUser);
 
-
+        //Request incoming TODO
 
         if (relationShip.containsKey(receiver)){
             if (relationShip.get(receiver).getType().equals(Relation.RelationType.INCOMING)){
