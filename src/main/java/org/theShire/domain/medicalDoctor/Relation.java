@@ -15,19 +15,30 @@ import static org.theShire.foundation.DomainAssertion.isNotNull;
 
 public class Relation extends BaseEntity {
     // The type of a Relation (OUTGOING,INCOMING,ESTABLISHED)
+    private User user1;
+    private User user2;
     private RelationType type;
-    private Set<UUID> userWithRelation;
-
 
     public Relation() {
         super(Instant.now());
     }
 
-    public Relation(RelationType type, UUID userWithRelation) {
-        super(Instant.now());
-        this.userWithRelation = new HashSet<>();
-        this.type = type;
-        this.userWithRelation.add(userWithRelation);
+    public Relation(User user1, User user2, RelationType relationType) {
+        setUser(user1);
+        setUser(user2);
+        setType(relationType);
+    }
+
+    private void setUser(User user) {
+        this.user1 = isNotNull(user, "user",exTypeUser);
+    }
+
+    public User getUser1() {
+        return user1;
+    }
+
+    public User getUser2() {
+        return user2;
     }
 
     public RelationType getType() {
@@ -39,7 +50,7 @@ public class Relation extends BaseEntity {
     }
 
 
-    enum RelationType{
+    public enum RelationType{
         OUTGOING,
         INCOMING,
         ESTABLISHED,
