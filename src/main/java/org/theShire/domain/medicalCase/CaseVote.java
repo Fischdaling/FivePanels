@@ -25,6 +25,11 @@ public class CaseVote {
         setMaxAnswers(maxAnswers);
     }
 
+    public Vote vote(UUID voter,Answer answer, double percent){
+        //erste Antwort vom Scanner...
+        return null;
+    }
+
     // getter & setter-----------------------------------
     public LinkedHashSet<Answer> getAnswers() {
         return answers;
