@@ -1,11 +1,13 @@
 package org.theShire.repository;
 
+import org.theShire.domain.BaseEntity;
+
 import javax.swing.text.html.parser.Entity;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public interface IRepository<T extends Entity> {
+public interface IRepository<T extends BaseEntity> {
 
      T save(T entities);
      List<T> findAll(List<T> entities);
