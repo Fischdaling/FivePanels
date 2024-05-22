@@ -12,4 +12,9 @@ public record Password(String value) {
     public Password(String value) {
         this.value = BCrypt.withDefaults().hashToString(12, isZxcvbn3Confirm(value, "Password", MedicalDoctorException.class).toCharArray());
     }
+
+    @Override
+    public String toString() {
+        return value;
+    }
 }

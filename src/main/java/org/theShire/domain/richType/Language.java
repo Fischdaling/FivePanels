@@ -8,4 +8,9 @@ public record Language(String value) {
     public Language(String value) {
         this.value = hasMaxLength(value,50,"Language", MedicalDoctorException.class);
     }
+
+    @Override
+    public String toString() {
+        return value;
+    }
 }

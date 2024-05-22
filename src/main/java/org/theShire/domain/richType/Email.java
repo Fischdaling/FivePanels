@@ -9,4 +9,9 @@ public record Email(String value) {
         hasMaxLength(value, 50, "email", MedicalDoctorException.class);
         this.value = containsSymbols(value,"Email", MedicalDoctorException.class,'@','.');
     }
+
+    @Override
+    public String toString() {
+        return value;
+    }
 }
