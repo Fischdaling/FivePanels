@@ -1,6 +1,8 @@
 package org.theShire.domain.medicalCase;
 
-import org.theShire.domain.exception.MedicalCaseException;
+import org.theShire.domain.medicalDoctor.User;
+import org.theShire.domain.medicalCase.Case;
+import org.theShire.foundation.DomainAssertion;
 
 import java.util.UUID;
 
@@ -15,6 +17,14 @@ public class Vote {
 
     private UUID voter;
 
+
+    public Vote(Answer answer, double percent, UUID voter) {
+        this.answer = answer;
+        this.percent = percent;
+        this.voter = voter;
+        setAnswer(answer);
+        setPercent(percent);
+    }
 
     //getter & setter-----------------------
     public Answer getAnswer() {
@@ -32,5 +42,13 @@ public class Vote {
     public void setPercent(double percent) {
         greaterEqualsZero(percent, "percent",exTypeCase);
         this.percent = percent;
+    }
+
+    public UUID getVoter() {
+        return voter;
+    }
+
+    public void setVoter(User voter) {
+        this.voter = isInCollection(voter, ,"voter", exTypeCase);
     }
 }

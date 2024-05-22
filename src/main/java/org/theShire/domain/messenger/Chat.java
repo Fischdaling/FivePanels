@@ -1,9 +1,7 @@
 package org.theShire.domain.messenger;
 
 import org.theShire.domain.BaseEntity;
-import org.theShire.domain.media.Content;
 import org.theShire.domain.medicalDoctor.User;
-import org.theShire.foundation.DomainAssertion;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -12,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.theShire.domain.exception.MessengerException.exTypeMes;
-import static org.theShire.foundation.DomainAssertion.isNotInCollection;
+import static org.theShire.foundation.DomainAssertion.isInCollection;
 import static org.theShire.foundation.DomainAssertion.isNotNull;
 
 public class Chat extends BaseEntity { //TODO assertions
@@ -41,7 +39,7 @@ public class Chat extends BaseEntity { //TODO assertions
         }
     }
     private void addChatter(User chatter) {
-        people.add(isNotInCollection(chatter,this.people,"chatter",exTypeMes));
+        people.add(isInCollection(chatter,this.people,"chatter",exTypeMes));
         chatter.addChat(this);
     }
 

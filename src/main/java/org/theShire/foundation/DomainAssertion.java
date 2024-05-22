@@ -7,7 +7,6 @@ import com.nulabinc.zxcvbn.Zxcvbn;
 import java.lang.reflect.InvocationTargetException;
 import java.time.Instant;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.function.Supplier;
 
 
@@ -118,7 +117,7 @@ public abstract class DomainAssertion<T> {
 
         // list Assertions -------------------------------------------------------------
         // Type erasure
-        public static <T, E extends RuntimeException, C extends Collection<T>>T isNotInCollection(T o, C list, String paramName, Class<E> clazz){
+        public static <T, E extends RuntimeException, C extends Collection<T>>T isInCollection(T o, C list, String paramName, Class<E> clazz){
             isNotNull(o,paramName, clazz);
 
             if (list.contains(o)) {

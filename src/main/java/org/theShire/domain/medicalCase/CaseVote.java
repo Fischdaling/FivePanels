@@ -18,12 +18,16 @@ public class CaseVote {
     //the percent limit that cannot be exceeded
     private final double maxProzentCount = 100.0;
 
+    public CaseVote(LinkedHashSet<Answer> answers, int maxAnswers, double prozentCount) {
+        addAnswers(answers);
+        setMaxAnswers(maxAnswers);
+    }
+
 
     public CaseVote(LinkedHashSet<Answer> answers, HashMap<UUID, Set<Vote>> votes, int maxAnswers, double prozentCount) {
         addAnswers(answers);
         this.votes = votes;
-        this.maxAnswers = maxAnswers;
-        this.prozentCount = prozentCount;
+        setMaxAnswers(maxAnswers);
     }
 
     // getter & setter-----------------------------------
@@ -31,16 +35,14 @@ public class CaseVote {
         return answers;
     }
 
-    public void addAnswer(Answer answer) {
-        isNotNull(answers, "answers", exTypeCase);
-        this.answers.add(answer);
-    }
+//    public void addAnswer(Answer answer) {
+//        isNotNull(answers, "answers", exTypeCase);
+//        this.answers.add(answer);
+//    }
 
-    public void addAnswers(Answer... answers) {
+    public void addAnswers(LinkedHashSet<Answer> answers) {
         isNotNull(answers, "answers", exTypeCase);
-        for (Answer answer:answers) {
-            addAnswer(answer);
-        }
+        this.answers.addAll(answers);
     }
 
     public HashMap<UUID, Set<Vote>> getVotes() {

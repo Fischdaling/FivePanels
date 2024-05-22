@@ -3,14 +3,12 @@ package org.theShire.foundation;
 import org.theShire.domain.exception.MedicalDoctorException;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
-import static org.theShire.foundation.DomainAssertion.isNotInCollection;
+import static org.theShire.foundation.DomainAssertion.isInCollection;
 
 public class Knowledges {
     // list of legal knowledges that are good and confirmed
@@ -27,7 +25,7 @@ public class Knowledges {
     }
 
     public void setKnowledge(String knowledge) {
-        this.knowledge = isNotInCollection(knowledge, legalKnowledges,"knowledge",exTypeUser);
+        this.knowledge = isInCollection(knowledge, legalKnowledges,"knowledge",exTypeUser);
     }
 
     public void readKnowledges() {
