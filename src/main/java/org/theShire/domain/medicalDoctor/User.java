@@ -2,12 +2,9 @@ package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.BaseEntity;
 import org.theShire.domain.media.Content;
-import org.theShire.domain.media.ContentText;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.messenger.Chat;
-import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
-import org.theShire.domain.media.Media;
 
 import java.time.Instant;
 import java.util.*;
@@ -98,7 +95,7 @@ public class User extends BaseEntity {
     }
 
     public void addChat(Chat chat) {
-        this.chats.add(isNotInCollection(chat, chats, "Chat already in Set", exTypeUser));
+        this.chats.add(isInCollection(chat, chats, "Chat already in Set", exTypeUser));
     }
 
 
