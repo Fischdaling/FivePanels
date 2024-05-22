@@ -48,7 +48,8 @@ public class Vote {
         return voter;
     }
 
-    public void setVoter(User voter) {
-        this.voter = isInCollection(voter, ,"voter", exTypeCase);
+    public void setVoter(UUID voter) {
+//        this.voter = isInCollection(voter, ,"voter", exTypeCase);
+        this.voter = voter;
     }
 }
