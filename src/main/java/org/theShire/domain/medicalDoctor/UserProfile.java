@@ -8,7 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
-import static org.theShire.foundation.DomainAssertion.isNotInCollection;
+import static org.theShire.foundation.DomainAssertion.isInCollection;
 import static org.theShire.foundation.DomainAssertion.isNotNull;
 
 public class UserProfile {
@@ -83,7 +83,7 @@ public class UserProfile {
 
 
     public void addEducationalTitle(EducationalTitle educationalTitle) {
-        this.educationalTitles.add(isNotInCollection(educationalTitle, educationalTitles,"educationalTitle", exTypeUser));
+        this.educationalTitles.add(isInCollection(educationalTitle, educationalTitles,"educationalTitle", exTypeUser));
     }
     public void addEducationalTitles(EducationalTitle...educationalTitle) {
         for (EducationalTitle title : educationalTitle) {

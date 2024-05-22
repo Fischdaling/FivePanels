@@ -4,11 +4,8 @@ import org.theShire.domain.BaseEntity;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
-import org.theShire.foundation.DomainAssertion;
 import org.theShire.foundation.Knowledges;
 
-import java.io.StringReader;
-import java.time.Instant;
 import java.util.*;
 
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
@@ -127,7 +124,7 @@ public class Case extends BaseEntity {
     //------------------
     public void addMember(User member) {
         this.members.add(
-                isNotInCollection(member, this.members, "members", exTypeCase)
+                isInCollection(member, this.members, "members", exTypeCase)
         );
     }
 
@@ -154,7 +151,7 @@ public class Case extends BaseEntity {
     }
 
     public void like(UUID userLiked) {
-        this.userLiked.add(isNotInCollection(userLiked, this.userLiked, "userLiked", exTypeCase));
+        this.userLiked.add(isInCollection(userLiked, this.userLiked, "userLiked", exTypeCase));
         likeCount++;
     }
 

@@ -1,10 +1,8 @@
 package org.theShire.foundation;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.junit.jupiter.api.Test;
 import org.theShire.domain.exception.MedicalCaseException;
 
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -244,7 +242,7 @@ public class DomainAssertionTest {
         list.add(i2);
         list.add(i3);
 
-        assertEquals(i1, isNotInCollection(i1,list,"TestCaseList",exType));
+        assertEquals(i1, isInCollection(i1,list,"TestCaseList",exType));
     }
 
     @Test
@@ -258,7 +256,7 @@ public class DomainAssertionTest {
         list.add(i2);
         list.add(i3);
 
-        assertThrows(exType,()-> isNotInCollection(i1,list,"TestCaseList",exType));
+        assertThrows(exType,()-> isInCollection(i1,list,"TestCaseList",exType));
     }
 
     @Test
