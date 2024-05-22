@@ -87,6 +87,14 @@ public class User extends BaseEntity {
         return memberOfCase;
     }
 
+    public Email getEmail() {
+        return email;
+    }
+
+    public void setEmail(Email email) {
+        this.email = email;
+    }
+
     // Methods ------------------------------------------------------------
     public void createCase(String title, List<Content> content, User... members) {
 

@@ -50,6 +50,6 @@ public class Vote {
 
     public void setVoter(UUID voter) {
 //        this.voter = isInCollection(voter, ,"voter", exTypeCase);
-        this.voter = voter;
+        this.voter = voter ;
     }
 }

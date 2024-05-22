@@ -77,7 +77,7 @@ public class Case extends BaseEntity {
 //        this.viewcount = Viewcount;
 //    }
 
-    public User getOwnerid() {
+    public User getOwner() {
         return owner;
     }
 
