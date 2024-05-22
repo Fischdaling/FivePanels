@@ -34,12 +34,9 @@ public class User extends BaseEntity {
     private Set<Case> memberOfCase;
 
 
-    public User() {
-        super(Instant.now());
-    }
 
     public User(Password password, Email email, UserProfile profile) {
-        super(Instant.now());
+        super();
         contacts = new HashSet<>();
         chats = new HashSet<>();
         ownedCases = new HashSet<>();
@@ -47,7 +44,6 @@ public class User extends BaseEntity {
         this.password = password;
         this.email = email;
         this.profile = profile;
-
     }
 
 
