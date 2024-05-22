@@ -3,10 +3,8 @@ package org.theShire.domain.medicalCase;
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
 
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class CaseVote {
     //a LinkedHashSet (it's simply a sorted HashSet) of the answers related to a specific case
@@ -21,14 +19,28 @@ public class CaseVote {
     private final double maxProzentCount = 100.0;
 
 
+    public CaseVote(LinkedHashSet<Answer> answers, HashMap<UUID, Set<Vote>> votes, int maxAnswers, double prozentCount) {
+        addAnswers(answers);
+        this.votes = votes;
+        this.maxAnswers = maxAnswers;
+        this.prozentCount = prozentCount;
+    }
+
     // getter & setter-----------------------------------
     public LinkedHashSet<Answer> getAnswers() {
         return answers;
     }
 
-    public void addAnswers(Answer answers) {
+    public void addAnswer(Answer answer) {
         isNotNull(answers, "answers", exTypeCase);
-        this.answers.add(answers);
+        this.answers.add(answer);
+    }
+
+    public void addAnswers(Answer... answers) {
+        isNotNull(answers, "answers", exTypeCase);
+        for (Answer answer:answers) {
+            addAnswer(answer);
+        }
     }
 
     public HashMap<UUID, Set<Vote>> getVotes() {
