@@ -38,12 +38,8 @@ public class Case extends BaseEntity {
     private CaseVote caseVote;
 
 
-    public Case() {
-        super(Instant.now());
-    }
-
     public Case(User owner, String title, List<Content> content, User... members) {
-        super(Instant.now());
+        super();
         Chat caseChat = new Chat(members);
         caseChat.addPerson(owner);
         setOwner(owner);
