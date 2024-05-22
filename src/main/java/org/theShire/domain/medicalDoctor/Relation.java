@@ -14,11 +14,13 @@ import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.isNotNull;
 
 public class Relation extends BaseEntity {
-    // The type of a Relation (OUTGOING,INCOMING,ESTABLISHED)
+    //TODO ADD describtions to the atributes
     private User user1;
     private User user2;
+    // The type of a Relation (OUTGOING,INCOMING,ESTABLISHED)
     private RelationType type;
 
+    //TODO TRY TO Understand why we don't need this constructor
     public Relation() {
         super(Instant.now());
     }

@@ -37,12 +37,12 @@ public class UserRelationShip {
 
 
     public void addRequest(User sender, User receiver, Relation.RelationType type) {
-
+        /*
         DomainAssertion.isNotNull(sender, "sender", exTypeUser);
         DomainAssertion.isNotNull(receiver, "receiver", exTypeUser);
-        //TODO new assertion isEqual();
+        //TODO new assertion isEqual() can also check for not null in there ;);
         DomainAssertion.isTrue(!sender.equals(receiver), () -> "sender and receiver can't be the same!", exTypeUser);
-        /* TODO Eventual usage of isInColletction
+        // TODO Eventual usage of isInColletction
         DomainAssertion.isTrue(relationShip.containsKey(sender.getEntityId().toString()+receiver.getEntityId().toString()), () -> "sender already has a relationship", exTypeUser);
         DomainAssertion.isTrue(relationShip.containsKey(receiver), () -> "receiver already has a relationship", exTypeUser);
         */
@@ -52,6 +52,7 @@ public class UserRelationShip {
     }
 
     public void updateRequest(User sender, User receiver, Relation.RelationType type) {
+        //TODO Find a better way not to use 3 times the same method
         DomainAssertion.isNotNull(sender, "sender", exTypeUser);
         DomainAssertion.isNotNull(receiver, "receiver", exTypeUser);
         DomainAssertion.isNotNull(type, "type", exTypeUser);
@@ -60,12 +61,14 @@ public class UserRelationShip {
         relation.setType(type);
     }
 
+    //TODO Try to understand the logic of those 4 methods below
     public Relation.RelationType getRelationType(User user1, User user2) {
         return Optional.of(getRelation(user1,user2)).map(Relation::getType).orElse(null);
     }
 
     public boolean messageable(User user1, User user2) {
-        return Optional.of(getRelation(user1,user2)).map(Relation::getType).filter(relationType -> relationType == ESTABLISHED).isPresent();
+        return Optional.of(getRelation(user1,user2)).map(Relation::getType).
+                filter(relationType -> relationType == ESTABLISHED).isPresent();
 
     }
 

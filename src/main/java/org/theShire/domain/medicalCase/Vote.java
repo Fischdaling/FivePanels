@@ -3,6 +3,7 @@ package org.theShire.domain.medicalCase;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.foundation.DomainAssertion;
+import org.theShire.repository.CaseRepository;
 
 import java.util.UUID;
 
@@ -50,6 +51,6 @@ public class Vote {
 
     public void setVoter(UUID voter) {
 //        this.voter = isInCollection(voter, ,"voter", exTypeCase);
-        this.voter = voter ;
+        this.voter = voter;
     }
 }
