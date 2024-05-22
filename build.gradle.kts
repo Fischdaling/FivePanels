@@ -1,12 +1,9 @@
-import org.gradle.kotlin.dsl.support.kotlinCompilerOptions
-
 plugins {
     id("java")
 }
 
 group = "org.theShire"
 version = "1.0-SNAPSHOT"
-
 
 repositories {
     mavenCentral()
@@ -23,14 +20,4 @@ java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
 
-}
-tasks.withType<JavaCompile> {
-    options.compilerArgs.add("--enable-preview")
-    options.javaModuleVersion.set("21")
-}
-
-
-tasks.test {
-    useJUnitPlatform()
-    jvmArgs("--enable-preview")
 }
