@@ -18,11 +18,6 @@ public class CaseVote {
     //the percent limit that cannot be exceeded
     private final double maxProzentCount = 100.0;
 
-    public CaseVote(LinkedHashSet<Answer> answers, int maxAnswers, double prozentCount) {
-        addAnswers(answers);
-        setMaxAnswers(maxAnswers);
-    }
-
 
     public CaseVote(LinkedHashSet<Answer> answers, HashMap<UUID, Set<Vote>> votes, int maxAnswers, double prozentCount) {
         addAnswers(answers);

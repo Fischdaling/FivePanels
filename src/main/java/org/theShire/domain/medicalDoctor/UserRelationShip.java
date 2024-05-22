@@ -1,85 +1,85 @@
 package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.messenger.Chat;
-import static org.theShire.foundation.DomainAssertion.*;
+import org.theShire.foundation.DomainAssertion;
 
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.UUID;
+import java.lang.reflect.Type;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;
 
 public class UserRelationShip {
     /*      UUID(User)    RELATION
-     *       1          TYPE:OUTGOING
-     *       2          TYPE:INCOMING
+     *       User12       User1,User2,TYPE:OUTGOING
+     *       User34       User3, User4, TYPE:ESTABLISHED
      */
-    public HashMap<UUID,Relation> relationShip;
-    public User sender,receiver;
+    public HashMap<String,Relation> relationShip;
     
-    public UserRelationShip(User sender, User receiver) {
+    public UserRelationShip() {
         relationShip = new HashMap<>();
-        setSender(sender);
-        setReceiver(receiver);
-        sendRequest(sender.getEntityId(), receiver.getEntityId());
+
     }
 
-    public User getSender() {
-        return sender;
-    }
-
-    public void setSender(User sender) {
-        this.sender = isNotNull(sender,"receiver",exTypeUser);
-    }
-
-    public User getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(User receiver) {
-        this.receiver = isNotNull(receiver,"receiver",exTypeUser);
-    }
-
-    public HashMap<UUID, Relation> getRelationShip() {
-        return relationShip;
-    }
-
-    public void setRelationShip(HashMap<UUID, Relation> relationShip) {
-        this.relationShip = relationShip; //TODO HELP
-    }
-
-    public void sendRequest(UUID sender, UUID receiver) {
-        isNotNull(sender, "sender", exTypeUser);
-        isNotNull(receiver, "receiver", exTypeUser);
-
-        isTrue(!sender.equals(receiver), () -> "sender and receiver can't be the same!", exTypeUser);
-
-        isTrue(relationShip.containsKey(sender), () -> "sender already has a relationship", exTypeUser);
-        isTrue(relationShip.containsKey(receiver), () -> "receiver already has a relationship", exTypeUser);
-
-        relationShip.put(sender, new Relation(OUTGOING,receiver,));
-        relationShip.put(receiver, new Relation(INCOMING,sender));
-    }
-
-    public void acceptRequest(UUID sender, UUID receiver) {
-        isNotNull(sender, "sender", exTypeUser);
-        isNotNull(receiver, "receiver", exTypeUser);
-
-        isTrue(relationShip.containsKey(sender), () -> "sender has no relationship", exTypeUser);
-        isTrue(relationShip.containsKey(receiver), () -> "receiver has no relationship", exTypeUser);
-
-
-        //Request incoming TODO
-
-        if (relationShip.containsKey(receiver)){
-            if (relationShip.get(receiver).getType().equals(Relation.RelationType.INCOMING)){
-                relationShip.replace(sender,new Relation(ESTABLISHED, receiver));
-                relationShip.replace(receiver,new Relation(ESTABLISHED, sender));
-
-                new Chat(this.sender,this.receiver);
-            }
+   private String createMapKey(User user1, User user2){
+        if (user1.getEntityId().compareTo(user2.getEntityId()) < 0){
+            return user1.getEntityId().toString() + user2.getEntityId().toString();
+        }else{
+            return user2.getEntityId().toString() + user1.getEntityId().toString();
         }
+   }
+
+    public Relation getRelation(User user1, User user2) {
+        String key = createMapKey(user1, user2);
+        return relationShip.get(key);
     }
+
+
+    public void addRequest(User sender, User receiver, Relation.RelationType type) {
+
+        DomainAssertion.isNotNull(sender, "sender", exTypeUser);
+        DomainAssertion.isNotNull(receiver, "receiver", exTypeUser);
+        //TODO new assertion isEqual();
+        DomainAssertion.isTrue(!sender.equals(receiver), () -> "sender and receiver can't be the same!", exTypeUser);
+        /* TODO Eventual usage of isInColletction
+        DomainAssertion.isTrue(relationShip.containsKey(sender.getEntityId().toString()+receiver.getEntityId().toString()), () -> "sender already has a relationship", exTypeUser);
+        DomainAssertion.isTrue(relationShip.containsKey(receiver), () -> "receiver already has a relationship", exTypeUser);
+        */
+        String key = createMapKey(sender, receiver);
+        Relation relation = new Relation(sender, receiver, type);
+        relationShip.put(key, relation);
+    }
+
+    public void updateRequest(User sender, User receiver, Relation.RelationType type) {
+        DomainAssertion.isNotNull(sender, "sender", exTypeUser);
+        DomainAssertion.isNotNull(receiver, "receiver", exTypeUser);
+        DomainAssertion.isNotNull(type, "type", exTypeUser);
+        Relation relation = getRelation(sender, receiver);
+        DomainAssertion.isNotNull(relation, "relation", exTypeUser);
+        relation.setType(type);
+    }
+
+    public Relation.RelationType getRelationType(User user1, User user2) {
+        return Optional.of(getRelation(user1,user2)).map(Relation::getType).orElse(null);
+    }
+
+    public boolean messageable(User user1, User user2) {
+        return Optional.of(getRelation(user1,user2)).map(Relation::getType).filter(relationType -> relationType == ESTABLISHED).isPresent();
+
+    }
+
+    public Map<User, Relation> getRequest(User user1) {
+        return relationShip.values().stream().
+                filter(relation -> relation.getUser1().equals(user1) && relation.getType() == INCOMING).
+                collect(Collectors.toMap(Relation::getUser2,relation -> relation));
+    }
+
+    public Map<User, Relation> getSent(User user1, User user2) {
+        return relationShip.values().stream().
+                filter(relation -> relation.getUser1().equals(user1) && relation.getType() == OUTGOING).
+                collect(Collectors.toMap(Relation::getUser2,relation -> relation));
+
+    }
+
 }

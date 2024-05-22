@@ -2,9 +2,12 @@ package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.BaseEntity;
 import org.theShire.domain.media.Content;
+import org.theShire.domain.media.ContentText;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.messenger.Chat;
+import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
+import org.theShire.domain.media.Media;
 
 import java.time.Instant;
 import java.util.*;
