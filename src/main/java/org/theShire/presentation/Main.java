@@ -68,7 +68,7 @@ public class Main {
 
         UserRelationShip relationShip = new UserRelationShip();
         relationShip.addRequest(user1,user2, Relation.RelationType.OUTGOING);
-        relationShip.addRequest(user1,user2, Relation.RelationType.INCOMING);
+        relationShip.addRequest(user2,user1, Relation.RelationType.INCOMING);
         
         relationShip.addRequest(user2,user3, Relation.RelationType.OUTGOING);
         relationShip.addRequest(user3,user2, Relation.RelationType.INCOMING);

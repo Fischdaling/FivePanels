@@ -64,25 +64,42 @@ public class UserRelationShip {
     //TODO Try to understand the logic of those 4 methods below
     public Relation.RelationType getRelationType(User user1, User user2) {
         return Optional.of(getRelation(user1,user2)).map(Relation::getType).orElse(null);
+        /*
+        creates a collection of Relations and returns the type of Relation
+        between 2 Users if a Relation exists (otherwise returns null)
+         */
     }
 
     public boolean messageable(User user1, User user2) {
         return Optional.of(getRelation(user1,user2)).map(Relation::getType).
                 filter(relationType -> relationType == ESTABLISHED).isPresent();
-
+        /*
+        Basically delivers the relationType of a Relation between 2 users
+        if the relation is established.
+         With that we can ensure that chatting between those users is possible
+        */
     }
+
 
     public Map<User, Relation> getRequest(User user1) {
         return relationShip.values().stream().
                 filter(relation -> relation.getUser1().equals(user1) && relation.getType() == INCOMING).
                 collect(Collectors.toMap(Relation::getUser2,relation -> relation));
+        /*
+        Takes the values of each User in the Hashmap (the enums), filters out
+        the INCOMING enums and returns a Map that wields the user2 and the Relation to User2
+        */
     }
 
-    public Map<User, Relation> getSent(User user1, User user2) {
+    public Map<User, Relation> getSent(User user1) {
         return relationShip.values().stream().
                 filter(relation -> relation.getUser1().equals(user1) && relation.getType() == OUTGOING).
                 collect(Collectors.toMap(Relation::getUser2,relation -> relation));
 
+        /*
+        Takes the values of each User in the Hashmap (the enums), filters out
+        the OUTGOING enums and returns a Map that wields the user2 and the Relation to User2
+        */
     }
 
 }
