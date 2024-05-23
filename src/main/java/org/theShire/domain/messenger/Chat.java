@@ -21,14 +21,11 @@ public class Chat extends BaseEntity { //TODO assertions
     // If the chat is a Group or single chat
     private ChatType chatType;
 
-    public Chat() {
-        super(Instant.now());
-    }
 
     public Chat(User ... chatters) {
-        super(Instant.now());
-        people = new HashSet<User>();
-        chatHistory = new ArrayList<Message>();
+        super();
+        people = new HashSet<>();
+        chatHistory = new ArrayList<>();
 
         addChatters(chatters);
     }

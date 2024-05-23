@@ -96,10 +96,7 @@ public class User extends BaseEntity {
     }
 
     // Methods ------------------------------------------------------------
-    public void createCase(String title, List<Content> content, User... members) {
 
-        this.ownedCases.add(new Case(this, title, content, members));
-    }
 
     public void addChat(Chat chat) {
         this.chats.add(isInCollection(chat, chats, "Chat already in Set", exTypeUser));
