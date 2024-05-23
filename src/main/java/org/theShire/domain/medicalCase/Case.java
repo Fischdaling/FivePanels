@@ -7,6 +7,7 @@ import org.theShire.domain.messenger.Chat;
 import org.theShire.foundation.Knowledges;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
@@ -37,14 +38,14 @@ public class Case extends BaseEntity {
 
     public Case(User owner, String title, List<Content> content, User... members) {
         super();
-        Chat caseChat = new Chat(members);
-        caseChat.addPerson(owner);
         setOwner(owner);
         setTitle(title);
         this.content = new ArrayList<>();
         addContentList(content);
         this.members = new HashSet<>();
         addMembers(members);
+        Chat caseChat = new Chat(members);
+        caseChat.addPerson(owner);
     }
 
 
@@ -158,16 +159,16 @@ public class Case extends BaseEntity {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Case{");
-        sb.append("title='").append(title).append('\'');
-        sb.append("content=").append(content);
-        sb.append("knowledges=").append(knowledges);
-        sb.append("viewcount=").append(viewcount);
-        sb.append("owner=").append(owner);
-        sb.append("members=").append(members);
-        sb.append("likeCount=").append(likeCount);
-        sb.append("userLiked=").append(userLiked);
-        sb.append("category=").append(category);
-        sb.append("caseVote=").append(caseVote);
+        sb.append("title='").append(title).append(System.lineSeparator());
+        sb.append("content=").append(content).append(System.lineSeparator());
+        sb.append("knowledges=").append(knowledges).append(System.lineSeparator());
+        sb.append("viewcount=").append(viewcount).append(System.lineSeparator());
+        sb.append("owner=").append(owner.getProfile().getFirstName()).append(System.lineSeparator());
+        sb.append("members=").append(members.stream().map(user -> user.getProfile().getFirstName()).collect(Collectors.toList())).append(System.lineSeparator());
+        sb.append("likeCount=").append(likeCount).append(System.lineSeparator());
+        sb.append("userLiked=").append(userLiked).append(System.lineSeparator());
+        sb.append("category=").append(category).append(System.lineSeparator());
+        sb.append("caseVote=").append(caseVote).append(System.lineSeparator());
         sb.append('}');
         return sb.toString();
     }

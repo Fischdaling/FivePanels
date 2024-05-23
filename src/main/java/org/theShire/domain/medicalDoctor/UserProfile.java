@@ -4,8 +4,8 @@ import org.theShire.domain.media.Media;
 import org.theShire.domain.richType.*;
 import org.theShire.foundation.Knowledges;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.isInCollection;
@@ -15,7 +15,7 @@ public class UserProfile {
 
     private Name firstName;
     private Name lastName;
-    private Set<EducationalTitle> educationalTitles;
+    private List<EducationalTitle> educationalTitles;
     private Media profilePicture;
     private Location location;
     private Language language;
@@ -28,9 +28,18 @@ public class UserProfile {
         this.profilePicture = profilePicture;
         this.firstName = firstName;
         this.lastName = lastName;
-        educationalTitles = new LinkedHashSet<>();
-        this.addEducationalTitle(educationalTitle[0]);
+        this.educationalTitles = Arrays.stream(educationalTitle).collect(Collectors.toList());
     }
+
+    public UserProfile(Language lang, Location loc, Media media, Name firstName, Name lastName, List<EducationalTitle> titles) {
+        this.language = language;
+        this.location = location;
+        this.profilePicture = profilePicture;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.educationalTitles = titles;
+    }
+
 
     public Name getFirstName() {
         return firstName;

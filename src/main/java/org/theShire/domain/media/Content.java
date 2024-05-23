@@ -14,7 +14,6 @@ public class Content extends BaseEntity { //TODO imageWriter
     private Media media;
 
     public Content(Media media) {
-        super(Instant.now());
         this.media = media;
     }
 
@@ -43,10 +42,10 @@ public class Content extends BaseEntity { //TODO imageWriter
     public String toString() {
         final StringBuffer sb = new StringBuffer("Content: ");
         if (text != null){
-            sb.append(text);
+            sb.append(text).append(System.lineSeparator());
         }
         if (media != null){
-            sb.append(media);
+            sb.append(media).append(System.lineSeparator());
         }
         return sb.toString();
     }

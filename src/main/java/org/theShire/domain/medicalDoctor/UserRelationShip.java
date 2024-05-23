@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;
+import static org.theShire.foundation.DomainAssertion.isTrue;
 
 public class UserRelationShip {
     /*      UUID(User)    RELATION
@@ -67,9 +68,11 @@ public class UserRelationShip {
     }
 
     public boolean messageable(User user1, User user2) {
-        return Optional.of(getRelation(user1,user2)).map(Relation::getType).
+        boolean b = Optional.of(getRelation(user1,user2)).map(Relation::getType).
                 filter(relationType -> relationType == ESTABLISHED).isPresent();
-
+        if (b)
+            new Chat(user1,user2);
+        return b;
     }
 
     public Map<User, Relation> getRequest(User user1) {
@@ -78,7 +81,7 @@ public class UserRelationShip {
                 collect(Collectors.toMap(Relation::getUser2,relation -> relation));
     }
 
-    public Map<User, Relation> getSent(User user1, User user2) {
+    public Map<User, Relation> getSent(User user1) {
         return relationShip.values().stream().
                 filter(relation -> relation.getUser1().equals(user1) && relation.getType() == OUTGOING).
                 collect(Collectors.toMap(Relation::getUser2,relation -> relation));

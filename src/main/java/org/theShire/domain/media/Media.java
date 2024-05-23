@@ -1,6 +1,13 @@
 package org.theShire.domain.media;
 
 
+import org.theShire.domain.exception.MediaException;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 import static org.theShire.domain.exception.MediaException.exTypeMedia;
 import static org.theShire.foundation.DomainAssertion.*;
 
@@ -13,7 +20,7 @@ public class Media {
     private String altText;
     //defines teh resolution of a picture
     private String resolution;
-
+    BufferedImage image = null;
 
     public Media(int width, int height, String altText, String resolution) {
         setWidth(width);
@@ -22,8 +29,19 @@ public class Media {
         setResolution(resolution);
     }
 
+    public Media(String filePath){
+
+        try {
+            image = ImageIO.read(new File(filePath));
+        } catch (IOException e) {
+            throw new MediaException(e.getMessage());
+        }
+    }
 
     //getter and setter-----------------------
+    public BufferedImage getImage() {
+        return image;
+    }
 
     public int getWidth() {
         return width;

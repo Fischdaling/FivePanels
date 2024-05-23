@@ -1,8 +1,10 @@
 package org.theShire.presentation;
 
+import org.theShire.domain.exception.MediaException;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
 import org.theShire.domain.media.Media;
+import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalDoctor.Relation;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserProfile;
@@ -11,50 +13,53 @@ import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Main {
+
+    public static User createUser(String firstname, String lastname, String email, String password,String language,String location,String picture,String...educationalTitle){
+        Name firstName = new Name(firstname);
+        Name lastName = new Name(lastname);
+        Email emayl = new Email(email);
+        Password passwort = new Password(password);
+        Language lang = new Language(language);
+        Location loc = new Location(location);
+        List<EducationalTitle> titles = Arrays.stream(educationalTitle).map(EducationalTitle::new).toList();
+        Media media = new Media(500,400,picture,"500x400");
+
+        UserProfile profile = new UserProfile(lang,loc,media,firstName,lastName,titles);
+        User user = new User(passwort,emayl,profile);
+
+        return user;
+    }
+
+    public static Case createCase(User owner,String title, List<Content> content, User... members){
+           return new Case(owner, title, content, members);
+    }
+
+    public static Chat createChat(User...chatters){
+         return new Chat(chatters);
+    }
+
     public static void main(String[] args) {
+
+//        Media media = new Media("/Bilbo_Profile.png");
+//        BufferedImage img = media.getImage();
         //TODO Relation && builder
         //CREATE USER1 -----------------------------------------------------------------------
-        //Creating ProfilePic
-        Media media1 = new Media(2000,1500,"I am a Picture", "2000x1500");
-        //Create Profile
-        UserProfile profile1 = new UserProfile(new Language("German"),
-                new Location("Gondor"),media1,new Name("Boromir"),
-                new Name("Aragorn"),new EducationalTitle("Dr."),
-                new EducationalTitle("arathorn"));
-
-
-        //Create User
-        User user1 = new User(new Password("Spengergasse"),
-                new Email("Boromir@gamil.com"),profile1);
-
+        User user1 = createUser("Bilbo","Beutlin","Bilbo@hobbit.com","VerySafe123","Hobbitisch","Auenland","Bilbo Profile","Fassreiter","Meister Dieb");
         //CREATE USER2-----------------------------------------------------------------
-        //Create ProfilePic
-        Media media2 = new Media(1500,100,"I am a Father", "1500x100");
-        //Create Profile
-        UserProfile profile2 = new UserProfile(new Language("German"),
-                new Location("Gondor"),media2,new Name("Aarathorn"),
-                new Name("Aragorn"),new EducationalTitle("Dr."),
-                new EducationalTitle("Arathorn"),new EducationalTitle("mag"));
-        //Create USer
-        User user2 = new User(new Password("Spengergasse123"),
-                new Email("Arathorn@gamil.com"),profile2);
 
+        User user2 = createUser("Aragorn","Arathorn","Aragorn@gondor.at","EvenSaver1234","Gondorisch","Gondor","Aragorn Profile","Arathorns Sohn","König von Gondor");
         //CREATE USER3-----------------------------------------------------------------
-        //Create ProfilePic
-        Media media3 = new Media(1500,100,"Bilbo", "1500x100");
-        //Create Profile
-        UserProfile profile3 = new UserProfile(new Language("Halbling"),
-                new Location("Shire"),media3,new Name("Bilbo"),
-                new Name("Beutlin"),new EducationalTitle("Dr.Dr"),
-                new EducationalTitle("meißterdieb"),new EducationalTitle("mag"));
-        //Create USer
-        User user3 = new User(new Password("Spengergasse123"),
-                new Email("Arathorn@gamil.com"),profile3);
-
+        User user3 = createUser("Gandalf","Wizardo","Gandalf@Wizardo.out","ICastFireBall!","all","world", "Gandalf Profile","The Gray","The White","Ainur");
         //init Content
         List<Content> contents = new ArrayList<>();
         //add texts
@@ -63,8 +68,8 @@ public class Main {
         //add Media
         contents.add(new Content(new Media(200,100,"My First Media", "200x100")));
 
-        //Create a Case with user 1 as member and user as owner
-        user1.createCase("my First Case", contents,user2,user3);
+        //Create a Case with user2&user3 as member and user1 as owner
+        Case case1 = createCase(user1,"my First Case", contents,user2,user3);
 
         UserRelationShip relationShip = new UserRelationShip();
         relationShip.addRequest(user1,user2, Relation.RelationType.OUTGOING);
@@ -73,12 +78,12 @@ public class Main {
         relationShip.addRequest(user2,user3, Relation.RelationType.OUTGOING);
         relationShip.addRequest(user3,user2, Relation.RelationType.INCOMING);
 
-            user1.getChatByUser(user1).getFirst().sendMessage(new Message(user1.getEntityId(),new Content(new ContentText("Hi"))));
 
-//            chat.sendMessage(new Message(user.getEntityId(),new Content(new ContentText("Yo"))));
 
         System.out.println(user1);
         System.out.println(user2);
+        System.out.println(user3);
+        System.out.println(case1);
 
     }
 
