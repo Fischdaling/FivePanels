@@ -37,11 +37,10 @@ public class UserRelationShip {
 
 
     public void addRequest(User sender, User receiver, Relation.RelationType type) {
-        /*
-        DomainAssertion.isNotNull(sender, "sender", exTypeUser);
-        DomainAssertion.isNotNull(receiver, "receiver", exTypeUser);
         //TODO new assertion isEqual() can also check for not null in there ;);
-        DomainAssertion.isTrue(!sender.equals(receiver), () -> "sender and receiver can't be the same!", exTypeUser);
+        DomainAssertion.isEqual(sender, receiver, "sender and receiver", exTypeUser);
+        DomainAssertion.isTrue(!sender.equals(receiver), () -> "sender and receiver can't be the same", exTypeUser);
+
         // TODO Eventual usage of isInColletction
         DomainAssertion.isTrue(relationShip.containsKey(sender.getEntityId().toString()+receiver.getEntityId().toString()), () -> "sender already has a relationship", exTypeUser);
         DomainAssertion.isTrue(relationShip.containsKey(receiver), () -> "receiver already has a relationship", exTypeUser);
