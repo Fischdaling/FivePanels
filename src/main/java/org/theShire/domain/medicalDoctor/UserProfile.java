@@ -19,7 +19,7 @@ public class UserProfile {
     private Media profilePicture;
     private Location location;
     private Language language;
-    private Set<Knowledges> specialization;
+
     private Set<Knowledges> experience;
 
     public UserProfile(Language language, Location location, Media profilePicture, Name firstName, Name lastName, EducationalTitle...educationalTitle) {
@@ -82,10 +82,6 @@ public class UserProfile {
         this.language = isNotNull(language, "language", exTypeUser);
     }
 
-    public Set<Knowledges> getSpecialization() {
-        return specialization;
-    }
-
     public Set<Knowledges> getExperience() {
         return experience;
     }
@@ -100,11 +96,6 @@ public class UserProfile {
         }
     }
 
-
-    public void addSpecialization(Knowledges specialization) {
-        this.specialization.add(isNotNull(specialization, "specialization", exTypeUser));
-    }
-
     public void setExperience(Knowledges experience) {
         this.experience.add(isNotNull(experience, "experience", exTypeUser));
     }
@@ -112,14 +103,12 @@ public class UserProfile {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("firstName=").append(firstName).append(System.lineSeparator());
-        sb.append("lastName=").append(lastName).append(System.lineSeparator());
-        sb.append("educationalTitles=").append(educationalTitles).append(System.lineSeparator());
-        sb.append("profilePicture=").append(profilePicture).append(System.lineSeparator());
-        sb.append("location=").append(location).append(System.lineSeparator());
-        sb.append("language=").append(language).append(System.lineSeparator());
-        sb.append("specialization=").append(specialization).append(System.lineSeparator());
-        sb.append("experience=").append(experience).append(System.lineSeparator());
+        sb.append("Name: ").append(firstName).append(lastName).append(System.lineSeparator());
+        sb.append("educationalTitles: ").append(educationalTitles).append(System.lineSeparator());
+        sb.append("profilePicture: ").append(profilePicture).append(System.lineSeparator());
+        sb.append("location: ").append(location).append(System.lineSeparator());
+        sb.append("language: ").append(language).append(System.lineSeparator());
+        sb.append("experience: ").append(experience).append(System.lineSeparator());
         return sb.toString();
     }
 }

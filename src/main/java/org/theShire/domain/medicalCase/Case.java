@@ -158,18 +158,18 @@ public class Case extends BaseEntity {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Case{");
-        sb.append("title='").append(title).append(System.lineSeparator());
-        sb.append("content=").append(content).append(System.lineSeparator());
-        sb.append("knowledges=").append(knowledges).append(System.lineSeparator());
-        sb.append("viewcount=").append(viewcount).append(System.lineSeparator());
-        sb.append("owner=").append(owner.getProfile().getFirstName()).append(System.lineSeparator());
-        sb.append("members=").append(members.stream().map(user -> user.getProfile().getFirstName()).collect(Collectors.toList())).append(System.lineSeparator());
-        sb.append("likeCount=").append(likeCount).append(System.lineSeparator());
-        sb.append("userLiked=").append(userLiked).append(System.lineSeparator());
-        sb.append("category=").append(category).append(System.lineSeparator());
-        sb.append("caseVote=").append(caseVote).append(System.lineSeparator());
-        sb.append('}');
+        final StringBuilder sb = new StringBuilder();
+        sb.append("Case: ").append(title).repeat('-',60).append(System.lineSeparator());
+        sb.append(content).append(System.lineSeparator());
+        sb.append("knowledges: ").append(knowledges).append(System.lineSeparator());
+        sb.append("viewcount: ").append(viewcount).append(System.lineSeparator());
+        sb.append("owner: ").append(owner.getProfile().getFirstName()).append(System.lineSeparator());
+        sb.append("members: ").append(members.stream().
+                map(user -> user.getProfile().getFirstName()).collect(Collectors.toList())).append(System.lineSeparator());
+        sb.append("likeCount: ").append(likeCount).append(System.lineSeparator());
+        sb.append("userLiked: ").append(userLiked).append(System.lineSeparator());
+        sb.append("category: ").append(category).append(System.lineSeparator());
+        sb.append("caseVote: ").append(caseVote).append(System.lineSeparator());
         return sb.toString();
     }
 }

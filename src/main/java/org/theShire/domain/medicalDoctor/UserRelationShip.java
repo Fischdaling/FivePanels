@@ -16,7 +16,7 @@ public class UserRelationShip {
      *       User12       User1,User2,TYPE:OUTGOING
      *       User34       User3, User4, TYPE:ESTABLISHED
      */
-    public HashMap<String,Relation> relationShip;
+    public static HashMap<String,Relation> relationShip;
     
     public UserRelationShip() {
         relationShip = new HashMap<>();

@@ -8,6 +8,7 @@ import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
 import org.theShire.domain.media.Media;
+import org.theShire.foundation.Knowledges;
 
 import java.time.Instant;
 import java.util.*;
@@ -32,10 +33,11 @@ public class User extends BaseEntity {
     private Set<Case> ownedCases;
     // all the cases the user is a member of
     private Set<Case> memberOfCase;
+    private Set<Knowledges> specialization;
 
 
 
-    public User(Password password, Email email, UserProfile profile) {
+    public User(Password password, Email email, UserProfile profile, Knowledges...specialization) {
         super();
         contacts = new HashSet<>();
         chats = new HashSet<>();
@@ -44,10 +46,15 @@ public class User extends BaseEntity {
         this.password = password;
         this.email = email;
         this.profile = profile;
+        setSpecialization(specialization);
     }
 
 
     // SETTER & GETTER -----------------------------------------------------------
+
+    public void setSpecialization(Knowledges[] specialization) {
+        this.specialization = new HashSet<>(Arrays.asList(isNotNull(specialization,"specialization",exTypeUser)));
+    }
     public UserProfile getProfile() {
         return profile;
     }

@@ -18,7 +18,6 @@ public class Content extends BaseEntity { //TODO imageWriter
     }
 
     public Content(ContentText text) {
-        super(Instant.now());
         this.text = text;
     }
 

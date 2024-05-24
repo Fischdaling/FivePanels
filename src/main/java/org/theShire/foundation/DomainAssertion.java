@@ -125,6 +125,14 @@ public abstract class DomainAssertion<T> {
             }
             return o;
         }
+        public static <T, E extends RuntimeException, C extends Collection<T>>T isNotInCollection(T o, C list, String paramName, Class<E> clazz){
+            isNotNull(o,paramName, clazz);
+
+            if (!list.contains(o)) {
+                throw variableException(clazz, paramName+"is existing in list");
+            }
+            return o;
+        }
 
         // Time Assertions -------------------------------------------------------------
         public static <T extends Instant, E extends RuntimeException>T isBeforeNow(T time, String paramName, Class<E> clazz){
