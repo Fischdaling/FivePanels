@@ -19,16 +19,27 @@ public class CaseVote {
     private final double maxProzentCount = 100.0;
 
 
-    public CaseVote(LinkedHashSet<Answer> answers, HashMap<UUID, Set<Vote>> votes, int maxAnswers, double prozentCount) {
+    public CaseVote(LinkedHashSet<Answer> answers, HashMap<UUID, Set<Vote>> votes) {
         addAnswers(answers);
+        setMaxAnswers();
         this.votes = votes;
-        setMaxAnswers(maxAnswers);
+        setProzentCount(0);
     }
 
-    public Vote vote(UUID voter,Answer answer, double percent){
-        //erste Antwort vom Scanner...
-        return null;
-    }
+//    public Vote voting(UUID voter) { //TODO
+//        while (prozentCount < maxProzentCount) {
+//            System.out.println(voter);
+//            Scanner scanner = new Scanner(System.in);
+//            System.out.println("Please select an answer!");
+//            Answer answer = new Answer();
+//            answer = scanner.nextLine();
+//            System.out.println("How much percent do you think this is the right Answer?");
+//            double answerPercent = scanner.nextDouble();
+//            greaterThan(maxProzentCount,(prozentCount += answerPercent), "prozentCount", exTypeCase);
+//            Vote vote = new Vote(answer, answerPercent, voter);
+//        }
+//        return vote;
+//    }
 
     // getter & setter-----------------------------------
     public LinkedHashSet<Answer> getAnswers() {
@@ -53,9 +64,9 @@ public class CaseVote {
         return maxAnswers;
     }
 
-    public void setMaxAnswers(int maxAnswers) {
+    public void setMaxAnswers() {
         greaterZero(maxAnswers, "maxAnswers", exTypeCase);
-        this.maxAnswers = maxAnswers;
+        maxAnswers = answers.size();
     }
 
     public double getProzentCount() {

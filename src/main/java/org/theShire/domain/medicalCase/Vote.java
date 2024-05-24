@@ -20,11 +20,9 @@ public class Vote {
 
 
     public Vote(Answer answer, double percent, UUID voter) {
-        this.answer = answer;
-        this.percent = percent;
-        this.voter = voter;
         setAnswer(answer);
         setPercent(percent);
+        setVoter(voter);
     }
 
     //getter & setter-----------------------
@@ -50,7 +48,6 @@ public class Vote {
     }
 
     public void setVoter(UUID voter) {
-//        this.voter = isInCollection(voter, ,"voter", exTypeCase);
-        this.voter = voter;
+        this.voter = isNotNull(voter,"voter", exTypeCase);
     }
 }
