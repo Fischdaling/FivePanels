@@ -31,6 +31,15 @@ public abstract class DomainAssertion<T> {
                 return value;
         }
 
+        public static <T, E extends RuntimeException> T isEqual(T value1, T value2, String paramName, Class<E> clazz) {
+            if (value1 == null || value2 == null) {
+                throw variableException(clazz,paramName+" cannot be null");
+            }
+            if (!value1.equals(value2)){
+                throw variableException(clazz,paramName+" are not equal");
+            }
+            return value1;
+        }
 
         // String Assertions -----------------------------------------------------------
 

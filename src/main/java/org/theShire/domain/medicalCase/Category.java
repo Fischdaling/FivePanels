@@ -21,7 +21,7 @@ public class Category {
         return setOfCategory;
     }
 
-    public void addSetOfCategory(UUID setOfCategory) {
-        this.setOfCategory.add(isNotNull(setOfCategory, "setOfCategory", exTypeCase));
+    public void addCategory(UUID category) {
+        this.setOfCategory.add(isNotNull(category, "category", exTypeCase));
     }
 }

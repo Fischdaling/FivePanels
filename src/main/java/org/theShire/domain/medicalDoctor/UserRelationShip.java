@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;
-import static org.theShire.foundation.DomainAssertion.isTrue;
 
 public class UserRelationShip {
     /*      UUID(User)    RELATION
@@ -38,15 +37,15 @@ public class UserRelationShip {
 
 
     public void addRequest(User sender, User receiver, Relation.RelationType type) {
-        /*
-        DomainAssertion.isNotNull(sender, "sender", exTypeUser);
-        DomainAssertion.isNotNull(receiver, "receiver", exTypeUser);
         //TODO new assertion isEqual() can also check for not null in there ;);
-        DomainAssertion.isTrue(!sender.equals(receiver), () -> "sender and receiver can't be the same!", exTypeUser);
+        DomainAssertion.isEqual(sender, receiver, "sender and receiver", exTypeUser);
+        DomainAssertion.isTrue(!sender.equals(receiver), () -> "sender and receiver can't be the same", exTypeUser);
+
         // TODO Eventual usage of isInColletction
-        DomainAssertion.isTrue(relationShip.containsKey(sender.getEntityId().toString()+receiver.getEntityId().toString()), () -> "sender already has a relationship", exTypeUser);
-        DomainAssertion.isTrue(relationShip.containsKey(receiver), () -> "receiver already has a relationship", exTypeUser);
-        */
+
+        DomainAssertion.isInCollection(sender, allUsers, "sender", exTypeUser);
+        DomainAssertion.isInCollection(receiver, allUsers, "receiver", exTypeUser);
+
         String key = createMapKey(sender, receiver);
         Relation relation = new Relation(sender, receiver, type);
         relationShip.put(key, relation);
@@ -65,20 +64,31 @@ public class UserRelationShip {
     //TODO Try to understand the logic of those 4 methods below
     public Relation.RelationType getRelationType(User user1, User user2) {
         return Optional.of(getRelation(user1,user2)).map(Relation::getType).orElse(null);
+        /*
+        creates a collection of Relations and returns the type of Relation
+        between 2 Users if a Relation exists (otherwise returns null)
+         */
     }
 
     public boolean messageable(User user1, User user2) {
-        boolean b = Optional.of(getRelation(user1,user2)).map(Relation::getType).
+        return Optional.of(getRelation(user1,user2)).map(Relation::getType).
                 filter(relationType -> relationType == ESTABLISHED).isPresent();
-        if (b)
-            new Chat(user1,user2);
-        return b;
+        /*
+        Basically delivers the relationType of a Relation between 2 users
+        if the relation is established.
+         With that we can ensure that chatting between those users is possible
+        */
     }
+
 
     public Map<User, Relation> getRequest(User user1) {
         return relationShip.values().stream().
                 filter(relation -> relation.getUser1().equals(user1) && relation.getType() == INCOMING).
                 collect(Collectors.toMap(Relation::getUser2,relation -> relation));
+        /*
+        Takes the values of each User in the Hashmap (the enums), filters out
+        the INCOMING enums and returns a Map that wields the user2 and the Relation to User2
+        */
     }
 
     public Map<User, Relation> getSent(User user1) {
@@ -86,6 +96,10 @@ public class UserRelationShip {
                 filter(relation -> relation.getUser1().equals(user1) && relation.getType() == OUTGOING).
                 collect(Collectors.toMap(Relation::getUser2,relation -> relation));
 
+        /*
+        Takes the values of each User in the Hashmap (the enums), filters out
+        the OUTGOING enums and returns a Map that wields the user2 and the Relation to User2
+        */
     }
 
 }
