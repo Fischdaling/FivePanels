@@ -14,7 +14,7 @@ public class Answer extends BaseEntity {
         this.answerID = answerID;
     }
 
-    //getter & setter-------------------------- //TODO inheritance &co
+    //getter & setter--------------------------
     public UUID getAnswerID() {
         return answerID;
     }
