@@ -19,12 +19,8 @@ public class Message extends BaseEntity {//TODO assertions
     //The Content of the message (Text or Media)
     private List<Content> contents;
 
-    public Message() {
-        super(Instant.now());
-    }
-
     public Message(UUID senderId, Content...contents) {
-        super(Instant.now());
+        super();
         this.contents = new ArrayList<>();
         this.senderId = senderId;
         this.stage = SENT;

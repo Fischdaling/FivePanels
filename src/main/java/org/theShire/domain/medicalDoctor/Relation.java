@@ -21,10 +21,6 @@ public class Relation extends BaseEntity {
     private RelationType type;
 
     //TODO TRY TO Understand why we don't need this constructor
-    public Relation() {
-        super(Instant.now());
-    }
-
     public Relation(User user1, User user2, RelationType relationType) {
         setUser(user1);
         setUser(user2);

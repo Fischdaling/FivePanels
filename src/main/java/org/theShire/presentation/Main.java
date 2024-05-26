@@ -181,9 +181,9 @@ public class Main {
     }
 
     private static void saveEntry() {
-        caseRepo.saveEntryMap("src/main/java/org/theShire/repository/caseRepoCSV.csv");
-        messangerRepo.saveEntryMap("src/main/java/org/theShire/repository/chatRepoCSV.csv");
-        userRepo.saveEntryMap("src/main/java/org/theShire/repository/userRepoCSV.csv");
+        caseRepo.saveEntryMap("src/main/java/org/theShire/persistence/caseRepoCSV.csv");
+        messangerRepo.saveEntryMap("src/main/java/org/theShire/persistence/chatRepoCSV.csv");
+        userRepo.saveEntryMap("src/main/java/org/theShire/persistence/userRepoCSV.csv");
     }
 
     private static void vote() {
