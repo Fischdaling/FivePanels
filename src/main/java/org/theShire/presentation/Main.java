@@ -235,6 +235,14 @@ public class Main {
     }
 
     private static void addCase() {
+        System.out.println("How many possible Answers does the Case have");
+        int ansCount = scanner.nextInt();
+        LinkedHashSet<Answer> answer = new LinkedHashSet();
+        for (int i = 0; i < ansCount; i++) {
+            System.out.println("Enter Answer to the Case");
+             answer.add(new Answer(scanner.nextLine()));
+        }
+        CaseVote caseVote = new CaseVote(answer);
 
         System.out.println("Enter Case Title");
         String title = scanner.nextLine();

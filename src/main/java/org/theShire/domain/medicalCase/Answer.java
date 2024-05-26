@@ -1,33 +1,35 @@
 package org.theShire.domain.medicalCase;
 
 import org.theShire.domain.BaseEntity;
+import org.theShire.domain.richType.Name;
 
 import java.util.UUID;
 
 public class Answer extends BaseEntity {
-    //id for answers
-    private UUID answerID;
-    //the definition of an answer
-    private String definition;
+    //the name of an answer
+    private Name name;
 
-    public Answer(UUID answerID) {
-        this.answerID = answerID;
+    public Answer(String name) {
+        super();
+        this.name = new Name(name);
     }
 
     //getter & setter-------------------------- //TODO inheritance &co
-    public UUID getAnswerID() {
-        return answerID;
+
+
+    public Name getName() {
+        return name;
     }
 
-    public void setAnswerID(UUID answerID) {
-        this.answerID = answerID;
+    public void setName(Name name) {
+        this.name = name;
     }
 
-    public String getDefinition() {
-        return definition;
-    }
-
-    public void setDefinition(String definition) {
-        this.definition = definition;
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("id: ").append(getEntityId());
+        sb.append("name: ").append(name);
+        return sb.toString();
     }
 }
