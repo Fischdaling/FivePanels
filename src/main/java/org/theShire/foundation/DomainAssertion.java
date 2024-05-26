@@ -127,6 +127,14 @@ public abstract class DomainAssertion<T> {
             }
             return value;
         }
+
+    public static <T extends Number&Comparable<T>, E extends RuntimeException> T lesserThan(T value,T value1, String paramName, Class<E> clazz) {
+        isNotNull(value,paramName,clazz);
+        if (value.compareTo(value1) >= 0) {
+            throw variableException(clazz, paramName+" is smaller than "+value1 );
+        }
+        return value;
+    }
     // Expression Assertions -------------------------------------------------------
 
         public static <E extends RuntimeException> void isTrue(boolean expression, Supplier<String> errorMsg, Class<E> clazz) {

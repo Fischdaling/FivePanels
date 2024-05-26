@@ -26,20 +26,10 @@ public class CaseVote {
         setProzentCount(0);
     }
 
-//    public Vote voting(UUID voter) { //TODO
-//        while (prozentCount < maxProzentCount) {
-//            System.out.println(voter);
-//            Scanner scanner = new Scanner(System.in);
-//            System.out.println("Please select an answer!");
-//            Answer answer = new Answer();
-//            answer = scanner.nextLine();
-//            System.out.println("How much percent do you think this is the right Answer?");
-//            double answerPercent = scanner.nextDouble();
-//            greaterThan(maxProzentCount,(prozentCount += answerPercent), "prozentCount", exTypeCase);
-//            Vote vote = new Vote(answer, answerPercent, voter);
-//        }
-//        return vote;
-//    }
+    public Vote voting(UUID voter, Answer answerChosen, double percent) { //TODO
+       Vote vote = new Vote(answerChosen, lesserThan(percent, maxProzentCount, "percent", exTypeCase), voter);
+
+    }
 
     // getter & setter-----------------------------------
     public LinkedHashSet<Answer> getAnswers() {
