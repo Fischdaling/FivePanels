@@ -13,22 +13,31 @@ public class CaseVote {
     private HashMap<UUID, Set<Vote>> votes;
     //determines the maximum amount of answers choosable
     private int maxAnswers;
-    //counts the percent in correlation to  maxProzentCount
-    private double prozentCount;
+    //counts the percent in correlation to  maxPercentCount
+    private double percentCount;
     //the percent limit that cannot be exceeded
-    private final double maxProzentCount = 100.0;
+    private final double maxPercentCount = 100.0;
 
 
     public CaseVote(LinkedHashSet<Answer> answers, HashMap<UUID, Set<Vote>> votes) {
         addAnswers(answers);
         setMaxAnswers();
         this.votes = votes;
-        setProzentCount(0);
+        setpercentCount(0);
     }
 
-    public Vote voting(UUID voter, Answer answerChosen, double percent) { //TODO
-       Vote vote = new Vote(answerChosen, lesserThan(percent, maxProzentCount, "percent", exTypeCase), voter);
-
+    public void voting(UUID voter, Answer answerChosen, double percent) {
+        Vote vote = new Vote(answerChosen, percent);
+        percentCount += vote.getPercent();
+        if (percentCount <= maxPercentCount) {
+            if (votes.containsKey(voter)) {
+                votes.get(voter).add(vote);
+            } else {
+                votes.put(voter, (Set<Vote>) vote);
+            }
+        }else {
+            System.err.println("The number you chose exceeds the limit of 100% total");
+        }
     }
 
     // getter & setter-----------------------------------
@@ -59,16 +68,16 @@ public class CaseVote {
         maxAnswers = answers.size();
     }
 
-    public double getProzentCount() {
-        return prozentCount;
+    public double getpercentCount() {
+        return percentCount;
     }
 
-    public void setProzentCount(double prozentCount) {
-        greaterZero(prozentCount, "prozentCount", exTypeCase);
-        this.prozentCount = prozentCount;
+    public void setpercentCount(double percentCount) {
+        greaterZero(percentCount, "percentCount", exTypeCase);
+        this.percentCount = percentCount;
     }
 
-    public double getMaxProzentCount() {
-        return maxProzentCount;
+    public double getmaxPercentCount() {
+        return maxPercentCount;
     }
 }

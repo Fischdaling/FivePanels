@@ -215,6 +215,31 @@ public class DomainAssertionTest {
         assertThrows(exType, ()->greaterThan(l,l1,"TestCaseLong",exType));
     }
 
+    //LesserThan
+
+    @Test
+    void lesserThan_ShouldThrowException_WhenFirstNumberGreaterThanSecondNumber() {
+        Integer i = 2;
+        Integer i1 = 1;
+        assertThrows(exType, ()->lesserThan(i,i1,"TestCaseInteger",exType));
+
+        int in = 2;
+        int in1 = 1;
+        assertThrows(exType, ()->lesserThan(in,in1,"TestCaseInt",exType));
+
+        double d = 2.0;
+        double d1 = 1.0;
+        assertThrows(exType, ()->lesserThan(d,d1,"TestCaseDouble",exType));
+
+        float f = 2f;
+        float f1 = 1f;
+        assertThrows(exType, ()->lesserThan(f,f1,"TestCaseFloat",exType));
+
+        Long l = (long)2;
+        Long l1 = (long)1;
+        assertThrows(exType, ()->lesserThan(l,l1,"TestCaseLong",exType));
+    }
+
     @Test
     void isTrue_ShouldThrow_WhenIsFalse(){
         boolean b = false;

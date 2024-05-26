@@ -16,13 +16,10 @@ public class Vote {
     //determines how much percent a member wants to add to an answer
     private double percent;
 
-    private UUID voter;
 
-
-    public Vote(Answer answer, double percent, UUID voter) {
+    public Vote(Answer answer, double percent) {
         setAnswer(answer);
         setPercent(percent);
-        setVoter(voter);
     }
 
     //getter & setter-----------------------
@@ -41,13 +38,5 @@ public class Vote {
     public void setPercent(double percent) {
         greaterEqualsZero(percent, "percent",exTypeCase);
         this.percent = percent;
-    }
-
-    public UUID getVoter() {
-        return voter;
-    }
-
-    public void setVoter(UUID voter) {
-        this.voter = isNotNull(voter,"voter", exTypeCase);
     }
 }
