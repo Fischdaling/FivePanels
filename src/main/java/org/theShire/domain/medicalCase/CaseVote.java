@@ -33,6 +33,7 @@ public class CaseVote {
 
     public void voting(UUID voter, Answer answerChosen, double percent) {
         Vote vote = new Vote(answerChosen, percent);
+        isInCollection(vote.getAnswer(), answers, "vote", exTypeCase);
         percentCount += vote.getPercent();
         if (percentCount <= maxPercentCount) {
             if (votes.containsKey(voter)) {
@@ -40,7 +41,7 @@ public class CaseVote {
             } else {
                 votes.put(voter, (Set<Vote>) vote);
             }
-        }else {
+        } else {
             System.err.println("The number you chose exceeds the limit of 100% total");
         }
     }

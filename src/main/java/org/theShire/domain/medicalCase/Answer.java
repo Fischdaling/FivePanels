@@ -14,7 +14,7 @@ public class Answer extends BaseEntity {
         this.name = new Name(name);
     }
 
-    //getter & setter-------------------------- //TODO inheritance &co
+    //getter & setter--------------------------
 
 
     public Name getName() {
