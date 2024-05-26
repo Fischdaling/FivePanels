@@ -12,6 +12,7 @@ import org.theShire.foundation.Knowledges;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.*;
@@ -126,12 +127,27 @@ public class User extends BaseEntity {
         sb.append(profile).append(System.lineSeparator());
         sb.append("email: ").append(email).append(System.lineSeparator());
         sb.append("password: ").append(password).append(System.lineSeparator());
-        sb.append("profile: ").append(profile).append(System.lineSeparator());
         sb.append("score: ").append(score).append(System.lineSeparator());
         sb.append("contacts: ").append(contacts).append(System.lineSeparator());
         sb.append("chats: ").append(chats).append(System.lineSeparator());
-        sb.append("ownedCases: ").append(ownedCases.stream().map(Case::getTitle)).append(System.lineSeparator());
-        sb.append("memberOfCase: ").append(memberOfCase.stream().map(Case::getTitle)).append(System.lineSeparator());
+        sb.append("specializations: ").append(specialization).append(System.lineSeparator());
+        sb.append("ownedCases: ").append(ownedCases.stream().map(Case::getTitle).findAny().orElse(null)).append(System.lineSeparator());
+        sb.append("memberOfCase: ").append(memberOfCase.stream().map(Case::getTitle).findAny().orElse(null)).append(System.lineSeparator());
+        return sb.toString();
+    }
+    @Override
+    public String toCSVString(){
+        final StringBuilder sb = new StringBuilder();
+        sb.append(getEntityId()).append(";");
+        sb.append(email).append(";");
+        sb.append(password).append(";");
+        sb.append(score).append(";");
+        sb.append(contacts).append(";");
+        sb.append(chats).append(";");
+        sb.append(specialization).append(";");
+        sb.append(ownedCases.stream().map(Case::getTitle).findAny().orElse(null)).append(";");
+        sb.append(memberOfCase.stream().map(Case::getTitle).findAny().orElse(null)).append(";");
+        sb.append(System.lineSeparator());
         return sb.toString();
     }
 

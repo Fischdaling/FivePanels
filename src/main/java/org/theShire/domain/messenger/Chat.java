@@ -65,6 +65,13 @@ public class Chat extends BaseEntity { //TODO assertions
         return sb.toString();
     }
 
+    @Override
+    public String toCSVString(){
+        final StringBuilder sb = new StringBuilder(super.toCSVString());
+        sb.append(chatHistory).append(";").append(System.lineSeparator());
+        return sb.toString();
+    }
+
     enum ChatType{
         SINGLECHAT,
         GROUPCHAT

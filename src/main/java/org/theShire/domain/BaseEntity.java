@@ -22,10 +22,11 @@ public class BaseEntity {
         updatedAt = Instant.now();
     }
 
-    public BaseEntity(Instant createdAt) {
-        this.entityId = UUID.randomUUID();
-        this.createdAt = Instant.now();
-        this.updatedAt = Instant.now();
+    public BaseEntity(UUID uuid,Instant createdAt, Instant updatedAt) {
+        this.entityId = uuid;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+
     }
 
     public Instant getCreatedAt() {
@@ -61,11 +62,18 @@ public class BaseEntity {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("BaseEntity{").
-                append(" entityId: ").append(entityId).append(System.lineSeparator()).
-//                append("createdAt").append(createdAt).append(System.lineSeparator()).
-//                append("updatedAt").append(updatedAt).append(System.lineSeparator()).
-                append("}");
+        stringBuilder.
+                append("entityId: ").append(entityId).append(System.lineSeparator()).
+                append("createdAt").append(createdAt).append(System.lineSeparator()).
+                append("updatedAt").append(updatedAt).append(System.lineSeparator());
+        return stringBuilder.toString();
+    }
+    public String toCSVString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.
+                append(entityId).append(";").
+                append(createdAt).append(";").
+                append(updatedAt).append(";");
         return stringBuilder.toString();
     }
 }

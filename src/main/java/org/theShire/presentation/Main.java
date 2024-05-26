@@ -102,12 +102,6 @@ public class Main {
         relationShip.addRequest(user3,user2, Relation.RelationType.INCOMING);
 
 
-
-        System.out.println(user1);
-        System.out.println(user2);
-        System.out.println(user3);
-        System.out.println(case1);
-
         while(true){
             System.out.println("Commands");
             System.out.println("1. add Doctor");
@@ -121,6 +115,7 @@ public class Main {
             System.out.println("9. manage Relations"); //TODO
             System.out.println("10. Vote for Case Answer");
             System.out.println("11. Leave a like for Case Answer");
+            System.out.println("12. Save Data");
             System.out.println("0. Exit");
 
             int choice = scanner.nextInt();
@@ -168,9 +163,12 @@ public class Main {
                 case 10:
                     vote();
                     break;
-                case 11:
-                    System.out.println("Goodbye");
-                    System.exit(0);
+//                case 11:
+//                    System.out.println("Goodbye");
+//                    System.exit(0);
+//                    break;
+                case 12:
+                    saveEntry();
                     break;
                 case 0:
                     System.out.println("Goodbye");
@@ -180,6 +178,12 @@ public class Main {
             }
         }
 
+    }
+
+    private static void saveEntry() {
+        caseRepo.saveEntryMap("src/main/java/org/theShire/repository/caseRepoCSV.csv");
+        messangerRepo.saveEntryMap("src/main/java/org/theShire/repository/chatRepoCSV.csv");
+        userRepo.saveEntryMap("src/main/java/org/theShire/repository/userRepoCSV.csv");
     }
 
     private static void vote() {
@@ -199,20 +203,22 @@ public class Main {
 
     private static void findAll() {
         System.out.println("Enter Entity");
-        String entity = scanner.nextLine().toLowerCase();
-        if (entity.equals(entity.getClass().getName().toLowerCase())){
-            switch (entity){
-                case "doctor":
+        System.out.println("1. Doctor");
+        System.out.println("2. Case");
+        System.out.println("3. Chat");
+        int entityId = scanner.nextInt();
+            switch (entityId){
+                case 1:
                     userRepo.findAll().forEach(System.out::println);
                     break;
-                case "case":
+                case 2:
                     caseRepo.findAll().forEach(System.out::println);
                     break;
-                case "chat":
+                case 3:
                     messangerRepo.findAll().forEach(System.out::println);
                     break;
             }
-        }
+
     }
 
     private static void openChat() {

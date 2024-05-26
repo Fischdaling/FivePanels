@@ -6,6 +6,7 @@ import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.foundation.Knowledges;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -172,4 +173,22 @@ public class Case extends BaseEntity {
         sb.append("caseVote: ").append(caseVote).append(System.lineSeparator());
         return sb.toString();
     }
+    @Override
+    public String toCSVString(){
+        final StringBuilder sb = new StringBuilder(super.toCSVString());
+        sb.append(getOwner().getEntityId()).append(";");
+        sb.append(title).append(";");
+        sb.append(knowledges).append(";");
+        sb.append(viewcount).append(";");
+        sb.append(owner.getProfile().getFirstName()).append(";");
+        sb.append(members.stream().
+                map(user -> user.getProfile().getFirstName()).collect(Collectors.toList())).append(";");
+        sb.append(likeCount).append(";");
+        sb.append(userLiked).append(";");
+        sb.append(category).append(";");
+        sb.append(caseVote).append(";");
+        sb.append(System.lineSeparator());
+        return sb.toString();
+    }
+
 }

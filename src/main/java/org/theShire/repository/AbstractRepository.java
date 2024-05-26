@@ -3,10 +3,11 @@ package org.theShire.repository;
 import org.theShire.domain.BaseEntity;
 import org.theShire.repository.IRepository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class AbstractRepository<T extends BaseEntity> implements IRepository<T> {
@@ -55,4 +56,7 @@ public abstract class AbstractRepository<T extends BaseEntity> implements IRepos
             entryMap.put(entity.getEntityId(), entity);
         }
     }
+
+    public abstract void saveEntryMap(String filepath);
+    public abstract void loadEntryMap(String filepath);
 }
