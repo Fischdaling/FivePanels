@@ -51,6 +51,19 @@ public class User extends BaseEntity {
     }
 
 
+    public User(UUID uuid, Instant createdAt, Instant updatedAt, Email email, Password password, UserProfile profile, int score, Set<UserRelationShip> contacts, Set<Chat> chats, Set<Case> ownedCases, Set<Case> memberOfCase, Set<Knowledges> specialization) {
+        super(uuid, createdAt, updatedAt);
+        this.email = email;
+        this.password = password;
+        this.profile = profile;
+        this.score = score;
+        this.contacts = contacts;
+        this.chats = chats;
+        this.ownedCases = ownedCases;
+        this.memberOfCase = memberOfCase;
+        this.specialization = specialization;
+    }
+
     // SETTER & GETTER -----------------------------------------------------------
 
     public void setSpecialization(Knowledges[] specialization) {
@@ -143,10 +156,10 @@ public class User extends BaseEntity {
         sb.append(password).append(";");
         sb.append(score).append(";");
         sb.append(contacts).append(";");
-        sb.append(chats).append(";");
+        sb.append(chats.stream().map(Chat::getEntityId)).append(";");
         sb.append(specialization).append(";");
-        sb.append(ownedCases.stream().map(Case::getTitle).findAny().orElse(null)).append(";");
-        sb.append(memberOfCase.stream().map(Case::getTitle).findAny().orElse(null)).append(";");
+        sb.append(ownedCases.stream().map(Case::getEntityId).findAny().orElse(null)).append(";");
+        sb.append(memberOfCase.stream().map(Case::getEntityId).findAny().orElse(null)).append(";");
         sb.append(System.lineSeparator());
         return sb.toString();
     }
