@@ -159,7 +159,7 @@ public class Case extends BaseEntity {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("Case: ").append(title).repeat('-',60).append(System.lineSeparator());
+        sb.append("Case: ").append(getEntityId()).append(" ").append(title).repeat('-',60).append(System.lineSeparator());
         sb.append(content).append(System.lineSeparator());
         sb.append("knowledges: ").append(knowledges).append(System.lineSeparator());
         sb.append("viewcount: ").append(viewcount).append(System.lineSeparator());

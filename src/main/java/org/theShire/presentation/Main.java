@@ -4,7 +4,9 @@ import org.theShire.domain.exception.MediaException;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
 import org.theShire.domain.media.Media;
+import org.theShire.domain.medicalCase.Answer;
 import org.theShire.domain.medicalCase.Case;
+import org.theShire.domain.medicalCase.CaseVote;
 import org.theShire.domain.medicalDoctor.Relation;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserProfile;
@@ -116,7 +118,9 @@ public class Main {
             System.out.println("6. Find Case by id");
             System.out.println("7. Delete Doctor by id");
             System.out.println("8. Delete Case by id");
-            System.out.println("9. manage Relations");
+            System.out.println("9. manage Relations"); //TODO
+            System.out.println("10. Vote for Case Answer");
+            System.out.println("11. Leave a like for Case Answer");
             System.out.println("0. Exit");
 
             int choice = scanner.nextInt();
@@ -161,6 +165,13 @@ public class Main {
 //                case 9:
 //                    relationCommands();
 //                    break;
+                case 10:
+                    vote();
+                    break;
+                case 11:
+                    System.out.println("Goodbye");
+                    System.exit(0);
+                    break;
                 case 0:
                     System.out.println("Goodbye");
                     System.exit(0);
@@ -169,6 +180,21 @@ public class Main {
             }
         }
 
+    }
+
+    private static void vote() {
+        System.out.println("Enter your User ID");
+        UUID userId = UUID.fromString(scanner.nextLine());
+        System.out.println("Enter Case ID to Vote for");
+        UUID caseId = UUID.fromString(scanner.nextLine());
+        Case medCase = caseRepo.findByID(caseId);
+        System.out.println("Enter Answer ID to Vote for");
+        UUID voteId = UUID.fromString(scanner.nextLine());
+        Answer answer = medCase.getCaseVote().getAnswers().stream().filter(answer1 -> answer1.equals(voteId)).findFirst().orElse(null);
+        System.out.println("Enter the percent you want to vote this answer with");
+        double percentage = scanner.nextDouble();
+        System.out.println(medCase);
+        medCase.getCaseVote().voting(userId, answer, percentage);
     }
 
     private static void findAll() {
