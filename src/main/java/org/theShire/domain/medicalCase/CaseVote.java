@@ -81,8 +81,4 @@ public class CaseVote {
     public double getmaxPercentCount() {
         return maxPercentCount;
     }
-
-    public static void main(String[] args) {
-        CaseVote caseVote = new CaseVote();
-    }
 }
