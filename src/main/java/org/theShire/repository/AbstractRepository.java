@@ -3,6 +3,7 @@ package org.theShire.repository;
 import org.theShire.domain.BaseEntity;
 import org.theShire.repository.IRepository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -19,8 +20,8 @@ public abstract class AbstractRepository<T extends BaseEntity> implements IRepos
     }
 
     @Override
-    public List<T> findAll(List<T> entities) {
-        return entryMap.values().stream().collect(Collectors.toList());
+    public List<T> findAll() {
+        return new ArrayList<>(entryMap.values());
     }
 
     @Override

@@ -50,7 +50,9 @@ public class Main {
 
     public static Case createCase(User owner,String title, List<Content> content, User... members){
            Case medCase = new Case(owner, title, content, members);
-            caseRepo.save(medCase);
+           owner.addOwnedCase(medCase);
+        Arrays.stream(members).forEach(user -> user.addMemberOfCase(medCase));
+           caseRepo.save(medCase);
            return medCase;
     }
 
@@ -127,24 +129,35 @@ public class Main {
                 case 2:
                     addCase();
                     break;
-//                case 3:
-//                    openChat();
-//                    break;
-//                case 4:
-//                    findAll();
-//                    break;
-//                case 5:
-//                    findDocByName();
-//                    break;
-//                case 6:
-//                    findCaseById();
-//                    break;
-//                case 7:
-//                    deleteDocById();
-//                    break;
-//                case 8:
-//                    deleteCaseById();
-//                    break;
+                case 3:
+                    openChat();
+                    break;
+                case 4:
+                    findAll();
+                    break;
+                case 5:
+                    System.out.println("Enter name");
+                    String name = scanner.nextLine();
+                    Optional<User> user = userRepo.findByName(new Name(name));
+                    if(user.isPresent()){
+                        System.out.println(user);
+                    }
+                    break;
+                case 6:
+                    System.out.println("Enter Id");
+                    String caseId = scanner.nextLine();
+                    caseRepo.findByID(UUID.fromString(caseId));
+                    break;
+                case 7:
+                    System.out.println("Enter Id");
+                    String userId = scanner.nextLine();
+                    userRepo.deleteById(UUID.fromString(userId));
+                    break;
+                case 8:
+                    System.out.println("Enter Id");
+                    String delCaseId = scanner.nextLine();
+                    caseRepo.deleteById(UUID.fromString(delCaseId));
+                    break;
 //                case 9:
 //                    relationCommands();
 //                    break;
@@ -156,6 +169,43 @@ public class Main {
             }
         }
 
+    }
+
+    private static void findAll() {
+        System.out.println("Enter Entity");
+        String entity = scanner.nextLine().toLowerCase();
+        if (entity.equals(entity.getClass().getName().toLowerCase())){
+            switch (entity){
+                case "doctor":
+                    userRepo.findAll().forEach(System.out::println);
+                    break;
+                case "case":
+                    caseRepo.findAll().forEach(System.out::println);
+                    break;
+                case "chat":
+                    messangerRepo.findAll().forEach(System.out::println);
+                    break;
+            }
+        }
+    }
+
+    private static void openChat() {
+        boolean exit = false;
+        System.out.println("enter chat uuid");
+        UUID uuid = UUID.fromString(scanner.nextLine());
+        Chat chat = messangerRepo.findByID(uuid);
+        System.out.println("chat with "+ chat.getPeople() +" opened");
+        System.out.println(chat.getChatHistory());
+
+        while(!exit){
+            System.out.println("Enter your UUID");
+            String user = scanner.nextLine();
+            System.out.println("Send a message? true/false");
+            exit = scanner.nextBoolean();
+            System.out.println("What message?");
+            String message = scanner.nextLine();
+            chat.sendMessage(new Message(UUID.fromString(user),new Content(new ContentText(message))));
+        }
     }
 
     private static void addCase() {

@@ -31,7 +31,7 @@ public class UserProfile {
         this.educationalTitles = Arrays.stream(educationalTitle).collect(Collectors.toList());
     }
 
-    public UserProfile(Language lang, Location loc, Media media, Name firstName, Name lastName, List<EducationalTitle> titles) {
+    public UserProfile(Language language, Location location, Media profilePicture, Name firstName, Name lastName, List<EducationalTitle> titles) {
         this.language = language;
         this.location = location;
         this.profilePicture = profilePicture;
@@ -103,7 +103,7 @@ public class UserProfile {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("Name: ").append(firstName).append(lastName).append(System.lineSeparator());
+        sb.append("Name: ").append(firstName).append(" ").append(lastName).append(System.lineSeparator());
         sb.append("educationalTitles: ").append(educationalTitles).append(System.lineSeparator());
         sb.append("profilePicture: ").append(profilePicture).append(System.lineSeparator());
         sb.append("location: ").append(location).append(System.lineSeparator());

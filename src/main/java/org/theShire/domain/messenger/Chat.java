@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.theShire.domain.exception.MessengerException.exTypeMes;
-import static org.theShire.foundation.DomainAssertion.isInCollection;
-import static org.theShire.foundation.DomainAssertion.isNotNull;
+import static org.theShire.foundation.DomainAssertion.*;
 
 public class Chat extends BaseEntity { //TODO assertions
     // The Users in the chat
@@ -36,7 +35,7 @@ public class Chat extends BaseEntity { //TODO assertions
         }
     }
     private void addChatter(User chatter) {
-        people.add(isInCollection(chatter,this.people,"chatter",exTypeMes));
+        people.add(isNotInCollection(chatter,this.people,"chatter",exTypeMes));
         chatter.addChat(this);
     }
 

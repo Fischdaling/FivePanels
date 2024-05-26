@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface IRepository<T extends BaseEntity> {
 
      T save(T entities);
-     List<T> findAll(List<T> entities);
+     List<T> findAll();
      T findByID(UUID id);
      void deleteById(UUID id);
      int count();

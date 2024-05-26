@@ -41,6 +41,16 @@ public abstract class DomainAssertion<T> {
             return value1;
         }
 
+        public static <T, E extends RuntimeException> T isNotEqual(T value1, T value2, String paramName, Class<E> clazz) {
+            if (value1 == null || value2 == null) {
+                throw variableException(clazz,paramName+" cannot be null");
+            }
+            if (value1.equals(value2)){
+                throw variableException(clazz,paramName+" are equal");
+            }
+            return value1;
+        }
+
         // String Assertions -----------------------------------------------------------
 
         public static <E extends RuntimeException>String isNotBlank(String value, String paramName, Class<E> clazz) {
@@ -129,16 +139,16 @@ public abstract class DomainAssertion<T> {
         public static <T, E extends RuntimeException, C extends Collection<T>>T isInCollection(T o, C list, String paramName, Class<E> clazz){
             isNotNull(o,paramName, clazz);
 
-            if (list.contains(o)) {
-                throw variableException(clazz, paramName+"is existing in list");
+            if (!list.contains(o)) {
+                throw variableException(clazz, paramName+"doesn't existing in list");
             }
             return o;
         }
         public static <T, E extends RuntimeException, C extends Collection<T>>T isNotInCollection(T o, C list, String paramName, Class<E> clazz){
             isNotNull(o,paramName, clazz);
 
-            if (!list.contains(o)) {
-                throw variableException(clazz, paramName+"is existing in list");
+            if (list.contains(o)) {
+                throw variableException(clazz, paramName + "is existing in list");
             }
             return o;
         }

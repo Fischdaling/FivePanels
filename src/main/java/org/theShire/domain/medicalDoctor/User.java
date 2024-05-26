@@ -106,25 +106,32 @@ public class User extends BaseEntity {
 
 
     public void addChat(Chat chat) {
-        this.chats.add(isInCollection(chat, chats, "Chat already in Set", exTypeUser));
+        this.chats.add(isNotInCollection(chat, chats, "Chat already in Set", exTypeUser));
     }
 
+    public void addOwnedCase(Case medCase){
+        this.ownedCases.add(medCase);
+    }
+
+    public void addMemberOfCase(Case medCase){
+        this.memberOfCase.add(medCase);
+    }
 
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("User{").append(System.lineSeparator());
+        final StringBuilder sb = new StringBuilder().append(System.lineSeparator());
         isNotNull(profile, "profile", exTypeUser);
-        sb.append("profile=").append(profile).append(System.lineSeparator());
-        sb.append("email=").append(email).append(System.lineSeparator());
-        sb.append("password=").append(password).append(System.lineSeparator());
-        sb.append("profile=").append(profile).append(System.lineSeparator());
-        sb.append("score=").append(score).append(System.lineSeparator());
-        sb.append("contacts=").append(contacts).append(System.lineSeparator());
-        sb.append("chats=").append(chats).append(System.lineSeparator());
-//        sb.append("ownedCases=").append(ownedCases).append(System.lineSeparator());
-        sb.append("memberOfCase=").append(memberOfCase).append(System.lineSeparator());
-        sb.append('}');
+        sb.append("ID: ").append(getEntityId()).append(System.lineSeparator());
+        sb.append(profile).append(System.lineSeparator());
+        sb.append("email: ").append(email).append(System.lineSeparator());
+        sb.append("password: ").append(password).append(System.lineSeparator());
+        sb.append("profile: ").append(profile).append(System.lineSeparator());
+        sb.append("score: ").append(score).append(System.lineSeparator());
+        sb.append("contacts: ").append(contacts).append(System.lineSeparator());
+        sb.append("chats: ").append(chats).append(System.lineSeparator());
+        sb.append("ownedCases: ").append(ownedCases.stream().map(Case::getTitle)).append(System.lineSeparator());
+        sb.append("memberOfCase: ").append(memberOfCase.stream().map(Case::getTitle)).append(System.lineSeparator());
         return sb.toString();
     }
 

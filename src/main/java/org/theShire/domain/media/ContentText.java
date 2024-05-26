@@ -3,7 +3,7 @@ package org.theShire.domain.media;
 import static org.theShire.domain.exception.MediaException.exTypeMedia;
 import static org.theShire.foundation.DomainAssertion.*;
 
-public class ContentText {
+public class ContentText{
     //a String that holds text
     private String text;
 

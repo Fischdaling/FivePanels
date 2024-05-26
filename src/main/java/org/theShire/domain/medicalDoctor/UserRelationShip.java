@@ -2,6 +2,7 @@ package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.messenger.Chat;
 import org.theShire.foundation.DomainAssertion;
+import org.theShire.repository.UserRepository;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -9,6 +10,7 @@ import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;
+import static org.theShire.presentation.Main.userRepo;
 
 public class UserRelationShip {
     /*      UUID(User)    RELATION
@@ -38,13 +40,13 @@ public class UserRelationShip {
 
     public void addRequest(User sender, User receiver, Relation.RelationType type) {
         //TODO new assertion isEqual() can also check for not null in there ;);
-        DomainAssertion.isEqual(sender, receiver, "sender and receiver", exTypeUser);
+        DomainAssertion.isNotEqual(sender, receiver, "sender and receiver", exTypeUser);
         DomainAssertion.isTrue(!sender.equals(receiver), () -> "sender and receiver can't be the same", exTypeUser);
 
         // TODO Eventual usage of isInColletction
 
-        DomainAssertion.isInCollection(sender, allUsers, "sender", exTypeUser);
-        DomainAssertion.isInCollection(receiver, allUsers, "receiver", exTypeUser);
+        DomainAssertion.isInCollection(sender, userRepo.findAll(), "sender", exTypeUser);
+        DomainAssertion.isInCollection(receiver, userRepo.findAll(), "receiver", exTypeUser);
 
         String key = createMapKey(sender, receiver);
         Relation relation = new Relation(sender, receiver, type);

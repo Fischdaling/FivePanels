@@ -125,7 +125,7 @@ public class Case extends BaseEntity {
     //------------------
     public void addMember(User member) {
         this.members.add(
-                isInCollection(member, this.members, "members", exTypeCase)
+                isNotInCollection(member, this.members, "members", exTypeCase)
         );
     }
 

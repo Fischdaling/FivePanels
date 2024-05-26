@@ -2,9 +2,9 @@ package org.theShire.foundation;
 
 import org.theShire.domain.exception.MedicalDoctorException;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -30,17 +30,18 @@ public class Knowledges {
     }
 
     public void setKnowledge(String knowledge) {
-        this.knowledge = isNotInCollection(knowledge, legalKnowledges,"knowledge",exTypeUser);
+        this.knowledge = isInCollection(knowledge, legalKnowledges,"knowledge",exTypeUser);
     }
 
     public void readKnowledges() {
-        try {
-            //TODO Not found file
-            BufferedReader br = new BufferedReader(new FileReader("Knowledges.txt"));
-            br.lines().forEach(line -> legalKnowledges.add(line));
-        } catch (FileNotFoundException e) {
-            throw new MedicalDoctorException("Knowledge file not found");
+        // Use Paths.get to ensure the file path is correctly
+//        String filePath = Paths.get("resources", "Knowledges.txt").toString();
+        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/Knowledges"))) {
+            br.lines().forEach(legalKnowledges::add);
+        } catch (IOException e) {
+            throw new MedicalDoctorException("Error reading knowledge file: " + e.getMessage());
         }
     }
+
 
 }
