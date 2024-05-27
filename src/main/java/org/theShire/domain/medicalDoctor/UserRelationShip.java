@@ -2,9 +2,7 @@ package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.messenger.Chat;
 import org.theShire.foundation.DomainAssertion;
-import org.theShire.repository.UserRepository;
 
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,7 +22,7 @@ public class UserRelationShip {
 
     }
 
-   private String createMapKey(User user1, User user2){
+   private static String createMapKey(User user1, User user2){
         if (user1.getEntityId().compareTo(user2.getEntityId()) < 0){
             return user1.getEntityId().toString() + user2.getEntityId().toString();
         }else{
@@ -32,38 +30,49 @@ public class UserRelationShip {
         }
    }
 
-    public Relation getRelation(User user1, User user2) {
+    public static Relation getRelation(User user1, User user2) {
         String key = createMapKey(user1, user2);
         return relationShip.get(key);
     }
 
 
-    public void addRequest(User sender, User receiver, Relation.RelationType type) {
-        //TODO new assertion isEqual() can also check for not null in there ;);
+    public static void sendRequest(User sender, User receiver) {
         DomainAssertion.isNotEqual(sender, receiver, "sender and receiver", exTypeUser);
         DomainAssertion.isTrue(!sender.equals(receiver), () -> "sender and receiver can't be the same", exTypeUser);
-
-        // TODO Eventual usage of isInColletction
-
         DomainAssertion.isInCollection(sender, userRepo.findAll(), "sender", exTypeUser);
         DomainAssertion.isInCollection(receiver, userRepo.findAll(), "receiver", exTypeUser);
 
-        String key = createMapKey(sender, receiver);
-        Relation relation = new Relation(sender, receiver, type);
-        relationShip.put(key, relation);
+        String keyIncoming = createMapKey(sender, receiver);
+        String keyOutgoing = createMapKey(receiver, sender);
+
+        Relation relationIncoming = new Relation(sender, receiver, INCOMING);
+        Relation relationOutgoing = new Relation(receiver, sender, OUTGOING);
+
+        relationShip.put(keyIncoming, relationIncoming);
+        relationShip.put(keyOutgoing, relationOutgoing);
     }
 
-    public void updateRequest(User sender, User receiver, Relation.RelationType type) {
-        //TODO Find a better way not to use 3 times the same method
+
+    public static void acceptRequest(User sender, User receiver) {
         DomainAssertion.isNotNull(sender, "sender", exTypeUser);
         DomainAssertion.isNotNull(receiver, "receiver", exTypeUser);
-        DomainAssertion.isNotNull(type, "type", exTypeUser);
-        Relation relation = getRelation(sender, receiver);
-        DomainAssertion.isNotNull(relation, "relation", exTypeUser);
-        relation.setType(type);
+
+        String keyIncoming = createMapKey(sender, receiver);
+        String keyOutgoing = createMapKey(receiver, sender);
+
+        Relation relationIncoming = relationShip.get(keyIncoming);
+        Relation relationOutgoing = relationShip.get(keyOutgoing);
+
+        if (relationIncoming != null && relationOutgoing != null) {
+            relationIncoming.setType(ESTABLISHED);
+            relationOutgoing.setType(ESTABLISHED);
+
+            if (messageable(sender, receiver)) {
+                new Chat(sender, receiver);
+            }
+        }
     }
 
-    //TODO Try to understand the logic of those 4 methods below
     public Relation.RelationType getRelationType(User user1, User user2) {
         return Optional.of(getRelation(user1,user2)).map(Relation::getType).orElse(null);
         /*
@@ -72,7 +81,7 @@ public class UserRelationShip {
          */
     }
 
-    public boolean messageable(User user1, User user2) {
+    public static boolean messageable(User user1, User user2) {
         return Optional.of(getRelation(user1,user2)).map(Relation::getType).
                 filter(relationType -> relationType == ESTABLISHED).isPresent();
         /*
@@ -83,20 +92,20 @@ public class UserRelationShip {
     }
 
 
-    public Map<User, Relation> getRequest(User user1) {
-        return relationShip.values().stream().
-                filter(relation -> relation.getUser1().equals(user1) && relation.getType() == INCOMING).
-                collect(Collectors.toMap(Relation::getUser2,relation -> relation));
+    public static Set<User> getRequest(User user1) {
+        return relationShip.values().stream()
+                .filter(relation -> relation.getUser1().equals(user1) && relation.getType() == INCOMING).map(Relation::getUser2)
+                .collect(Collectors.toSet());
         /*
         Takes the values of each User in the Hashmap (the enums), filters out
         the INCOMING enums and returns a Map that wields the user2 and the Relation to User2
         */
     }
 
-    public Map<User, Relation> getSent(User user1) {
-        return relationShip.values().stream().
-                filter(relation -> relation.getUser1().equals(user1) && relation.getType() == OUTGOING).
-                collect(Collectors.toMap(Relation::getUser2,relation -> relation));
+    public static Map<User, Relation> getSent(User user1) {
+        return relationShip.values().stream()
+                .filter(relation -> relation.getUser1().equals(user1) && relation.getType() == OUTGOING)
+                .collect(Collectors.toMap(Relation::getUser2, relation -> relation));
 
         /*
         Takes the values of each User in the Hashmap (the enums), filters out

@@ -1,6 +1,5 @@
 package org.theShire.presentation;
 
-import org.theShire.domain.exception.MediaException;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
 import org.theShire.domain.media.Media;
@@ -19,18 +18,16 @@ import org.theShire.repository.CaseRepository;
 import org.theShire.repository.MessangerRepository;
 import org.theShire.repository.UserRepository;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
+
+import static org.theShire.domain.medicalDoctor.UserRelationShip.*;
 
 public class Main {
     public static final Scanner scanner = new Scanner(System.in);
     public static final UserRepository userRepo = new UserRepository();
     public static final CaseRepository caseRepo = new CaseRepository();
     public static final MessangerRepository messangerRepo = new MessangerRepository();
+    public static final UserRelationShip relationship = new UserRelationShip();
 
 
 
@@ -58,20 +55,6 @@ public class Main {
            return medCase;
     }
 
-    public static Chat createChat(User...chatters){
-         Chat chat = new Chat(chatters);
-         messangerRepo.save(chat);
-         return chat;
-    }
-
-    public static void createPendingRelation(User user1, User user2){
-       Relation rel1 = new Relation(user1,user2, Relation.RelationType.OUTGOING);
-       Relation rel2 = new Relation(user2,user1, Relation.RelationType.INCOMING);
-    }
-    public static void createEstablishedRelation(User user1, User user2){
-       Relation rel1 = new Relation(user1,user2, Relation.RelationType.ESTABLISHED);
-       Relation rel2 = new Relation(user2,user1, Relation.RelationType.ESTABLISHED);
-    }
 
     public static void main(String[] args) {
 
@@ -83,6 +66,11 @@ public class Main {
         User user2 = createUser("Aragorn","Arathorn","Aragorn@gondor.at","EvenSaver1234","Gondorisch","Gondor","Aragorn Profile","Arathorns Sohn","König von Gondor");
         //CREATE USER3-----------------------------------------------------------------
         User user3 = createUser("Gandalf","Wizardo","Gandalf@Wizardo.out","ICastFireBall!","all","world", "Gandalf Profile","The Gray","The White","Ainur");
+
+        sendRequest(user1,user2);
+        acceptRequest(user1,user2);
+        sendRequest(user3,user1);
+
         //init Content
         List<Content> contents = new ArrayList<>();
         //add texts
@@ -94,12 +82,7 @@ public class Main {
         //Create a Case with user2&user3 as member and user1 as owner
         Case case1 = createCase(user1,"my First Case", contents,user2,user3);
 
-        UserRelationShip relationShip = new UserRelationShip();
-        relationShip.addRequest(user1,user2, Relation.RelationType.OUTGOING);
-        relationShip.addRequest(user1,user2, Relation.RelationType.INCOMING);
-        
-        relationShip.addRequest(user2,user3, Relation.RelationType.OUTGOING);
-        relationShip.addRequest(user3,user2, Relation.RelationType.INCOMING);
+
 
 
         while(true){
@@ -157,9 +140,9 @@ public class Main {
                     String delCaseId = scanner.nextLine();
                     caseRepo.deleteById(UUID.fromString(delCaseId));
                     break;
-//                case 9:
-//                    relationCommands();
-//                    break;
+                case 9:
+                    relationCommands();
+                    break;
                 case 10:
                     vote();
                     break;
@@ -178,6 +161,77 @@ public class Main {
             }
         }
 
+    }
+
+    private static void relationCommands() {
+        System.out.println("1. See Incoming");
+        System.out.println("2. send request");
+        System.out.println("3. accept request");
+        int answer = scanner.nextInt();
+        switch (answer) {
+            case 1:
+                System.out.println("Enter your UUID");
+                scanner.nextLine();
+                UUID userUUID1 = UUID.fromString(scanner.nextLine());
+                User user1 = userRepo.findByID(userUUID1);
+                if (user1 == null) {
+                    System.out.println("User not found.");
+                } else {
+                    Set<User> incomingRequests = UserRelationShip.getRequest(user1);
+                    if (incomingRequests.isEmpty()) {
+                        System.out.println("No Requests");
+                    } else {
+                        incomingRequests.forEach((sender) -> {
+                            System.out.println("Request from: " + sender.getProfile().getFirstName());
+                        });
+                    }
+                }
+                break;
+
+            case 2:
+                System.out.println("Enter your UUID");
+                scanner.nextLine();
+                UUID senderUUID2 = UUID.fromString(scanner.nextLine());
+                User sender2 = userRepo.findByID(senderUUID2);
+                if (sender2 == null) {
+                    System.out.println("Sender not found.");
+                } else {
+                    System.out.println("Enter target's UUID");
+                    UUID receiverUUID2 = UUID.fromString(scanner.nextLine());
+                    User receiver2 = userRepo.findByID(receiverUUID2);
+                    if (receiver2 == null) {
+                        System.out.println("Receiver not found.");
+                    } else {
+                        UserRelationShip.sendRequest(sender2, receiver2);
+                        System.out.println("Request sent from " + sender2.getProfile().getFirstName() + " to " + receiver2.getProfile().getFirstName());
+                    }
+                }
+                break;
+
+            case 3:
+                System.out.println("Enter your UUID");
+                scanner.nextLine();
+                UUID senderUUID3 = UUID.fromString(scanner.nextLine());
+                User sender3 = userRepo.findByID(senderUUID3);
+                if (sender3 == null) {
+                    System.out.println("Sender not found.");
+                } else {
+                    System.out.println("Enter target's UUID");
+                    UUID receiverUUID3 = UUID.fromString(scanner.nextLine());
+                    User receiver3 = userRepo.findByID(receiverUUID3);
+                    if (receiver3 == null) {
+                        System.out.println("Receiver not found.");
+                    } else {
+                        UserRelationShip.acceptRequest(sender3, receiver3);
+                        System.out.println("Request from " + sender3.getProfile().getFirstName()+" "+ senderUUID3 + " to " + receiver3.getProfile().getFirstName() + " accepted.");
+                    }
+                }
+                break;
+
+            default:
+                System.out.println("Invalid option.");
+                break;
+        }
     }
 
     private static void saveEntry() {
@@ -226,27 +280,35 @@ public class Main {
         System.out.println("enter chat uuid");
         UUID uuid = UUID.fromString(scanner.nextLine());
         Chat chat = messangerRepo.findByID(uuid);
-        System.out.println("chat with "+ chat.getPeople() +" opened");
-        System.out.println(chat.getChatHistory());
+        if (chat != null) {
+            System.out.println("chat with " + chat.getPeople() + " opened");
+            System.out.println(chat.getChatHistory());
 
-        while(!exit){
-            System.out.println("Enter your UUID");
-            String user = scanner.nextLine();
-            System.out.println("Send a message? true/false");
-            exit = scanner.nextBoolean();
-            System.out.println("What message?");
-            String message = scanner.nextLine();
-            chat.sendMessage(new Message(UUID.fromString(user),new Content(new ContentText(message))));
+            while (!exit) {
+                System.out.println("Enter your UUID");
+                String user = scanner.nextLine();
+                System.out.println("Send a message? true/false");
+                exit = scanner.nextBoolean();
+                System.out.println("What message?");
+                String message = scanner.nextLine();
+                chat.sendMessage(new Message(UUID.fromString(user), new Content(new ContentText(message))));
+            }
+        }else {
+            System.out.println("Chat not found");
         }
     }
 
     private static void addCase() {
         System.out.println("How many possible Answers does the Case have");
         int ansCount = scanner.nextInt();
+        String[] answers = new String[ansCount];
         LinkedHashSet<Answer> answer = new LinkedHashSet();
         for (int i = 0; i < ansCount; i++) {
             System.out.println("Enter Answer to the Case");
-             answer.add(new Answer(scanner.nextLine()));
+            scanner.nextLine();
+            answers[i] = scanner.nextLine();
+
+
         }
         CaseVote caseVote = new CaseVote(answer);
 
@@ -261,15 +323,24 @@ public class Main {
         System.out.println("How many Doctors do you want to add?");
         int doctors = scanner.nextInt();
         String[] memberId = new String[doctors];
+        User[] members = new User[memberId.length];
         for(int i = 0; i < doctors; i++){
             System.out.println("Enter Doctor ID");
+            scanner.nextLine();
             memberId[i] = scanner.nextLine();
+
+
         }
-        User[] members = new User[memberId.length];
-        for(int i = 0; i < memberId.length; i++){
-        members[i] = userRepo.findByID(UUID.fromString(memberId[i]));
+
+        for (int i = 0; i < doctors; i++) {
+            members[i] = userRepo.findByID(UUID.fromString(memberId[i]));
         }
-        Case medCase = new Case(userRepo.findByID(ownerId),title,caseContents, members);
+
+        for (int i = 0; i < ansCount; i++) {
+            answer.add(new Answer(answers[i]));
+        }
+        createCase(userRepo.findByID(ownerId),title,caseContents,members);
+
 
     }
 
@@ -286,10 +357,12 @@ public class Main {
             switch (choice) {
                 case 1:
                     System.out.println("Enter Filepath");
+                    scanner.nextLine();
                     content.add(new Content(new Media(scanner.nextLine())));
                     break;
                 case 2:
                     System.out.println("Enter Text");
+                    scanner.nextLine();
                     content.add(new Content(new ContentText(scanner.nextLine())));
                     break;
                 default:

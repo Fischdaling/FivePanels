@@ -8,9 +8,9 @@ import java.util.stream.Stream;
 
 public class CaseVote {
     //a LinkedHashSet (it's simply a sorted HashSet) of the answers related to a specific case
-    private LinkedHashSet<Answer> answers;
+    private LinkedHashSet<Answer> answers = new LinkedHashSet<>();
     //a HashMap of a Set of Votes (so we can differentiate between the members)
-    private HashMap<UUID, Set<Vote>> votes;
+    private HashMap<UUID, Set<Vote>> votes = new HashMap<>();
     //determines the maximum amount of answers choosable
     private int maxAnswers;
     //counts the percent in correlation to  maxPercentCount
@@ -29,6 +29,7 @@ public class CaseVote {
         setMaxAnswers();
         this.votes = votes;
         setpercentCount(0);
+
     }
 
     public void voting(UUID voter, Answer answerChosen, double percent) {
@@ -70,7 +71,7 @@ public class CaseVote {
     }
 
     public void setMaxAnswers() {
-        greaterZero(maxAnswers, "maxAnswers", exTypeCase);
+
         maxAnswers = answers.size();
     }
 
@@ -79,7 +80,7 @@ public class CaseVote {
     }
 
     public void setpercentCount(double percentCount) {
-        greaterZero(percentCount, "percentCount", exTypeCase);
+        greaterEqualsZero(percentCount, "percentCount", exTypeCase);
         this.percentCount = percentCount;
     }
 

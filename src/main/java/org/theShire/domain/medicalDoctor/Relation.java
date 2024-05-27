@@ -20,7 +20,7 @@ public class Relation extends BaseEntity {
     // The type of a Relation (OUTGOING,INCOMING,ESTABLISHED)
     private RelationType type;
 
-    //TODO TRY TO Understand why we don't need this constructor
+
     public Relation(User user1, User user2, RelationType relationType) {
         setUser(user1);
         setUser(user2);

@@ -29,10 +29,10 @@ public class Media {
         setResolution(resolution);
     }
 
-    public Media(String filePath){
+    public Media(String filename){
 
         try {
-            image = ImageIO.read(new File(filePath));
+            image = ImageIO.read(new File("src/main/resources/"+filename));
         } catch (IOException e) {
             throw new MediaException(e.getMessage());
         }

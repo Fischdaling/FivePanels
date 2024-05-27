@@ -60,7 +60,7 @@ public class Chat extends BaseEntity { //TODO assertions
     }
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Chat:");
+        final StringBuilder sb = new StringBuilder("Chat:").append(getEntityId()).append(System.lineSeparator());
         sb.append(chatHistory);
         return sb.toString();
     }

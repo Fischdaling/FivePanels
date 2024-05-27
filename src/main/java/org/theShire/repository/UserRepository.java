@@ -94,15 +94,17 @@ public class UserRepository extends AbstractRepository<User>{
     }
 
     private Set<UserRelationShip> saveContacts(String value) {
-        return Arrays.stream(value.split(","))
-                .map(UserRelationShip::new)
-                .collect(Collectors.toSet());
+//        return Arrays.stream(value.split(","))
+//                .map(UserRelationShip::new)
+//                .collect(Collectors.toSet());
+        return new HashSet<>();
     }
 
     private Set<Chat> saveChats(String value) {
-        return Arrays.stream(value.split(","))
-                .map(findByID(UUID.fromString(value)))
-                .collect(Collectors.toSet());
+//        return Arrays.stream(value.split(","))
+//                .map(findByID(UUID.fromString(value)))
+//                .collect(Collectors.toSet());
+        return new HashSet<>();
     }
 
     private Set<Knowledges> saveSpecializations(String value) {
@@ -112,9 +114,10 @@ public class UserRepository extends AbstractRepository<User>{
     }
 
     private Set<Case> saveCases(String value) {
-        return Arrays.stream(value.split(","))
-                .map(findByID(UUID.fromString(value)))
-                .collect(Collectors.toSet());
+//        return Arrays.stream(value.split(","))
+//                .
+//                .collect(Collectors.toSet());
+        return new HashSet<>();
     }
 
     private List<EducationalTitle> saveEducationalTitles(String value) {
