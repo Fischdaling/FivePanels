@@ -76,4 +76,8 @@ public class BaseEntity {
                 append(updatedAt).append(";");
         return stringBuilder.toString();
     }
+
+    protected void setEntityId(UUID entityId) {
+        this.entityId = entityId;
+    }
 }

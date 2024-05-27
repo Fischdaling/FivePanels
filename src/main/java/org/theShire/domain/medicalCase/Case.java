@@ -177,6 +177,7 @@ public class Case extends BaseEntity {
         final StringBuilder sb = new StringBuilder(super.toCSVString());
         sb.append(getOwner().getEntityId()).append(";");
         sb.append(title).append(";");
+        sb.append(content).append(";");
         sb.append(knowledges).append(";");
         sb.append(viewcount).append(";");
         sb.append(members.stream().

@@ -59,14 +59,15 @@ public class CaseRepository extends AbstractRepository<Case> {
                     Instant updatedAt = Instant.parse(parts[2]);
                     User owner = userRepo.findByID(UUID.fromString(parts[3]));
                     String title = parts[4];
-                    Set<Knowledges> knowledges = saveKnowledges(parts[5]);
-                    int viewCount = Integer.parseInt(parts[6]);
-                    Set<User> members = saveMembers(parts[7]);
-                    int likeCount = Integer.parseInt(parts[8]);
-                    Set<UUID> usersLiked = saveUsersLiked(parts[9]);
-                    CaseVote caseVote = saveCaseVote(parts[10]);
+                    List<Content> content = saveContent(parts[5]);
+                    Set<Knowledges> knowledges = saveKnowledges(parts[6]);
+                    int viewCount = Integer.parseInt(parts[7]);
+                    Set<User> members = saveMembers(parts[8]);
+                    int likeCount = Integer.parseInt(parts[9]);
+                    Set<UUID> usersLiked = saveUsersLiked(parts[10]);
+                    CaseVote caseVote = saveCaseVote(parts[11]);
 
-                    new Case(entityId,createdAt,updatedAt);
+                    new Case(entityId,createdAt,updatedAt,title,content,viewCount,knowledges,owner,members,likeCount,usersLiked,caseVote);
                 }
         } catch (FileNotFoundException e) {
                 throw new MedicalCaseException(e.getMessage());
@@ -75,45 +76,34 @@ public class CaseRepository extends AbstractRepository<Case> {
             }
     }
 
-    private Content saveContent(String contentStr) {
-        if (contentStr.startsWith("text:")) {
-            String text = contentStr.substring(5);
-            return new Content(new ContentText(text));
-        } else if (contentStr.startsWith("media:")) {
-            String media = contentStr.substring(6);
-            return new Content(new Media(media));
-        } else {
-            throw new MessengerException("Unknown content format: " + contentStr);
+    private List<Content> saveContent(String part) {
+            List<Content> content = new ArrayList<>();
+        String[] parts = part.split(",");
+        for (int i = 0; i < parts.length; i++) {
+            String text = parts[i];
+            content.add( new Content(new ContentText(text)));
         }
+        return content;
     }
 
     private CaseVote saveCaseVote(String part) {
-        String[] parts = part.split(";");
-        LinkedHashSet<Answer> answers = Arrays.stream(parts[0].split(","))
-                .map(Answer::toCSVString)
-                .collect(Collectors.toCollection(LinkedHashSet::new));
+        String[] parts = part.split(",");
+        LinkedHashSet<Answer> answer = saveAnswers(parts[0]);
+        HashMap<UUID, Set<Vote>> votes = saveVotes(parts[1]);
+        int percentCount = Integer.parseInt(parts[3]);
 
-        HashMap<UUID, Set<Vote>> votes = Arrays.stream(parts[1].split(";"))
-                .map(entry -> {
-                    String[] entryParts = entry.split(":");
-                    UUID voter = UUID.fromString(entryParts[0]);
-                    Set<Vote> voteSet = Arrays.stream(entryParts[1].split(","))
-                            .map(Vote::fromCSVString)
-                            .collect(Collectors.toSet());
-                    return new AbstractMap.SimpleEntry<>(voter, voteSet);
-                })
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-
-        int maxAnswers = Integer.parseInt(parts[2]);
-        double percentCount = Double.parseDouble(parts[3]);
-        double maxPercentCount = Double.parseDouble(parts[4]);
-
-        CaseVote caseVote = new CaseVote(answers, votes);
-        caseVote.setMaxAnswers(maxAnswers);
-        caseVote.setpercentCount(percentCount);
-
-        return caseVote;
+        return new CaseVote(answer,votes,percentCount);
     }
+
+    private HashMap<UUID, Set<Vote>> saveVotes(String part) {
+            return  new HashMap<>();
+    }
+
+    private LinkedHashSet<Answer> saveAnswers(String part) {
+
+            return null;
+    }
+
     private Set<UUID> saveUsersLiked(String part) {
         Set<String> str = Arrays.stream(part.split(",")).collect(Collectors.toSet());
         return str.stream().map(UUID::fromString).collect(Collectors.toSet());

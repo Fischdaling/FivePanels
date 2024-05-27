@@ -83,8 +83,6 @@ public class Main {
         Case case1 = createCase(user1,"my First Case", contents,user2,user3);
 
 
-
-
         while(true){
             System.out.println("Commands");
             System.out.println("1. add Doctor");
@@ -164,6 +162,7 @@ public class Main {
         }
 
     }
+
 
     private static void relationCommands() {
         System.out.println("1. See Incoming");

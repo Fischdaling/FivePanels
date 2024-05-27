@@ -77,7 +77,7 @@ public class Media {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder("media:");
         sb.append("width=").append(width);
         sb.append("height=").append(height);
         sb.append("altText='").append(altText).append('\'');

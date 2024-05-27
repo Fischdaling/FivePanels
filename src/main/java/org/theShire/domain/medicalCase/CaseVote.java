@@ -24,11 +24,11 @@ public class CaseVote {
         setpercentCount(0);
     }
 
-    public CaseVote(LinkedHashSet<Answer> answers, HashMap<UUID, Set<Vote>> votes) {
+    public CaseVote(LinkedHashSet<Answer> answers, HashMap<UUID, Set<Vote>> votes,double percentCount) {
         addAnswers(answers);
         setMaxAnswers();
         this.votes = votes;
-        setpercentCount(0);
+        setpercentCount(percentCount);
 
     }
 
@@ -85,5 +85,27 @@ public class CaseVote {
 
     public double getmaxPercentCount() {
         return maxPercentCount;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer();
+        sb.append("answers: ").append(answers);
+        sb.append("votes: ").append(votes);
+        sb.append("maxAnswers: ").append(maxAnswers);
+        sb.append("percentCount: ").append(percentCount);
+        sb.append("maxPercentCount: ").append(maxPercentCount);
+
+        return sb.toString();
+    }
+
+    public String toCSVString() {
+        final StringBuffer sb = new StringBuffer();
+        sb.append(answers).append(",");
+        sb.append(votes).append(",");
+        sb.append(maxAnswers).append(",");
+        sb.append(percentCount).append(",");
+        sb.append(maxPercentCount);
+        return sb.toString();
     }
 }

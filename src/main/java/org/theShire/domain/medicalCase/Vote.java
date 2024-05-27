@@ -5,6 +5,9 @@ import org.theShire.domain.medicalCase.Case;
 import org.theShire.foundation.DomainAssertion;
 import org.theShire.repository.CaseRepository;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
@@ -38,5 +41,13 @@ public class Vote {
     public void setPercent(double percent) {
         greaterEqualsZero(percent, "percent",exTypeCase);
         this.percent = percent;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer();
+        sb.append(answer).append("%");
+        sb.append(percent);
+        return sb.toString();
     }
 }

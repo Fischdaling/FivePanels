@@ -23,6 +23,6 @@ public class ContentText{
 
     @Override
     public String toString() {
-       return text;
+       return "text:"+text;
     }
 }
