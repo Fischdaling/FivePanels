@@ -32,4 +32,10 @@ public class Answer extends BaseEntity {
         sb.append("name: ").append(name);
         return sb.toString();
     }
+
+    public String toCSVString(){
+        final StringBuilder sb = new StringBuilder();
+        sb.append(getEntityId()).append(",").append(getCreatedAt()).append(",").append(getUpdatedAt());
+        return sb.toString();
+    }
 }

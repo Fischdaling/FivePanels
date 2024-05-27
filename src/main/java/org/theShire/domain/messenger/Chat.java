@@ -4,10 +4,7 @@ import org.theShire.domain.BaseEntity;
 import org.theShire.domain.medicalDoctor.User;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.theShire.domain.exception.MessengerException.exTypeMes;
 import static org.theShire.foundation.DomainAssertion.*;
@@ -16,9 +13,8 @@ public class Chat extends BaseEntity { //TODO assertions
     // The Users in the chat
     private Set<User> people;
     // All past sent messanges
-    private List<Message> chatHistory;
+    private static List<Message> chatHistory;
     // If the chat is a Group or single chat
-    private ChatType chatType;
 
 
     public Chat(User ... chatters) {
@@ -27,6 +23,12 @@ public class Chat extends BaseEntity { //TODO assertions
         chatHistory = new ArrayList<>();
 
         addChatters(chatters);
+    }
+
+    public Chat(UUID uuid, Instant createdAt, Instant updatedAt, Set<User> people) {
+        super(uuid, createdAt, updatedAt);
+        this.people = people;
+
     }
 
     private void addChatters(User...chatters) {
@@ -47,7 +49,7 @@ public class Chat extends BaseEntity { //TODO assertions
         return chatHistory;
     }
 
-    public void addChatHistory(Message message) {
+    public static void addChatHistory(Message message) {
         chatHistory.add(isNotNull(message,"message",exTypeMes));
     }
 
@@ -68,12 +70,9 @@ public class Chat extends BaseEntity { //TODO assertions
     @Override
     public String toCSVString(){
         final StringBuilder sb = new StringBuilder(super.toCSVString());
+        sb.append(people).append(";");
         sb.append(chatHistory).append(";").append(System.lineSeparator());
         return sb.toString();
     }
 
-    enum ChatType{
-        SINGLECHAT,
-        GROUPCHAT
-    }
 }

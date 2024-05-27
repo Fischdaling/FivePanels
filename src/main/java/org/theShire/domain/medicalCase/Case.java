@@ -31,8 +31,6 @@ public class Case extends BaseEntity {
     private int likeCount;
     //remembers which user has already liked a case by their id (prevents a user to like the same case more often)
     private Set<UUID> userLiked;
-    //A set of categories (contains different categories of medical cases)
-    private Set<Category> category;
     //portraits the total votes of all members combined
     private CaseVote caseVote;
 
@@ -49,6 +47,18 @@ public class Case extends BaseEntity {
         caseChat.addPerson(owner);
     }
 
+    public Case(UUID uuid, Instant createdAt, Instant updatedAt, String title, List<Content> content, int viewcount, Set<Knowledges> knowledges, User owner, Set<User> members, int likeCount, Set<UUID> userLiked, CaseVote caseVote) {
+        super(uuid, createdAt, updatedAt);
+        this.title = title;
+        this.content = content;
+        this.viewcount = viewcount;
+        this.knowledges = knowledges;
+        this.owner = owner;
+        this.members = members;
+        this.likeCount = likeCount;
+        this.userLiked = userLiked;
+        this.caseVote = caseVote;
+    }
 
     public String getTitle() {
         return title;
@@ -107,13 +117,6 @@ public class Case extends BaseEntity {
         return userLiked;
     }
 
-    public Set<Category> getCategory() {
-        return category;
-    }
-
-    public void setCategory(Set<Category> category) {
-        this.category = category;
-    }
 
     public CaseVote getCaseVote() {
         return caseVote;
@@ -148,10 +151,6 @@ public class Case extends BaseEntity {
         this.knowledges.add(isNotNull(knowledges, "knowledges", exTypeCase));
     }
 
-    public void addCategory(Category category) {
-        this.category.add(isNotNull(category, "category", exTypeCase));
-    }
-
     public void like(UUID userLiked) {
         this.userLiked.add(isInCollection(userLiked, this.userLiked, "userLiked", exTypeCase));
         likeCount++;
@@ -170,7 +169,6 @@ public class Case extends BaseEntity {
                 map(user -> user.getProfile().getFirstName()).collect(Collectors.toList())).append(System.lineSeparator());
         sb.append("likeCount: ").append(likeCount).append(System.lineSeparator());
         sb.append("userLiked: ").append(userLiked).append(System.lineSeparator());
-        sb.append("category: ").append(category).append(System.lineSeparator());
         sb.append("caseVote: ").append(caseVote).append(System.lineSeparator());
         return sb.toString();
     }
@@ -181,12 +179,10 @@ public class Case extends BaseEntity {
         sb.append(title).append(";");
         sb.append(knowledges).append(";");
         sb.append(viewcount).append(";");
-        sb.append(owner.getProfile().getFirstName()).append(";");
         sb.append(members.stream().
-                map(user -> user.getProfile().getFirstName()).collect(Collectors.toList())).append(";");
+                map(BaseEntity::getEntityId).collect(Collectors.toSet())).append(";");
         sb.append(likeCount).append(";");
         sb.append(userLiked).append(";");
-        sb.append(category).append(";");
         sb.append(caseVote).append(";");
         sb.append(System.lineSeparator());
         return sb.toString();

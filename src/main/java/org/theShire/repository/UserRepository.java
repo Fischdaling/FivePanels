@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.greaterEqualsZero;
 import static org.theShire.foundation.DomainAssertion.isTrue;
+import static org.theShire.presentation.Main.*;
 
 public class UserRepository extends AbstractRepository<User>{
 
@@ -92,19 +93,15 @@ public class UserRepository extends AbstractRepository<User>{
             throw new MedicalDoctorException(e.getMessage());
         }
     }
-
+//TODO
     private Set<UserRelationShip> saveContacts(String value) {
-//        return Arrays.stream(value.split(","))
-//                .map(UserRelationShip::new)
-//                .collect(Collectors.toSet());
-        return new HashSet<>();
+        Set<String> str = Arrays.stream(value.split(",")).collect(Collectors.toSet());
+        return str.stream().map((s -> findByID(UUID.fromString(s)).getContacts())).findAny().orElse(Collections.emptySet());
     }
 
     private Set<Chat> saveChats(String value) {
-//        return Arrays.stream(value.split(","))
-//                .map(findByID(UUID.fromString(value)))
-//                .collect(Collectors.toSet());
-        return new HashSet<>();
+        Set<String> str = Arrays.stream(value.split(",")).collect(Collectors.toSet());
+        return str.stream().map((s -> messangerRepo.findByID(UUID.fromString(s)))).collect(Collectors.toSet());
     }
 
     private Set<Knowledges> saveSpecializations(String value) {
@@ -114,10 +111,8 @@ public class UserRepository extends AbstractRepository<User>{
     }
 
     private Set<Case> saveCases(String value) {
-//        return Arrays.stream(value.split(","))
-//                .
-//                .collect(Collectors.toSet());
-        return new HashSet<>();
+        Set<String> str = Arrays.stream(value.split(",")).collect(Collectors.toSet());
+        return str.stream().map((s -> caseRepo.findByID(UUID.fromString(s)))).collect(Collectors.toSet());
     }
 
     private List<EducationalTitle> saveEducationalTitles(String value) {

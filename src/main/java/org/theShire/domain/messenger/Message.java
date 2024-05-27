@@ -27,6 +27,13 @@ public class Message extends BaseEntity {//TODO assertions
         addContents(contents);
     }
 
+    public Message(UUID uuid, Instant createdAt, Instant updatedAt, UUID senderId, List<Content> contents, Stage stage) {
+        super(uuid, createdAt, updatedAt);
+        this.senderId = senderId;
+        this.contents = contents;
+        this.stage = stage;
+    }
+
     private void addContents(Content...contents) {
         for (Content content : contents) {
             addContent(content);
@@ -72,7 +79,16 @@ public class Message extends BaseEntity {//TODO assertions
         return sb.toString();
     }
 
-    enum Stage{
+    public String toCSVString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(/*DB.getUser(senderId)*/ senderId).append(";");
+        sb.append(stage).append(";");
+        sb.append(contents).append(";");
+        return sb.toString();
+    }
+
+
+    public enum Stage{
         SENT,
         ARRIVED,
         READ

@@ -138,6 +138,8 @@ public class Main {
                 case 8:
                     System.out.println("Enter Id");
                     String delCaseId = scanner.nextLine();
+                    Case tmpCase = caseRepo.findByID(UUID.fromString(delCaseId));
+                    //TODO DELTE CASE FROM ALL USERS
                     caseRepo.deleteById(UUID.fromString(delCaseId));
                     break;
                 case 9:
@@ -303,12 +305,11 @@ public class Main {
         int ansCount = scanner.nextInt();
         String[] answers = new String[ansCount];
         LinkedHashSet<Answer> answer = new LinkedHashSet();
+        scanner.nextLine();
         for (int i = 0; i < ansCount; i++) {
             System.out.println("Enter Answer to the Case");
-            scanner.nextLine();
+
             answers[i] = scanner.nextLine();
-
-
         }
         CaseVote caseVote = new CaseVote(answer);
 
@@ -324,12 +325,10 @@ public class Main {
         int doctors = scanner.nextInt();
         String[] memberId = new String[doctors];
         User[] members = new User[memberId.length];
+        scanner.nextLine();
         for(int i = 0; i < doctors; i++){
             System.out.println("Enter Doctor ID");
-            scanner.nextLine();
             memberId[i] = scanner.nextLine();
-
-
         }
 
         for (int i = 0; i < doctors; i++) {
