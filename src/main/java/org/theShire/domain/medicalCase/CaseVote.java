@@ -71,7 +71,6 @@ public class CaseVote {
     }
 
     public void setMaxAnswers() {
-
         maxAnswers = answers.size();
     }
 
