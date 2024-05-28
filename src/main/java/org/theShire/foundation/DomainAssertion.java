@@ -148,7 +148,7 @@ public abstract class DomainAssertion<T> {
             isNotNull(o,paramName, clazz);
 
             if (!list.contains(o)) {
-                throw variableException(clazz, paramName+"doesn't existing in list");
+                throw variableException(clazz, paramName+" doesn't existing in list");
             }
             return o;
         }

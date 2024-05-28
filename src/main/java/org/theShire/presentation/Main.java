@@ -19,6 +19,7 @@ import org.theShire.repository.MessangerRepository;
 import org.theShire.repository.UserRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.theShire.domain.medicalDoctor.UserRelationShip.*;
 
@@ -31,7 +32,7 @@ public class Main {
 
 
 
-    public static User createUser(String firstname, String lastname, String email, String password,String language,String location,String picture,String...educationalTitle){
+    public static User createUser(String firstname, String lastname, String email, String password,String language,String location,String picture,Set<String> specialization,String...educationalTitle){
         Name firstName = new Name(firstname);
         Name lastName = new Name(lastname);
         Email emayl = new Email(email);
@@ -40,9 +41,9 @@ public class Main {
         Location loc = new Location(location);
         List<EducationalTitle> titles = Arrays.stream(educationalTitle).map(EducationalTitle::new).toList();
         Media media = new Media(500,400,picture,"500x400");
-
+        Set<Knowledges> knowledges  = specialization.stream().map(Knowledges::new).collect(Collectors.toSet());
         UserProfile profile = new UserProfile(lang,loc,media,firstName,lastName,titles);
-        User user = new User(passwort,emayl,profile);
+        User user = new User(passwort,emayl,profile,knowledges);
         userRepo.save(user);
         return user;
     }
@@ -61,11 +62,20 @@ public class Main {
 //        Media media = new Media("/Bilbo_Profile.png");
 //        BufferedImage img = media.getImage();
         //CREATE USER1 -----------------------------------------------------------------------
-        User user1 = createUser("Bilbo","Beutlin","Bilbo@hobbit.com","VerySafe123","Hobbitisch","Auenland","Bilbo Profile","Fassreiter","Meister Dieb");
+        Set<String> knowledges1 = new HashSet<>();
+        knowledges1.add("Test");
+        knowledges1.add("adult cardiothoracic anesthesiology");
+        User user1 = createUser("Bilbo","Beutlin","Bilbo@hobbit.com","VerySafe123","Hobbitisch","Auenland","Bilbo Profile",knowledges1,"Fassreiter","Meister Dieb");
         //CREATE USER2-----------------------------------------------------------------
-        User user2 = createUser("Aragorn","Arathorn","Aragorn@gondor.at","EvenSaver1234","Gondorisch","Gondor","Aragorn Profile","Arathorns Sohn","König von Gondor");
+        Set<String> knowledges2 = new HashSet<>();
+        knowledges2.add("critical care or pain medicine");
+        knowledges2.add("pediatric anesthesiology");
+        User user2 = createUser("Aragorn","Arathorn","Aragorn@gondor.at","EvenSaver1234","Gondorisch","Gondor","Aragorn Profile",knowledges2,"Arathorns Sohn","König von Gondor");
         //CREATE USER3-----------------------------------------------------------------
-        User user3 = createUser("Gandalf","Wizardo","Gandalf@Wizardo.out","ICastFireBall!","all","world", "Gandalf Profile","The Gray","The White","Ainur");
+        Set<String> knowledges3 = new HashSet<>();
+        knowledges3.add("pediatric emergency medicine");
+        knowledges3.add("hand surgery");
+        User user3 = createUser("Gandalf","Wizardo","Gandalf@Wizardo.out","ICastFireBall!","all","world", "Gandalf Profile",knowledges3,"The Gray","The White","Ainur");
 
         sendRequest(user1,user2);
         acceptRequest(user1,user2);
@@ -97,6 +107,7 @@ public class Main {
             System.out.println("10. Vote for Case Answer");
             System.out.println("11. Leave a like for Case Answer");
             System.out.println("12. Save Data");
+            System.out.println("13. Load Data");
             System.out.println("0. Exit");
 
             int choice = scanner.nextInt();
@@ -126,7 +137,9 @@ public class Main {
                 case 6:
                     System.out.println("Enter Id");
                     String caseId = scanner.nextLine();
-                    caseRepo.findByID(UUID.fromString(caseId));
+                    Case medicCase =  caseRepo.findByID(UUID.fromString(caseId));
+                    medicCase.setViewcount(medicCase.getViewcount()+1);
+                    System.out.println(medicCase);
                     break;
                 case 7:
                     System.out.println("Enter Id");
@@ -138,6 +151,8 @@ public class Main {
                     String delCaseId = scanner.nextLine();
                     Case tmpCase = caseRepo.findByID(UUID.fromString(delCaseId));
                     //TODO DELTE CASE FROM ALL USERS
+                    tmpCase.getOwner().removeCase(tmpCase);
+                    tmpCase.getMembers().forEach(aUser -> aUser.removeCase(tmpCase));
                     caseRepo.deleteById(UUID.fromString(delCaseId));
                     break;
                 case 9:
@@ -146,12 +161,20 @@ public class Main {
                 case 10:
                     vote();
                     break;
-//                case 11:
-//                    System.out.println("Goodbye");
-//                    System.exit(0);
-//                    break;
+                case 11:
+                    System.out.println("Enter your ID");
+                    userId = scanner.nextLine();
+                    System.out.println("Enter Case ID");
+                    String likeCaseId = scanner.nextLine();
+                    Case medCase = caseRepo.findByID(UUID.fromString(likeCaseId));
+                    medCase.setViewcount(medCase.getViewcount()+1);
+                    medCase.like(UUID.fromString(userId));
+                    break;
                 case 12:
                     saveEntry();
+                    break;
+                case 13:
+                    loadEntry();
                     break;
                 case 0:
                     System.out.println("Goodbye");
@@ -161,6 +184,12 @@ public class Main {
             }
         }
 
+    }
+
+    private static void loadEntry() {
+        caseRepo.loadEntryMap("src/main/java/org/theShire/persistence/caseRepoCSV.csv");
+        messangerRepo.loadEntryMap("src/main/java/org/theShire/persistence/chatRepoCSV.csv");
+        userRepo.loadEntryMap("src/main/java/org/theShire/persistence/userRepoCSV.csv");
     }
 
 
@@ -267,11 +296,14 @@ public class Main {
                     userRepo.findAll().forEach(System.out::println);
                     break;
                 case 2:
+                    caseRepo.findAll().forEach(aCase -> aCase.setViewcount(aCase.getViewcount()+1));
                     caseRepo.findAll().forEach(System.out::println);
                     break;
                 case 3:
                     messangerRepo.findAll().forEach(System.out::println);
                     break;
+                default:
+                    System.out.println("invalid command");
             }
 
     }
@@ -397,15 +429,13 @@ public class Main {
         System.out.println("How many specialties do you want to add?");
         i = scanner.nextInt();
         scanner.nextLine();
-        Knowledges[] specialty = new Knowledges[i];
+        Set<String> specialty= new HashSet<>();
         for (int j = 0; j < i; j++) {
                 System.out.println("Enter Specialty");
                 String value = scanner.nextLine();
-                specialty[j] = new Knowledges(value);
+                specialty.add(value);
         }
-        User user = createUser(firstname,lastname,email,password,language,location,profilePic ,title);
-        user.setSpecialization(specialty);
-
+        User user = createUser(firstname,lastname,email,password,language,location,profilePic,specialty ,title);
 
     }
 
