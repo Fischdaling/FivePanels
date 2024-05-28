@@ -24,61 +24,57 @@ public class MessangerRepository extends AbstractRepository<Chat>{
     @Override
     public void saveEntryMap(String filepath) {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath))) {
-            for (Chat value : entryMap.values()) {
-                String csvFile = value.toCSVString();
-                bufferedWriter.write(csvFile);
-            }
+            entryMap.values().stream()
+                    .map(Chat::toCSVString)
+                    .forEach(csvFile -> {
+                        try {
+                            bufferedWriter.write(csvFile);
+                        } catch (IOException e) {
+                            throw new UncheckedIOException(e);
+                        }
+                    });
             System.out.println("Successfully saved " + filepath);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(String.format("File %s is not found", filepath), e);
-
         } catch (IOException e) {
             throw new RuntimeException(String.format("File %s has a problem", filepath), e);
         }
     }
+
     @Override
     public void loadEntryMap(String filepath) {
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filepath))) {
-            String line = "";
-            while ((line = bufferedReader.readLine()) != null) {
-                String[] parts = line.split(";");
-                UUID entityId = UUID.fromString(parts[0]);
-                Instant createdAt = Instant.parse(parts[1]);
-                Instant updatedAt = Instant.parse(parts[2]);
-                Set<User> users = saveUser(parts[3]);
-                List<Message> chatHistory = saveHistory(parts[4]);
-                chatHistory.forEach(Chat::addChatHistory);
-
-                Chat chat = new Chat(entityId,createdAt,updatedAt,users);
-            }
-        } catch (FileNotFoundException e) {
-            throw new MessengerException(e.getMessage());
+            bufferedReader.lines()
+                    .map(this::parseChat)
+                    .forEach(chat -> entryMap.put(chat.getEntityId(), chat));
         } catch (IOException e) {
-            throw new MediaException(e.getMessage());
+            throw new MessengerException(e.getMessage());
         }
     }
 
-    private Set<User> saveUser(String part) {
-        Set<String> str = Arrays.stream(part.split(",")).collect(Collectors.toSet());
-        return str.stream().map((s -> userRepo.findByID(UUID.fromString(s)))).collect(Collectors.toSet());
+    private Chat parseChat(String line) {
+        String[] parts = line.split(";");
+        UUID entityId = UUID.fromString(parts[0]);
+        Instant createdAt = Instant.parse(parts[1]);
+        Instant updatedAt = Instant.parse(parts[2]);
+        Set<User> users = parseUsers(parts[3]);
+        List<Message> chatHistory = parseHistory(parts[4]);
+        chatHistory.forEach(Chat::addChatHistory);
+
+        return new Chat(entityId, createdAt, updatedAt, users);
     }
 
-    private List<Message> saveHistory(String part) {
-        if (part == null || part.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        String[] messageParts = part.split(",");
-        List<Message> messages = new ArrayList<>();
-        for (String messageStr : messageParts) {
-
-            Message message = saveMessage(messageStr);
-            messages.add(message);
-        }
-        return messages;
+    private Set<User> parseUsers(String part) {
+        return Arrays.stream(part.split(","))
+                .map(uuid -> userRepo.findByID(UUID.fromString(uuid)))
+                .collect(Collectors.toSet());
     }
 
-    private Message saveMessage(String messageStr) {
+    private List<Message> parseHistory(String part) {
+        return Arrays.stream(part.split(","))
+                .map(this::parseMessage)
+                .collect(Collectors.toList());
+    }
+
+    private Message parseMessage(String messageStr) {
         String[] parts = messageStr.split(";");
         UUID entityId = UUID.fromString(parts[0]);
         Instant createdAt = Instant.parse(parts[1]);
@@ -87,18 +83,14 @@ public class MessangerRepository extends AbstractRepository<Chat>{
         UUID senderId = UUID.fromString(parts[3]);
         Message.Stage stage = Message.Stage.valueOf(parts[4]);
 
-        String[] contentParts = parts[5].split(",");
-        List<Content> contents = new ArrayList<>();
-        for (String contentStr : contentParts) {
+        List<Content> contents = Arrays.stream(parts[5].split(","))
+                .map(this::parseContent)
+                .collect(Collectors.toList());
 
-            Content content = saveContent(contentStr);
-            contents.add(content);
-        }
-
-        return new Message(entityId,createdAt,updatedAt,senderId, contents,stage);
+        return new Message(entityId, createdAt, updatedAt, senderId, contents, stage);
     }
 
-    private Content saveContent(String contentStr) {
+    private Content parseContent(String contentStr) {
         if (contentStr.startsWith("text:")) {
             String text = contentStr.substring(5);
             return new Content(new ContentText(text));
