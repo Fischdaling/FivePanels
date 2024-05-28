@@ -14,10 +14,10 @@ import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.isNotNull;
 
 public class Relation extends BaseEntity {
-    //TODO ADD describtions to the atributes
+    //following 2 attributes are 2 participants of the relation
     private User user1;
     private User user2;
-    // The type of a Relation (OUTGOING,INCOMING,ESTABLISHED)
+    // The type of Relation (OUTGOING,INCOMING,ESTABLISHED)
     private RelationType type;
 
 

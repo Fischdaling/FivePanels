@@ -9,7 +9,7 @@ import java.util.*;
 import static org.theShire.domain.exception.MessengerException.exTypeMes;
 import static org.theShire.foundation.DomainAssertion.*;
 
-public class Chat extends BaseEntity { //TODO assertions
+public class Chat extends BaseEntity {
     // The Users in the chat
     private Set<User> people;
     // All past sent messanges
