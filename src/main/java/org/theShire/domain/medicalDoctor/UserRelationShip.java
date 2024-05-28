@@ -35,6 +35,8 @@ public class UserRelationShip {
         return relationShip.get(key);
     }
 
+    //important to know! The relation type always differs
+    //from the direction of the relation. User1 and User2 have a different POVs
 
     public static void sendRequest(User sender, User receiver) {
         DomainAssertion.isNotEqual(sender, receiver, "sender and receiver", exTypeUser);
