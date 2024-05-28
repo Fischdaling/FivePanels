@@ -290,7 +290,7 @@ public class Main {
                 String user = scanner.nextLine();
                 System.out.println("Send a message? true/false");
                 exit = scanner.nextBoolean();
-                System.out.println("What message?");
+                System.out.println("Enter your Message?");
                 String message = scanner.nextLine();
                 chat.sendMessage(new Message(UUID.fromString(user), new Content(new ContentText(message))));
             }
