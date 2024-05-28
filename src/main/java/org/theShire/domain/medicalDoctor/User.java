@@ -1,6 +1,7 @@
 package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.BaseEntity;
+import org.theShire.domain.exception.MedicalDoctorException;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
 import org.theShire.domain.medicalCase.Case;
@@ -38,7 +39,7 @@ public class User extends BaseEntity {
 
 
 
-    public User(Password password, Email email, UserProfile profile, Knowledges...specialization) {
+    public User(Password password, Email email, UserProfile profile, Set<Knowledges> specialization) {
         super();
         contacts = new HashSet<>();
         chats = new HashSet<>();
@@ -47,7 +48,7 @@ public class User extends BaseEntity {
         this.password = password;
         this.email = email;
         this.profile = profile;
-        setSpecialization(specialization);
+        this.specialization = specialization;
     }
 
 
@@ -132,6 +133,16 @@ public class User extends BaseEntity {
     }
 
 
+    public void removeCase(Case medCase){
+        if(memberOfCase.contains(medCase)) {
+            this.memberOfCase.remove(medCase);
+        } else if (ownedCases.contains(medCase)) {
+            this.ownedCases.remove(medCase);
+        }else{
+            throw new MedicalDoctorException("Unknown medical case");
+        }
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder().append(System.lineSeparator());
@@ -156,7 +167,7 @@ public class User extends BaseEntity {
         sb.append(password).append(";");
         sb.append(score).append(";");
         sb.append(contacts).append(";");
-        sb.append(chats.stream().map(Chat::getEntityId)).append(";");
+        sb.append(chats.stream().map(Chat::getEntityId).collect(Collectors.toSet())).append(";");
         sb.append(specialization).append(";");
         sb.append(ownedCases.stream().map(Case::getEntityId).findAny().orElse(null)).append(";");
         sb.append(memberOfCase.stream().map(Case::getEntityId).findAny().orElse(null)).append(";");

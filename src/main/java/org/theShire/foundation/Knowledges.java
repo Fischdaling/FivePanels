@@ -46,13 +46,8 @@ public class Knowledges {
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer();
-        sb.append("knowledge: ").append(knowledge).append(System.lineSeparator());
+        sb.append(knowledge);
         return sb.toString();
     }
 
-    public String toCSVString(){
-        final StringBuffer sb = new StringBuffer();
-        sb.append(knowledge).append(",").append(System.lineSeparator());
-        return sb.toString();
-    }
 }
