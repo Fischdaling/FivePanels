@@ -108,7 +108,17 @@ public class UserProfile {
         sb.append("profilePicture: ").append(profilePicture).append(System.lineSeparator());
         sb.append("location: ").append(location).append(System.lineSeparator());
         sb.append("language: ").append(language).append(System.lineSeparator());
-        sb.append("experience: ").append(experience).append(System.lineSeparator());
+        return sb.toString();
+    }
+
+    public String toCSVString(){
+        final StringBuilder sb = new StringBuilder();
+        sb.append(firstName).append(";");
+        sb.append(lastName).append(";");
+        sb.append(educationalTitles).append(";");
+        sb.append(profilePicture).append(";");
+        sb.append(location).append(";");
+        sb.append(language).append(";");
         return sb.toString();
     }
 }

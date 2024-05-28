@@ -171,6 +171,7 @@ public class User extends BaseEntity {
         sb.append(specialization).append(";");
         sb.append(ownedCases.stream().map(Case::getEntityId).findAny().orElse(null)).append(";");
         sb.append(memberOfCase.stream().map(Case::getEntityId).findAny().orElse(null)).append(";");
+        sb.append(profile.toCSVString());
         sb.append(System.lineSeparator());
         return sb.toString();
     }
