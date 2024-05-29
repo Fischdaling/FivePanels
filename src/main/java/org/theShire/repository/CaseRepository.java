@@ -102,14 +102,10 @@ public class CaseRepository extends AbstractRepository<Case> {
         String[] parts = part.split(",");
         LinkedHashSet<Answer> answers = new LinkedHashSet<>();
         for (int i = 0; i < parts.length; i++) {
-            String[] partsParts = parts[i].split("_");
-            UUID uuid = UUID.fromString(partsParts[0]);
-            Instant createdAt = Instant.parse(partsParts[1]);
-            Instant updatedAt = Instant.parse(partsParts[2]);
-            Name name = new Name(parts[3]);
-            answers.add(new Answer(uuid,createdAt,updatedAt,name));
+            String name = parts[0];
+            answers.add(new Answer(name));
         }
-        return new LinkedHashSet<>();
+        return answers;
     }
 
     private Set<UUID> parseUsersLiked(String part) {

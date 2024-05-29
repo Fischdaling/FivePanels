@@ -6,36 +6,30 @@ import org.theShire.domain.richType.Name;
 import java.time.Instant;
 import java.util.UUID;
 
-public class Answer extends BaseEntity {
+public class Answer{
     //the name of an answer
-    private Name name;
+    private Name answerName;
 
     public Answer(String name) {
-        super();
-        this.name = new Name(name);
+        this.answerName = new Name(name);
     }
 
-    public Answer(UUID uuid, Instant createdAt, Instant updatedAt, Name name) {
-        super(uuid, createdAt, updatedAt);
-        this.name = name;
-    }
+
 
     //getter & setter--------------------------
 
 
     public Name getName() {
-        return name;
+        return answerName;
     }
 
     public void setName(Name name) {
-        this.name = name;
+        this.answerName = name;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append(getEntityId()).append("_").append(getCreatedAt()).append("_").append(getUpdatedAt()).append("_").append(name);
-        return sb.toString();
+        return answerName.value();
     }
 
 }

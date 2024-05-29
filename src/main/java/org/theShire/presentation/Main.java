@@ -288,7 +288,7 @@ public class Main {
 
     private static void vote() {
         UUID userId = enterUUID("Enter your User ID");
-        while (!caseRepo.getEntryMap().containsKey(userId)) {
+        while (!userRepo.getEntryMap().containsKey(userId)) {
             System.out.println("User not found");
             userId = enterUUID("Enter your User ID");
         }
@@ -299,11 +299,11 @@ public class Main {
         }
         Case medCase = caseRepo.findByID(caseId);
         for (Answer answer : medCase.getCaseVote().getAnswers()) {
-            System.out.println(answer.getName() + System.lineSeparator());
-            System.out.println(answer.getEntityId()+ System.lineSeparator());
+            System.out.println(answer.getName());
         }
-        UUID voteId = enterUUID("Enter Answer ID to Vote for");
-        Answer answer = medCase.getCaseVote().getAnswers().stream().filter(answer1 -> answer1.equals(voteId)).findFirst().orElse(null);
+        System.out.println("Enter Answer to vote for");
+        Name userAnswer = new Name(scanner.nextLine());
+        Answer answer = medCase.getCaseVote().getAnswers().stream().filter(answer1 -> answer1.equals(userAnswer)).findFirst().orElse(null);
         System.out.println("Enter the percent you want to vote this answer with");
         double percentage = scanner.nextDouble();
         medCase.getCaseVote().voting(userId, answer, percentage);
