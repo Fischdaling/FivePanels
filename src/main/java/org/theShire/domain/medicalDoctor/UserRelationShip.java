@@ -15,20 +15,20 @@ public class UserRelationShip {
      *       User12       User1,User2,TYPE:OUTGOING
      *       User34       User3, User4, TYPE:ESTABLISHED
      */
-    public static HashMap<String,Relation> relationShip;
-    
+    public static HashMap<String, Relation> relationShip;
+
     public UserRelationShip() {
         relationShip = new HashMap<>();
 
     }
 
-   private static String createMapKey(User user1, User user2){
-        if (user1.getEntityId().compareTo(user2.getEntityId()) < 0){
+    private static String createMapKey(User user1, User user2) {
+        if (user1.getEntityId().compareTo(user2.getEntityId()) < 0) {
             return user1.getEntityId().toString() + user2.getEntityId().toString();
-        }else{
+        } else {
             return user2.getEntityId().toString() + user1.getEntityId().toString();
         }
-   }
+    }
 
     public static Relation getRelation(User user1, User user2) {
         String key = createMapKey(user1, user2);
@@ -78,7 +78,7 @@ public class UserRelationShip {
     }
 
     public Relation.RelationType getRelationType(User user1, User user2) {
-        return Optional.of(getRelation(user1,user2)).map(Relation::getType).orElse(null);
+        return Optional.of(getRelation(user1, user2)).map(Relation::getType).orElse(null);
         /*
         creates a collection of Relations and returns the type of Relation
         between 2 Users if a Relation exists (otherwise returns null)
@@ -86,7 +86,7 @@ public class UserRelationShip {
     }
 
     public static boolean messageable(User user1, User user2) {
-        return Optional.of(getRelation(user1,user2)).map(Relation::getType).
+        return Optional.of(getRelation(user1, user2)).map(Relation::getType).
                 filter(relationType -> relationType == ESTABLISHED).isPresent();
         /*
         Basically delivers the relationType of a Relation between 2 users
@@ -116,5 +116,6 @@ public class UserRelationShip {
         the OUTGOING enums and returns a Map that wields the user2 and the Relation to User2
         */
     }
-
 }
+
+
