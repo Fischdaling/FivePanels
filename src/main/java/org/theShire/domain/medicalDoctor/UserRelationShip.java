@@ -68,6 +68,8 @@ public class UserRelationShip {
         if (relationIncoming != null && relationOutgoing != null) {
             relationIncoming.setType(ESTABLISHED);
             relationOutgoing.setType(ESTABLISHED);
+            relationShip.put(keyIncoming, relationIncoming);
+            relationShip.put(keyOutgoing, relationOutgoing);
 
             if (messageable(sender, receiver)) {
                 new Chat(sender, receiver);
