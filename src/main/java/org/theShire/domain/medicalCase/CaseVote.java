@@ -42,7 +42,9 @@ public class CaseVote {
             if (votes.containsKey(voter)) {
                 votes.get(voter).add(vote);
             } else {
-                votes.put(voter, (Set<Vote>) vote);
+                Set<Vote> voteSet = new HashSet<>();
+                voteSet.add(vote);
+                votes.put(voter, voteSet);
             }
         } else {
             System.err.println("The number you chose exceeds the limit of 100% total");
