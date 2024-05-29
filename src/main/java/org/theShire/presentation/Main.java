@@ -221,7 +221,7 @@ public class Main {
         scanner.nextLine();
         switch (answer) {
             case 1:
-                UUID userUUID1 = enterUUID("Enter your Id");
+                UUID userUUID1 = enterUUID("Enter your ID");
                 User user1 = userRepo.findByID(userUUID1);
                 if (userRepo.getEntryMap().containsKey(userUUID1)) {
 
