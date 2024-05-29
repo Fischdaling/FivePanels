@@ -13,6 +13,7 @@ import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.richType.*;
 import org.theShire.foundation.Knowledges;
+import org.theShire.presentation.Main;
 
 import java.io.*;
 import java.time.Instant;
@@ -139,11 +140,25 @@ public class UserRepository extends AbstractRepository<User>{
         value = value.replace("[","");
         value = value.replace("]","");
         if (value.trim().isEmpty() || value.trim().isBlank() || value.equals("null")){
-            return null;
+            return new HashSet<>();
         }
-        return Arrays.stream(value.split(","))
-                .map(s -> caseRepo.findByID(UUID.fromString(s)))
-                .collect(Collectors.toSet());
+        if (caseRepo.entryMap.containsKey(UUID.fromString(value))) {
+            return Arrays.stream(value.split(","))
+                    .map(s -> caseRepo.findByID(UUID.fromString(s)))
+                    .collect(Collectors.toSet());
+        }else {
+            Set<Case> cases = new HashSet<>();
+            System.out.println("case import failed input manuel: ");
+            System.out.println("how many cases do you want to add");
+            int j = scanner.nextInt();
+            for (int i = 0; i < j; i++) {
+                UUID caseId = Main.enterUUID("Please enter the caseId");
+                cases.add(caseRepo.findByID(caseId));
+            }
+
+            return cases;
+        }
+
     }
 
     private List<EducationalTitle> parseEducationalTitles(String value) {

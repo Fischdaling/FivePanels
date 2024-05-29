@@ -208,8 +208,9 @@ public class Main {
 
     private static void loadEntry() {
 //        messangerRepo.loadEntryMap("src/main/java/org/theShire/persistence/chatRepoCSV.csv");
+        caseRepo.loadEntryMap("src/main/java/org/theShire/persistence/caseRepoCSV.csv");
         userRepo.loadEntryMap("src/main/java/org/theShire/persistence/userLoadTest.csv");
-        caseRepo.loadEntryMap("src/main/java/org/theShire/persistence/caseLoadTest.csv");
+
     }
 
 
@@ -477,7 +478,7 @@ public class Main {
 
     }
 
-    private static UUID enterUUID(String enterMessage){
+    public static UUID enterUUID(String enterMessage){
         StringBuilder str = new StringBuilder();
         for (User user : userRepo.findAll()) {
             str.append(user.getProfile().getFirstName()).append(" ").append(user.getProfile().getLastName()).append(System.lineSeparator());

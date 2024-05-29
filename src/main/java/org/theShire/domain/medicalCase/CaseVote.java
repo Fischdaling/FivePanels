@@ -22,7 +22,7 @@ public class CaseVote {
         setpercentCount(0);
     }
 
-    public CaseVote(LinkedHashSet<Answer> answers, HashMap<UUID, Set<Vote>> votes,double percentCount) {
+    public CaseVote(LinkedHashSet<Answer> answers, HashMap<UUID, Set<Vote>> votes) {
         addAnswers(answers);
         this.votes = votes;
         setpercentCount(percentCount);
@@ -82,8 +82,7 @@ public class CaseVote {
     public String toCSVString() {
         final StringBuffer sb = new StringBuffer();
         sb.append(answers).append(",");
-        sb.append(votes).append(",");
-        sb.append(percentCount).append(",");
+        sb.append(votes);
         return sb.toString();
     }
 }

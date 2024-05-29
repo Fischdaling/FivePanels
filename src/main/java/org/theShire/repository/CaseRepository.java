@@ -13,11 +13,14 @@ import org.theShire.domain.medicalCase.Vote;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.richType.Name;
 import org.theShire.foundation.Knowledges;
+import org.theShire.presentation.Main;
 
 
 import java.io.*;
 import java.time.Instant;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static org.theShire.presentation.Main.userRepo;
@@ -63,7 +66,7 @@ public class CaseRepository extends AbstractRepository<Case> {
         UUID entityId = UUID.fromString(parts[0]);
         Instant createdAt = Instant.parse(parts[1]);
         Instant updatedAt = Instant.parse(parts[2]);
-        User owner = userRepo.findByID(UUID.fromString(parts[3]));
+        User owner = getOwnerID(parts);
         String title = parts[4];
         List<Content> content = parseContent(parts[5]);
         Set<Knowledges> knowledges = parseKnowledges(parts[6]);
@@ -76,6 +79,16 @@ public class CaseRepository extends AbstractRepository<Case> {
         return new Case(entityId, createdAt, updatedAt, title, content, viewCount, knowledges, owner, members, likeCount, usersLiked, caseVote);
     }
 
+    private static User getOwnerID(String[] parts) {
+        if (userRepo.getEntryMap().containsKey(UUID.fromString(parts[3]))) {
+            return userRepo.findByID(UUID.fromString(parts[3]));
+        } else {
+            System.out.println("Owner import failed input manuel: ");
+            UUID ownerId = Main.enterUUID("Please enter the ownerId");
+           return userRepo.findByID(ownerId);
+        }
+    }
+
     private List<Content> parseContent(String part) {
         return Arrays.stream(part.split(","))
                 .map(text -> new Content(new ContentText(text)))
@@ -86,23 +99,21 @@ public class CaseRepository extends AbstractRepository<Case> {
         String[] parts = part.split(",");
         LinkedHashSet<Answer> answers = parseAnswers(parts[0]);
         HashMap<UUID, Set<Vote>> votes = parseVotes(parts[1]);
-        double percentCount = Double.parseDouble(parts[2]);
 
-        return new CaseVote(answers, votes, percentCount);
+        return new CaseVote(answers, votes);
     }
 
-
-
-    //TODO BIIIG HASHMAP LOOKING
     private HashMap<UUID, Set<Vote>> parseVotes(String part) {
+
         return new HashMap<>();
     }
+
 
     private LinkedHashSet<Answer> parseAnswers(String part) {
         String[] parts = part.split(",");
         LinkedHashSet<Answer> answers = new LinkedHashSet<>();
         for (int i = 0; i < parts.length; i++) {
-            String name = parts[0];
+            String name = parts[i];
             answers.add(new Answer(name));
         }
         return answers;
@@ -123,6 +134,7 @@ public class CaseRepository extends AbstractRepository<Case> {
         return user;
     }
 
+
     private Set<User> parseMembers(String part) {
 
         String[] parts = part.split(", ");
@@ -131,7 +143,13 @@ public class CaseRepository extends AbstractRepository<Case> {
         for (int i = 0; i < parts.length; i++) {
             partsEdit[i] = parts[i].replace("[","");
             partsEdit[i] = partsEdit[i].replace("]","");
-            user.add(userRepo.findByID(UUID.fromString(partsEdit[i])));
+            if (userRepo.entryMap.containsKey(UUID.fromString(partsEdit[i]))) {
+                user.add(userRepo.findByID(UUID.fromString(partsEdit[i])));
+            }else {
+                System.out.println("members import failed input manuel: ");
+                UUID memberId =  Main.enterUUID("Please enter the memberId");;
+                user.add(userRepo.findByID(memberId));
+            }
         }
         return user;
     }

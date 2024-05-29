@@ -5,6 +5,7 @@ import org.theShire.domain.media.Content;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.foundation.Knowledges;
+import org.theShire.presentation.Main;
 
 import java.time.Instant;
 import java.util.*;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
+import static org.theShire.presentation.Main.userRepo;
 
 public class Case extends BaseEntity {
 
@@ -56,7 +58,6 @@ public class Case extends BaseEntity {
         this.content = content;
         this.viewcount = viewcount;
         this.knowledges = knowledges;
-        this.owner = owner;
         this.members = members;
         this.likeCount = likeCount;
         this.userLiked = userLiked;

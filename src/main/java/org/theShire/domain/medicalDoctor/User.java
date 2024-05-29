@@ -71,7 +71,13 @@ public class User extends BaseEntity {
         this.score = score;
         this.contacts = contacts;
         this.chats = chats;
+        if (ownedCases == null){
+            ownedCases = new HashSet<>();
+        }
         this.ownedCases = ownedCases;
+        if (memberOfCase == null){
+            memberOfCase = new HashSet<>();
+        }
         this.memberOfCase = memberOfCase;
         this.specialization = specialization;
     }
