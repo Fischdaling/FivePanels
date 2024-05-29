@@ -35,12 +35,13 @@ public class Case extends BaseEntity {
     private CaseVote caseVote;
 
 
-    public Case(User owner, String title, List<Content> content, User... members) {
+    public Case(User owner, String title,Set<Knowledges> knowledges, List<Content> content, User... members) {
         super();
         this.userLiked = new HashSet<>();
         setOwner(owner);
         setTitle(title);
         this.content = new ArrayList<>();
+        this.knowledges = knowledges;
         addContentList(content);
         this.members = new HashSet<>();
         addMembers(members);
@@ -189,7 +190,7 @@ public class Case extends BaseEntity {
                 map(BaseEntity::getEntityId).collect(Collectors.toSet())).append(";");
         sb.append(likeCount).append(";");
         sb.append(userLiked).append(";");
-        sb.append(caseVote).append(";");
+        sb.append(caseVote).append(System.lineSeparator());
         return sb.toString();
     }
 

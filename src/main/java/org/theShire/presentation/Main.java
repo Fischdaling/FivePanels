@@ -48,8 +48,11 @@ public class Main {
         return user;
     }
 
-    public static Case createCase(User owner,String title, List<Content> content, User... members){
-           Case medCase = new Case(owner, title, content, members);
+    //TODO
+
+    public static Case createCase(User owner,String title,Set<String> knowledges, List<Content> content, User... members){
+        Set<Knowledges> knowledgesSet  = knowledges.stream().map(Knowledges::new).collect(Collectors.toSet());
+           Case medCase = new Case(owner, title, knowledgesSet , content, members);
            owner.addOwnedCase(medCase);
         Arrays.stream(members).forEach(user -> user.addMemberOfCase(medCase));
            caseRepo.save(medCase);
@@ -90,7 +93,10 @@ public class Main {
         contents.add(new Content(new Media(200,100,"My First Media", "200x100")));
 
         //Create a Case with user2&user3 as member and user1 as owner
-        Case case1 = createCase(user1,"my First Case", contents,user2,user3);
+        Set<String> knowledges4 = new HashSet<>();
+        knowledges4.add("pediatric emergency medicine");
+        knowledges4.add("critical care or pain medicine");
+        Case case1 = createCase(user1,"my First Case",knowledges4, contents,user2,user3);
 
 
         while(true){
@@ -187,9 +193,9 @@ public class Main {
     }
 
     private static void loadEntry() {
-        caseRepo.loadEntryMap("src/main/java/org/theShire/persistence/caseRepoCSV.csv");
         messangerRepo.loadEntryMap("src/main/java/org/theShire/persistence/chatRepoCSV.csv");
         userRepo.loadEntryMap("src/main/java/org/theShire/persistence/userRepoCSV.csv");
+        caseRepo.loadEntryMap("src/main/java/org/theShire/persistence/caseRepoCSV.csv");
     }
 
 
@@ -369,7 +375,16 @@ public class Main {
         for (int i = 0; i < ansCount; i++) {
             answer.add(new Answer(answers[i]));
         }
-        createCase(userRepo.findByID(ownerId),title,caseContents,members);
+
+        System.out.println("How many Knowledges do you want to add?");
+        int knowledges = scanner.nextInt();
+        Set<String> knowledgesSet= new HashSet<>();
+        scanner.nextLine();
+        for(int i = 0; i < knowledges; i++){
+            System.out.println("Enter Knowledge");
+            knowledgesSet.add(scanner.nextLine());
+        }
+        createCase(userRepo.findByID(ownerId),title,knowledgesSet,caseContents,members);
 
 
     }
