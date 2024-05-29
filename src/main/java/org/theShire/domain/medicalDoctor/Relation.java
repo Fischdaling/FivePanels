@@ -19,8 +19,6 @@ public class Relation extends BaseEntity {
     private User user2;
     // The type of Relation (OUTGOING,INCOMING,ESTABLISHED)
     private RelationType type;
-
-
     public Relation(User user1, User user2, RelationType relationType) {
         setUser(user1);
         setUser(user2);
