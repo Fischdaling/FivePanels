@@ -301,12 +301,25 @@ public class Main {
         for (Answer answer : medCase.getCaseVote().getAnswers()) {
             System.out.println(answer.getName());
         }
-        System.out.println("Enter Answer to vote for");
-        Name userAnswer = new Name(scanner.nextLine());
-        Answer answer = medCase.getCaseVote().getAnswers().stream().filter(answer1 -> answer1.equals(userAnswer)).findFirst().orElse(null);
-        System.out.println("Enter the percent you want to vote this answer with");
-        double percentage = scanner.nextDouble();
-        medCase.getCaseVote().voting(userId, answer, percentage);
+        double percentTrack = 0.0;
+
+        while (percentTrack < 100.0) {
+            System.out.println("Enter Answer to vote for");
+            if (percentTrack != 0.0)
+                scanner.nextLine();
+            String str = scanner.nextLine();
+            Name userAnswer = new Name(str);
+            Answer answer = medCase.getCaseVote().getAnswers().stream().filter(answer1 -> answer1.getName().equals(userAnswer)).findFirst().orElse(null);
+            System.out.println("Enter the percent you want to vote this answer with");
+            double percentage = scanner.nextDouble();
+            percentTrack += percentage;
+            if (percentTrack <= 100.0) {
+                medCase.getCaseVote().voting(userId, answer, percentage);
+            }else {
+                medCase.getCaseVote().voting(userId, answer, percentTrack - percentage);
+                percentTrack = 100.0;
+            }
+        }
     }
 
     private static void findAll() {
