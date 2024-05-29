@@ -1,6 +1,5 @@
 package org.theShire.domain;
 
-import org.theShire.foundation.DomainAssertion;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;

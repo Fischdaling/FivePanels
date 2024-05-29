@@ -1,17 +1,13 @@
 package org.theShire.repository;
 
-import org.theShire.domain.exception.MediaException;
 import org.theShire.domain.exception.MedicalCaseException;
-import org.theShire.domain.exception.MessengerException;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
-import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalCase.Answer;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalCase.CaseVote;
 import org.theShire.domain.medicalCase.Vote;
 import org.theShire.domain.medicalDoctor.User;
-import org.theShire.domain.richType.Name;
 import org.theShire.foundation.Knowledges;
 
 
@@ -93,7 +89,7 @@ public class CaseRepository extends AbstractRepository<Case> {
 
 
 
-    //TODO BIIIG HASHMAP LOOKING
+    //TODO BIIIG HASHMAP LOOKING, parameter part is never used
     private HashMap<UUID, Set<Vote>> parseVotes(String part) {
         return new HashMap<>();
     }

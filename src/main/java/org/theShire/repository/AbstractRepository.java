@@ -1,14 +1,9 @@
 package org.theShire.repository;
 
 import org.theShire.domain.BaseEntity;
-import org.theShire.repository.IRepository;
 
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+
 import java.util.*;
-import java.util.stream.Collectors;
 
 public abstract class AbstractRepository<T extends BaseEntity> implements IRepository<T> {
 

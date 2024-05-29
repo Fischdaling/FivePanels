@@ -80,17 +80,12 @@ public class Case extends BaseEntity {
         return knowledges;
     }
 
-//    public void setKnowledges(Set<Knowledges> knowledges) {
-//        this.knowledges = knowledges;
-//    }
+
 
     public int getViewcount() {
         return viewcount;
     }
 
-//    public void setViewcount(int Viewcount) {
-//        this.viewcount = Viewcount;
-//    }
 
     public User getOwner() {
         return owner;
@@ -112,9 +107,7 @@ public class Case extends BaseEntity {
         return likeCount;
     }
 
-//    public void setLikeCount(int likeCount) {
-//        this.likeCount = likeCount;
-//    }
+
 
     public Set<UUID> getUserLiked() {
         return userLiked;

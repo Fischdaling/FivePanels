@@ -1,10 +1,6 @@
 package org.theShire.repository;
 
-import org.theShire.domain.exception.MediaException;
-import org.theShire.domain.exception.MedicalCaseException;
 import org.theShire.domain.exception.MedicalDoctorException;
-import org.theShire.domain.media.Content;
-import org.theShire.domain.media.ContentText;
 import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalDoctor.User;
@@ -19,9 +15,6 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
-import static org.theShire.foundation.DomainAssertion.greaterEqualsZero;
-import static org.theShire.foundation.DomainAssertion.isTrue;
 import static org.theShire.presentation.Main.*;
 
 public class UserRepository extends AbstractRepository<User>{
@@ -117,7 +110,7 @@ public class UserRepository extends AbstractRepository<User>{
             return null;
         }
         return Arrays.stream(value.split(","))
-                .map(s -> messangerRepo.findByID(UUID.fromString(s)))
+                .map(s -> messengerRepo.findByID(UUID.fromString(s)))
                 .collect(Collectors.toSet());
     }
 

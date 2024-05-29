@@ -1,12 +1,10 @@
 package org.theShire.domain.medicalCase;
 
-import org.theShire.domain.BaseEntity;
 
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 public class CaseVote {
     //a LinkedHashSet (it's simply a sorted HashSet) of the answers related to a specific case
@@ -19,37 +17,32 @@ public class CaseVote {
 
     public CaseVote(LinkedHashSet<Answer> answers) {
         addAnswers(answers);
-        setpercentCount(0);
+        setPercentCount(0);
     }
 
-    public CaseVote(LinkedHashSet<Answer> answers, HashMap<UUID, Set<Vote>> votes,double percentCount) {
+    public CaseVote(LinkedHashSet<Answer> answers, HashMap<UUID, Set<Vote>> votes, double percentCount) {
         addAnswers(answers);
         this.votes = votes;
-        setpercentCount(percentCount);
+        setPercentCount(percentCount);
 
     }
 
     public void voting(UUID voter, Answer answerChosen, double percent) {
         Vote vote = new Vote(answerChosen, percent);
         isInCollection(vote.getAnswer(), answers, "vote", exTypeCase);
-            if (votes.containsKey(voter)) {
-                votes.get(voter).add(vote);
-            } else {
-                Set<Vote> voteSet = new HashSet<>();
-                voteSet.add(vote);
-                votes.put(voter, voteSet);
-            }
+        if (votes.containsKey(voter)) {
+            votes.get(voter).add(vote);
+        } else {
+            Set<Vote> voteSet = new HashSet<>();
+            voteSet.add(vote);
+            votes.put(voter, voteSet);
+        }
     }
 
     // getter & setter-----------------------------------
     public LinkedHashSet<Answer> getAnswers() {
         return answers;
     }
-
-//    public void addAnswer(Answer answer) {
-//        isNotNull(answers, "answers", exTypeCase);
-//        this.answers.add(answer);
-//    }
 
     public void addAnswers(LinkedHashSet<Answer> answers) {
         isNotNull(answers, "answers", exTypeCase);
@@ -60,11 +53,11 @@ public class CaseVote {
         return votes;
     }
 
-    public double getpercentCount() {
+    public double getPercentCount() {
         return percentCount;
     }
 
-    public void setpercentCount(double percentCount) {
+    public void setPercentCount(double percentCount) {
         greaterEqualsZero(percentCount, "percentCount", exTypeCase);
         this.percentCount = percentCount;
     }
