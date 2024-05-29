@@ -83,9 +83,9 @@ public class Main {
         knowledges3.add("hand surgery");
         User user3 = createUser(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"),"Gandalf","Wizardo","Gandalf@Wizardo.out","ICastFireBall!","all","world", "Gandalf Profile",knowledges3,"The Gray","The White","Ainur");
 
-        sendRequest(user1,user2);
-        acceptRequest(user1,user2);
-        sendRequest(user3,user1);
+//        sendRequest(user1,user2);
+//        acceptRequest(user1,user2);
+//        sendRequest(user3,user1);
 
         //init Content
         List<Content> contents = new ArrayList<>();
