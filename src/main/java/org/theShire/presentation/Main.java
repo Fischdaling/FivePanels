@@ -32,7 +32,10 @@ public class Main {
 
 
 
-    public static User createUser(String firstname, String lastname, String email, String password,String language,String location,String picture,Set<String> specialization,String...educationalTitle){
+    public static User createUser(UUID uuid, String firstname, String lastname, String email, String password,String language,String location,String picture,Set<String> specialization,String...educationalTitle){
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
         Name firstName = new Name(firstname);
         Name lastName = new Name(lastname);
         Email emayl = new Email(email);
@@ -43,16 +46,16 @@ public class Main {
         Media media = new Media(500,400,picture,"500x400");
         Set<Knowledges> knowledges  = specialization.stream().map(Knowledges::new).collect(Collectors.toSet());
         UserProfile profile = new UserProfile(lang,loc,media,firstName,lastName,titles);
-        User user = new User(passwort,emayl,profile,knowledges);
+        User user = new User(uuid,passwort,emayl,profile,knowledges);
         userRepo.save(user);
         return user;
     }
 
     //TODO
 
-    public static Case createCase(User owner,String title,Set<String> knowledges, List<Content> content, User... members){
+    public static Case createCase(User owner,String title,Set<String> knowledges, List<Content> content,CaseVote caseVote, User... members){
         Set<Knowledges> knowledgesSet  = knowledges.stream().map(Knowledges::new).collect(Collectors.toSet());
-           Case medCase = new Case(owner, title, knowledgesSet , content, members);
+           Case medCase = new Case(owner, title, knowledgesSet, content, caseVote , members);
            owner.addOwnedCase(medCase);
         Arrays.stream(members).forEach(user -> user.addMemberOfCase(medCase));
            caseRepo.save(medCase);
@@ -68,17 +71,17 @@ public class Main {
         Set<String> knowledges1 = new HashSet<>();
         knowledges1.add("Test");
         knowledges1.add("adult cardiothoracic anesthesiology");
-        User user1 = createUser("Bilbo","Beutlin","Bilbo@hobbit.com","VerySafe123","Hobbitisch","Auenland","Bilbo Profile",knowledges1,"Fassreiter","Meister Dieb");
+        User user1 = createUser(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"),"Bilbo","Beutlin","Bilbo@hobbit.com","VerySafe123","Hobbitisch","Auenland","Bilbo Profile",knowledges1,"Fassreiter","Meister Dieb");
         //CREATE USER2-----------------------------------------------------------------
         Set<String> knowledges2 = new HashSet<>();
         knowledges2.add("critical care or pain medicine");
         knowledges2.add("pediatric anesthesiology");
-        User user2 = createUser("Aragorn","Arathorn","Aragorn@gondor.at","EvenSaver1234","Gondorisch","Gondor","Aragorn Profile",knowledges2,"Arathorns Sohn","König von Gondor");
+        User user2 = createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"),"Aragorn","Arathorn","Aragorn@gondor.at","EvenSaver1234","Gondorisch","Gondor","Aragorn Profile",knowledges2,"Arathorns Sohn","König von Gondor");
         //CREATE USER3-----------------------------------------------------------------
         Set<String> knowledges3 = new HashSet<>();
         knowledges3.add("pediatric emergency medicine");
         knowledges3.add("hand surgery");
-        User user3 = createUser("Gandalf","Wizardo","Gandalf@Wizardo.out","ICastFireBall!","all","world", "Gandalf Profile",knowledges3,"The Gray","The White","Ainur");
+        User user3 = createUser(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"),"Gandalf","Wizardo","Gandalf@Wizardo.out","ICastFireBall!","all","world", "Gandalf Profile",knowledges3,"The Gray","The White","Ainur");
 
         sendRequest(user1,user2);
         acceptRequest(user1,user2);
@@ -96,7 +99,10 @@ public class Main {
         Set<String> knowledges4 = new HashSet<>();
         knowledges4.add("pediatric emergency medicine");
         knowledges4.add("critical care or pain medicine");
-        Case case1 = createCase(user1,"my First Case",knowledges4, contents,user2,user3);
+        LinkedHashSet<Answer> answers = new LinkedHashSet<>();
+        answers.add(new Answer("Answer 1"));
+        answers.add(new Answer("Answer 2"));
+        Case case1 = createCase(user1,"my First Case",knowledges4, contents,new CaseVote(answers),user2,user3);
 
 
         while(true){
@@ -135,31 +141,39 @@ public class Main {
                 case 5:
                     System.out.println("Enter name");
                     String name = scanner.nextLine();
-                    Optional<User> user = userRepo.findByName(new Name(name));
-                    if(user.isPresent()){
+                    Set<User> user = userRepo.findByName(new Name(name));
+                    if(user != null){
                         System.out.println(user);
+                    }else{
+                        System.out.println("User not found");
                     }
                     break;
                 case 6:
-                    System.out.println("Enter Id");
-                    String caseId = scanner.nextLine();
-                    Case medicCase =  caseRepo.findByID(UUID.fromString(caseId));
-                    medicCase.setViewcount(medicCase.getViewcount()+1);
-                    System.out.println(medicCase);
+                    Case medicCase =  caseRepo.findByID(enterUUID("Enter Case Id"));
+                    if (caseRepo.getEntryMap().containsValue(medicCase)) {
+                        medicCase.setViewcount(medicCase.getViewcount() + 1);
+                        System.out.println(medicCase);
+                    }else {
+                        System.out.println("Case not found");
+                    }
                     break;
                 case 7:
-                    System.out.println("Enter Id");
-                    String userId = scanner.nextLine();
-                    userRepo.deleteById(UUID.fromString(userId));
+                    UUID userId = enterUUID("Enter User Id");
+                    if(userRepo.getEntryMap().containsKey(userId)){
+                        userRepo.deleteById(userId);
+                    }else {
+                        System.out.println("User not found");
+                    }
                     break;
                 case 8:
-                    System.out.println("Enter Id");
-                    String delCaseId = scanner.nextLine();
-                    Case tmpCase = caseRepo.findByID(UUID.fromString(delCaseId));
-                    //TODO DELTE CASE FROM ALL USERS
-                    tmpCase.getOwner().removeCase(tmpCase);
-                    tmpCase.getMembers().forEach(aUser -> aUser.removeCase(tmpCase));
-                    caseRepo.deleteById(UUID.fromString(delCaseId));
+                    Case tmpCase = caseRepo.findByID(enterUUID("Enter Case Id"));
+                    if (caseRepo.getEntryMap().containsValue(tmpCase)) {
+                        tmpCase.getOwner().removeCase(tmpCase);
+                        tmpCase.getMembers().forEach(aUser -> aUser.removeCase(tmpCase));
+                        caseRepo.deleteById(tmpCase.getEntityId());
+                    }else {
+                        System.out.println("Case not found");
+                    }
                     break;
                 case 9:
                     relationCommands();
@@ -168,13 +182,13 @@ public class Main {
                     vote();
                     break;
                 case 11:
-                    System.out.println("Enter your ID");
-                    userId = scanner.nextLine();
-                    System.out.println("Enter Case ID");
-                    String likeCaseId = scanner.nextLine();
-                    Case medCase = caseRepo.findByID(UUID.fromString(likeCaseId));
-                    medCase.setViewcount(medCase.getViewcount()+1);
-                    medCase.like(UUID.fromString(userId));
+                    Case medCase = caseRepo.findByID(enterUUID("Enter Case Id"));
+                    if (caseRepo.getEntryMap().containsValue(medCase)) {
+                        medCase.setViewcount(medCase.getViewcount()+1);
+                        medCase.like(enterUUID("Enter Your Id"));
+                    }else {
+                        System.out.println("Case not found");
+                    }
                     break;
                 case 12:
                     saveEntry();
@@ -193,9 +207,9 @@ public class Main {
     }
 
     private static void loadEntry() {
-        messangerRepo.loadEntryMap("src/main/java/org/theShire/persistence/chatRepoCSV.csv");
-        userRepo.loadEntryMap("src/main/java/org/theShire/persistence/userRepoCSV.csv");
-        caseRepo.loadEntryMap("src/main/java/org/theShire/persistence/caseRepoCSV.csv");
+//        messangerRepo.loadEntryMap("src/main/java/org/theShire/persistence/chatRepoCSV.csv");
+        userRepo.loadEntryMap("src/main/java/org/theShire/persistence/userLoadTest.csv");
+        caseRepo.loadEntryMap("src/main/java/org/theShire/persistence/caseLoadTest.csv");
     }
 
 
@@ -204,15 +218,13 @@ public class Main {
         System.out.println("2. send request");
         System.out.println("3. accept request");
         int answer = scanner.nextInt();
+        scanner.nextLine();
         switch (answer) {
             case 1:
-                System.out.println("Enter your UUID");
-                scanner.nextLine();
-                UUID userUUID1 = UUID.fromString(scanner.nextLine());
+                UUID userUUID1 = enterUUID("Enter your Id");
                 User user1 = userRepo.findByID(userUUID1);
-                if (user1 == null) {
-                    System.out.println("User not found.");
-                } else {
+                if (userRepo.getEntryMap().containsKey(userUUID1)) {
+
                     Set<User> incomingRequests = UserRelationShip.getRequest(user1);
                     if (incomingRequests.isEmpty()) {
                         System.out.println("No Requests");
@@ -221,46 +233,44 @@ public class Main {
                             System.out.println("Request from: " + sender.getProfile().getFirstName());
                         });
                     }
+                } else {
+                    System.out.println("User not found.");
                 }
                 break;
 
             case 2:
-                System.out.println("Enter your UUID");
-                scanner.nextLine();
-                UUID senderUUID2 = UUID.fromString(scanner.nextLine());
+                UUID senderUUID2 = enterUUID("Enter your Id");
                 User sender2 = userRepo.findByID(senderUUID2);
-                if (sender2 == null) {
-                    System.out.println("Sender not found.");
-                } else {
-                    System.out.println("Enter target's UUID");
-                    UUID receiverUUID2 = UUID.fromString(scanner.nextLine());
+                if (userRepo.getEntryMap().containsKey(senderUUID2)) {
+                    UUID receiverUUID2 = enterUUID("Enter target's Id");
                     User receiver2 = userRepo.findByID(receiverUUID2);
-                    if (receiver2 == null) {
-                        System.out.println("Receiver not found.");
-                    } else {
+                    if (userRepo.getEntryMap().containsKey(receiverUUID2)) {
                         UserRelationShip.sendRequest(sender2, receiver2);
                         System.out.println("Request sent from " + sender2.getProfile().getFirstName() + " to " + receiver2.getProfile().getFirstName());
+
+                    } else {
+                        System.out.println("Receiver not found.");
                     }
+                } else {
+                    System.out.println("Sender not found.");
                 }
                 break;
 
             case 3:
-                System.out.println("Enter your UUID");
-                scanner.nextLine();
-                UUID senderUUID3 = UUID.fromString(scanner.nextLine());
+                UUID senderUUID3 = enterUUID("Enter your Id");
                 User sender3 = userRepo.findByID(senderUUID3);
-                if (sender3 == null) {
-                    System.out.println("Sender not found.");
-                } else {
-                    System.out.println("Enter target's UUID");
-                    UUID receiverUUID3 = UUID.fromString(scanner.nextLine());
+                if (userRepo.getEntryMap().containsKey(senderUUID3)) {
+
+                    UUID receiverUUID3 = enterUUID("Enter target's id");
                     User receiver3 = userRepo.findByID(receiverUUID3);
-                    if (receiver3 == null) {
-                        System.out.println("Receiver not found.");
-                    } else {
+                    if (userRepo.getEntryMap().containsKey(receiverUUID3)) {
                         UserRelationShip.acceptRequest(sender3, receiver3);
                         System.out.println("Request from " + sender3.getProfile().getFirstName()+" "+ senderUUID3 + " to " + receiver3.getProfile().getFirstName() + " accepted.");
+                    } else {
+                        System.out.println("Receiver not found.");
                     }
+                } else {
+                    System.out.println("Sender not found.");
                 }
                 break;
 
@@ -277,17 +287,25 @@ public class Main {
     }
 
     private static void vote() {
-        System.out.println("Enter your User ID");
-        UUID userId = UUID.fromString(scanner.nextLine());
-        System.out.println("Enter Case ID to Vote for");
-        UUID caseId = UUID.fromString(scanner.nextLine());
+        UUID userId = enterUUID("Enter your User ID");
+        while (!caseRepo.getEntryMap().containsKey(userId)) {
+            System.out.println("User not found");
+            userId = enterUUID("Enter your User ID");
+        }
+        UUID caseId = enterUUID("Enter Case ID to Vote for");
+        while (!caseRepo.getEntryMap().containsKey(caseId)) {
+            System.out.println("Case not found");
+            caseId = enterUUID("Enter Case ID");
+        }
         Case medCase = caseRepo.findByID(caseId);
-        System.out.println("Enter Answer ID to Vote for");
-        UUID voteId = UUID.fromString(scanner.nextLine());
+        for (Answer answer : medCase.getCaseVote().getAnswers()) {
+            System.out.println(answer.getName() + System.lineSeparator());
+            System.out.println(answer.getEntityId()+ System.lineSeparator());
+        }
+        UUID voteId = enterUUID("Enter Answer ID to Vote for");
         Answer answer = medCase.getCaseVote().getAnswers().stream().filter(answer1 -> answer1.equals(voteId)).findFirst().orElse(null);
         System.out.println("Enter the percent you want to vote this answer with");
         double percentage = scanner.nextDouble();
-        System.out.println(medCase);
         medCase.getCaseVote().voting(userId, answer, percentage);
     }
 
@@ -316,10 +334,9 @@ public class Main {
 
     private static void openChat() {
         boolean exit = false;
-        System.out.println("enter chat uuid");
-        UUID uuid = UUID.fromString(scanner.nextLine());
+        UUID uuid = enterUUID("Enter chat uuid");
         Chat chat = messangerRepo.findByID(uuid);
-        if (chat != null) {
+        if (messangerRepo.getEntryMap().containsKey(uuid)) {
             System.out.println("chat with " + chat.getPeople() + " opened");
             System.out.println(chat.getChatHistory());
 
@@ -352,24 +369,17 @@ public class Main {
 
         System.out.println("Enter Case Title");
         String title = scanner.nextLine();
-        System.out.println("Enter Owner ID");
-        UUID ownerId = UUID.fromString(scanner.nextLine());
+        UUID ownerId = enterUUID("Enter Owner ID");
         List<Content> caseContents = new ArrayList<>();
 
         contentUtil(caseContents);
 
         System.out.println("How many Doctors do you want to add?");
         int doctors = scanner.nextInt();
-        String[] memberId = new String[doctors];
-        User[] members = new User[memberId.length];
+        User[] members = new User[doctors];
         scanner.nextLine();
-        for(int i = 0; i < doctors; i++){
-            System.out.println("Enter Doctor ID");
-            memberId[i] = scanner.nextLine();
-        }
-
         for (int i = 0; i < doctors; i++) {
-            members[i] = userRepo.findByID(UUID.fromString(memberId[i]));
+            members[i] = userRepo.findByID(enterUUID("Enter Member id"));
         }
 
         for (int i = 0; i < ansCount; i++) {
@@ -384,7 +394,7 @@ public class Main {
             System.out.println("Enter Knowledge");
             knowledgesSet.add(scanner.nextLine());
         }
-        createCase(userRepo.findByID(ownerId),title,knowledgesSet,caseContents,members);
+        createCase(userRepo.findByID(ownerId),title,knowledgesSet,caseContents,caseVote,members);
 
 
     }
@@ -450,7 +460,29 @@ public class Main {
                 String value = scanner.nextLine();
                 specialty.add(value);
         }
-        User user = createUser(firstname,lastname,email,password,language,location,profilePic,specialty ,title);
+        User user = createUser(null,firstname,lastname,email,password,language,location,profilePic,specialty ,title);
+
+    }
+
+    private static UUID enterUUID(String enterMessage){
+        StringBuilder str = new StringBuilder();
+        for (User user : userRepo.findAll()) {
+            str.append(user.getProfile().getFirstName()).append(" ").append(user.getProfile().getLastName()).append(System.lineSeparator());
+            str.append(user.getEntityId()).append(System.lineSeparator());
+        }
+        for (Case medCase : caseRepo.findAll()) {
+            str.append(medCase.getTitle()).append(System.lineSeparator());
+            str.append(medCase.getEntityId()).append(System.lineSeparator());
+        }
+
+        for (Chat chat : messangerRepo.findAll()) {
+            str.append(chat.getPeople().stream().map(aChat -> aChat.getProfile().getFirstName()).collect(Collectors.toSet()));
+            str.append(chat.getEntityId()).append(System.lineSeparator());
+        }
+        System.out.println(str);
+
+        System.out.println(enterMessage);
+        return UUID.fromString(scanner.nextLine());
 
     }
 

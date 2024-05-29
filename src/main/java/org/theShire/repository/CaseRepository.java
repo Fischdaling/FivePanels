@@ -11,6 +11,7 @@ import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalCase.CaseVote;
 import org.theShire.domain.medicalCase.Vote;
 import org.theShire.domain.medicalDoctor.User;
+import org.theShire.domain.richType.Name;
 import org.theShire.foundation.Knowledges;
 
 
@@ -90,29 +91,65 @@ public class CaseRepository extends AbstractRepository<Case> {
         return new CaseVote(answers, votes, percentCount);
     }
 
+
+
+    //TODO BIIIG HASHMAP LOOKING
     private HashMap<UUID, Set<Vote>> parseVotes(String part) {
         return new HashMap<>();
     }
 
     private LinkedHashSet<Answer> parseAnswers(String part) {
+        String[] parts = part.split(",");
+        LinkedHashSet<Answer> answers = new LinkedHashSet<>();
+        for (int i = 0; i < parts.length; i++) {
+            String[] partsParts = parts[i].split("_");
+            UUID uuid = UUID.fromString(partsParts[0]);
+            Instant createdAt = Instant.parse(partsParts[1]);
+            Instant updatedAt = Instant.parse(partsParts[2]);
+            Name name = new Name(parts[3]);
+            answers.add(new Answer(uuid,createdAt,updatedAt,name));
+        }
         return new LinkedHashSet<>();
     }
 
     private Set<UUID> parseUsersLiked(String part) {
-        return Arrays.stream(part.split(","))
-                .map(UUID::fromString)
-                .collect(Collectors.toSet());
+        String[] parts = part.split(", ");
+        String[] partsEdit = new String[parts.length];
+        Set<UUID> user = new HashSet<>();
+        for (int i = 0; i < parts.length; i++) {
+            partsEdit[i] = parts[i].replace("[","");
+            partsEdit[i] = partsEdit[i].replace("]","");
+            if (partsEdit[i].isEmpty()) {
+                return null;
+            }
+            user.add(UUID.fromString(partsEdit[i]));
+        }
+        return user;
     }
 
     private Set<User> parseMembers(String part) {
-        return Arrays.stream(part.split(","))
-                .map(uuid -> userRepo.findByID(UUID.fromString(uuid)))
-                .collect(Collectors.toSet());
+
+        String[] parts = part.split(", ");
+        String[] partsEdit = new String[parts.length];
+        Set<User> user = new HashSet<>();
+        for (int i = 0; i < parts.length; i++) {
+            partsEdit[i] = parts[i].replace("[","");
+            partsEdit[i] = partsEdit[i].replace("]","");
+            user.add(userRepo.findByID(UUID.fromString(partsEdit[i])));
+        }
+        return user;
     }
 
     private Set<Knowledges> parseKnowledges(String part) {
-        return Arrays.stream(part.split(","))
-                .map(Knowledges::new)
-                .collect(Collectors.toSet());
+        String[] parts = part.split(",");
+        Set<Knowledges> knowledges = new HashSet<>();
+        for (String str : parts) {
+            str = str.trim();
+            str = str.replace("[","");
+            str = str.replace("]","");
+            knowledges.add(new Knowledges(str));
+
+        }
+        return knowledges;
     }
 }

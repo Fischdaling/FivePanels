@@ -50,6 +50,17 @@ public class User extends BaseEntity {
         this.profile = profile;
         this.specialization = specialization;
     }
+    public User(UUID uuid,Password password, Email email, UserProfile profile, Set<Knowledges> specialization) {
+        super(uuid);
+        contacts = new HashSet<>();
+        chats = new HashSet<>();
+        ownedCases = new HashSet<>();
+        memberOfCase = new HashSet<>();
+        this.password = password;
+        this.email = email;
+        this.profile = profile;
+        this.specialization = specialization;
+    }
 
 
     public User(UUID uuid, Instant createdAt, Instant updatedAt, Email email, Password password, UserProfile profile, int score, Set<UserRelationShip> contacts, Set<Chat> chats, Set<Case> ownedCases, Set<Case> memberOfCase, Set<Knowledges> specialization) {
@@ -161,8 +172,7 @@ public class User extends BaseEntity {
     }
     @Override
     public String toCSVString(){
-        final StringBuilder sb = new StringBuilder();
-        sb.append(getEntityId()).append(";");
+        final StringBuilder sb = new StringBuilder(super.toCSVString());
         sb.append(email).append(";");
         sb.append(password).append(";");
         sb.append(score).append(";");

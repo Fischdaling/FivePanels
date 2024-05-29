@@ -1,5 +1,7 @@
 package org.theShire.domain.medicalCase;
 
+import org.theShire.domain.BaseEntity;
+
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
 

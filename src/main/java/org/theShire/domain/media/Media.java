@@ -77,11 +77,11 @@ public class Media {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("media:");
-        sb.append("width=").append(width);
-        sb.append("height=").append(height);
-        sb.append("altText='").append(altText).append('\'');
-        sb.append("resolution='").append(resolution).append('\'');
+        final StringBuilder sb = new StringBuilder();
+        sb.append(width).append(",");
+        sb.append(height).append(",");
+        sb.append(altText).append(',');
+        sb.append(resolution);
         return sb.toString();
     }
 }

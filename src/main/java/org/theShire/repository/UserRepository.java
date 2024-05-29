@@ -26,10 +26,10 @@ import static org.theShire.presentation.Main.*;
 
 public class UserRepository extends AbstractRepository<User>{
 
-    public Optional<User> findByName(Name name) {
+    public Set<User> findByName(Name name) {
         return entryMap.values().stream()
                 .filter(user -> user.getProfile().getFirstName().value().equalsIgnoreCase(name.value()))
-                .findFirst();
+                .collect(Collectors.toSet());
     }
 
     public Optional<User> findByEmail(Email email) {
@@ -70,7 +70,7 @@ public class UserRepository extends AbstractRepository<User>{
     private User parseUser(String line) {
         String[] parts = line.split(";");
 
-        isTrue(parts.length == 17, () -> "Error: CSV lines not matching", exTypeUser);
+//        isTrue(parts.length == 17, () -> "Error: CSV lines not matching", exTypeUser);
         UUID entityId = UUID.fromString(parts[0]);
         Instant createdAt = Instant.parse(parts[1]);
         Instant updatedAt = Instant.parse(parts[2]);
@@ -82,12 +82,12 @@ public class UserRepository extends AbstractRepository<User>{
         Set<Knowledges> specializations = parseSpecializations(parts[8]);
         Set<Case> ownedCases = parseCases(parts[9]);
         Set<Case> memberOfCase = parseCases(parts[10]);
-        Language language = new Language(parts[11]);
-        Location location = new Location(parts[12]);
-        Media profilePicture = new Media(parts[13]);
-        Name firstName = new Name(parts[14]);
-        Name lastName = new Name(parts[15]);
-        List<EducationalTitle> educationalTitles = parseEducationalTitles(parts[16]);
+        Name firstName = new Name(parts[11]);
+        Name lastName = new Name(parts[12]);
+        List<EducationalTitle> educationalTitles = parseEducationalTitles(parts[13]);
+        Media profilePicture = parseMedia(parts[14]);
+        Language language = new Language(parts[15]);
+        Location location = new Location(parts[16]);
 
         UserProfile profile = new UserProfile(language, location, profilePicture, firstName, lastName, educationalTitles);
         User user = new User(entityId, createdAt, updatedAt, email, password, profile, score, contacts, chats, ownedCases, memberOfCase, specializations);
@@ -95,7 +95,16 @@ public class UserRepository extends AbstractRepository<User>{
         return user;
     }
 
+    private Media parseMedia(String part) {
+        String[] parts = part.split(",");
+        return new Media(Integer.parseInt(parts[0]),Integer.parseInt(parts[1]),parts[2],parts[3]);
+    }
+
     private Set<UserRelationShip> parseContacts(String value) {
+        String[] parts = value.split(";");
+        if (parts.length >0) {
+            return null;
+        }
         return Arrays.stream(value.split(","))
                 .map(s -> findByID(UUID.fromString(s)).getContacts())
                 .flatMap(Collection::stream)
@@ -103,24 +112,43 @@ public class UserRepository extends AbstractRepository<User>{
     }
 
     private Set<Chat> parseChats(String value) {
+        String[] parts = value.split(";");
+        if (parts.length >0) {
+            return null;
+        }
         return Arrays.stream(value.split(","))
                 .map(s -> messangerRepo.findByID(UUID.fromString(s)))
                 .collect(Collectors.toSet());
     }
 
     private Set<Knowledges> parseSpecializations(String value) {
-        return Arrays.stream(value.split(","))
-                .map(Knowledges::new)
-                .collect(Collectors.toSet());
+
+        String[] parts = value.split(",");
+        Set<Knowledges> knowledges = new HashSet<>();
+        for (String part : parts) {
+            part = part.trim();
+            part = part.replace("[","");
+            part = part.replace("]","");
+            knowledges.add(new Knowledges(part));
+
+        }
+        return knowledges;
     }
 
     private Set<Case> parseCases(String value) {
+        value = value.replace("[","");
+        value = value.replace("]","");
+        if (value.trim().isEmpty() || value.trim().isBlank() || value.equals("null")){
+            return null;
+        }
         return Arrays.stream(value.split(","))
                 .map(s -> caseRepo.findByID(UUID.fromString(s)))
                 .collect(Collectors.toSet());
     }
 
     private List<EducationalTitle> parseEducationalTitles(String value) {
+        value = value.replace("[","");
+        value = value.replace("]","");
         return Arrays.stream(value.split(","))
                 .map(EducationalTitle::new)
                 .collect(Collectors.toList());

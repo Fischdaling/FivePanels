@@ -21,6 +21,11 @@ public class BaseEntity {
         createdAt = Instant.now();
         updatedAt = Instant.now();
     }
+    public BaseEntity(UUID uuid) {
+        entityId = uuid;
+        createdAt = Instant.now();
+        updatedAt = Instant.now();
+    }
 
     public BaseEntity(UUID uuid,Instant createdAt, Instant updatedAt) {
         this.entityId = uuid;

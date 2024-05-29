@@ -35,7 +35,7 @@ public class Case extends BaseEntity {
     private CaseVote caseVote;
 
 
-    public Case(User owner, String title,Set<Knowledges> knowledges, List<Content> content, User... members) {
+    public Case(User owner, String title,Set<Knowledges> knowledges, List<Content> content,CaseVote caseVote, User... members) {
         super();
         this.userLiked = new HashSet<>();
         setOwner(owner);
@@ -46,6 +46,7 @@ public class Case extends BaseEntity {
         this.members = new HashSet<>();
         addMembers(members);
         Chat caseChat = new Chat(members);
+        this.caseVote = caseVote;
         caseChat.addPerson(owner);
     }
 
@@ -193,7 +194,7 @@ public class Case extends BaseEntity {
                 map(BaseEntity::getEntityId).collect(Collectors.toSet())).append(";");
         sb.append(likeCount).append(";");
         sb.append(userLiked).append(";");
-        sb.append(caseVote).append(System.lineSeparator());
+        sb.append(caseVote.toCSVString()).append(System.lineSeparator());
         return sb.toString();
     }
 

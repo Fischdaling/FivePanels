@@ -46,7 +46,7 @@ public class Vote {
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer();
-        sb.append(answer).append("%");
+        sb.append(answer).append(",");
         sb.append(percent);
         return sb.toString();
     }
