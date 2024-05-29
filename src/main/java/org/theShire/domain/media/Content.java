@@ -6,7 +6,6 @@ import static org.theShire.domain.exception.MediaException.exTypeMedia;
 import static org.theShire.foundation.DomainAssertion.*;
 
 
-import java.time.Instant;
 
 public class Content extends BaseEntity { //TODO imageWriter
     private ContentText text;

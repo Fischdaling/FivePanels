@@ -3,16 +3,11 @@ package org.theShire.foundation;
 import org.theShire.domain.exception.MedicalDoctorException;
 
 import java.io.*;
-import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Scanner;
 import java.util.Set;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.isInCollection;
-import static org.theShire.foundation.DomainAssertion.isNotInCollection;
-
 public class Knowledges {
     // list of legal knowledges that are good and confirmed
     private static Set<String> legalKnowledges;
@@ -20,7 +15,7 @@ public class Knowledges {
     private String knowledge;
 
     public Knowledges(String knowledge) {
-        legalKnowledges = new HashSet<String>();
+        legalKnowledges = new HashSet<>();
         readKnowledges();
         setKnowledge(knowledge);
     }

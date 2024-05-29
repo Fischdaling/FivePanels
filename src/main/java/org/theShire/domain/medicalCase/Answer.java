@@ -1,10 +1,7 @@
 package org.theShire.domain.medicalCase;
 
-import org.theShire.domain.BaseEntity;
 import org.theShire.domain.richType.Name;
 
-import java.time.Instant;
-import java.util.UUID;
 
 public class Answer{
     //the name of an answer

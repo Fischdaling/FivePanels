@@ -6,7 +6,6 @@ import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalCase.Answer;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalCase.CaseVote;
-import org.theShire.domain.medicalDoctor.Relation;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserProfile;
 import org.theShire.domain.medicalDoctor.UserRelationShip;
@@ -15,20 +14,18 @@ import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
 import org.theShire.foundation.Knowledges;
 import org.theShire.repository.CaseRepository;
-import org.theShire.repository.MessangerRepository;
+import org.theShire.repository.MessengerRepository;
 import org.theShire.repository.UserRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.theShire.domain.medicalDoctor.UserRelationShip.*;
-
 public class Main {
     public static final Scanner scanner = new Scanner(System.in);
     public static final UserRepository userRepo = new UserRepository();
     public static final CaseRepository caseRepo = new CaseRepository();
-    public static final MessangerRepository messangerRepo = new MessangerRepository();
-    public static final UserRelationShip relationship = new UserRelationShip();
+    public static final MessengerRepository messengerRepo = new MessengerRepository();
+    public static final UserRelationShip relationship = new UserRelationShip(); //TODO gabriel wozu brauchste das?
 
 
 
@@ -83,9 +80,9 @@ public class Main {
         knowledges3.add("hand surgery");
         User user3 = createUser(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"),"Gandalf","Wizardo","Gandalf@Wizardo.out","ICastFireBall!","all","world", "Gandalf Profile",knowledges3,"The Gray","The White","Ainur");
 
-        sendRequest(user1,user2);
-        acceptRequest(user1,user2);
-        sendRequest(user3,user1);
+//        sendRequest(user1,user2);
+//        acceptRequest(user1,user2);
+//        sendRequest(user3,user1);
 
         //init Content
         List<Content> contents = new ArrayList<>();
@@ -230,9 +227,7 @@ public class Main {
                     if (incomingRequests.isEmpty()) {
                         System.out.println("No Requests");
                     } else {
-                        incomingRequests.forEach((sender) -> {
-                            System.out.println("Request from: " + sender.getProfile().getFirstName());
-                        });
+                        incomingRequests.forEach((sender) -> System.out.println("Request from: " + sender.getProfile().getFirstName()));
                     }
                 } else {
                     System.out.println("User not found.");
@@ -283,7 +278,7 @@ public class Main {
 
     private static void saveEntry() {
         caseRepo.saveEntryMap("src/main/java/org/theShire/persistence/caseRepoCSV.csv");
-        messangerRepo.saveEntryMap("src/main/java/org/theShire/persistence/chatRepoCSV.csv");
+        messengerRepo.saveEntryMap("src/main/java/org/theShire/persistence/chatRepoCSV.csv");
         userRepo.saveEntryMap("src/main/java/org/theShire/persistence/userRepoCSV.csv");
     }
 
@@ -338,7 +333,7 @@ public class Main {
                     caseRepo.findAll().forEach(System.out::println);
                     break;
                 case 3:
-                    messangerRepo.findAll().forEach(System.out::println);
+                    messengerRepo.findAll().forEach(System.out::println);
                     break;
                 default:
                     System.out.println("invalid command");
@@ -349,8 +344,8 @@ public class Main {
     private static void openChat() {
         boolean exit = false;
         UUID uuid = enterUUID("Enter chat uuid");
-        Chat chat = messangerRepo.findByID(uuid);
-        if (messangerRepo.getEntryMap().containsKey(uuid)) {
+        Chat chat = messengerRepo.findByID(uuid);
+        if (messengerRepo.getEntryMap().containsKey(uuid)) {
             System.out.println("chat with " + chat.getPeople() + " opened");
             System.out.println(chat.getChatHistory());
 
@@ -372,7 +367,7 @@ public class Main {
         System.out.println("How many possible Answers does the Case have");
         int ansCount = scanner.nextInt();
         String[] answers = new String[ansCount];
-        LinkedHashSet<Answer> answer = new LinkedHashSet();
+        LinkedHashSet<Answer> answer = new LinkedHashSet<>();
         scanner.nextLine();
         for (int i = 0; i < ansCount; i++) {
             System.out.println("Enter Answer to the Case");
@@ -489,7 +484,7 @@ public class Main {
             str.append(medCase.getEntityId()).append(System.lineSeparator());
         }
 
-        for (Chat chat : messangerRepo.findAll()) {
+        for (Chat chat : messengerRepo.findAll()) {
             str.append(chat.getPeople().stream().map(aChat -> aChat.getProfile().getFirstName()).collect(Collectors.toSet()));
             str.append(chat.getEntityId()).append(System.lineSeparator());
         }

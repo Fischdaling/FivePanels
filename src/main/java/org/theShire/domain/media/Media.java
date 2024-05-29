@@ -25,7 +25,7 @@ public class Media {
     public Media(int width, int height, String altText, String resolution) {
         setWidth(width);
         setHeight(height);
-        setaltText(altText);
+        setAltText(altText);
         setResolution(resolution);
     }
 
@@ -59,11 +59,11 @@ public class Media {
         this.height = greaterZero(height,"height",exTypeMedia);
     }
 
-    public String getaltText() {
+    public String getAltText() {
         return altText;
     }
 
-    public void setaltText(String altText) {
+    public void setAltText(String altText) {
         this.altText = isNotBlank(altText,"altText", exTypeMedia);
     }
 

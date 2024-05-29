@@ -1,26 +1,21 @@
 package org.theShire.repository;
 
-import org.theShire.domain.exception.MediaException;
-import org.theShire.domain.exception.MedicalCaseException;
 import org.theShire.domain.exception.MessengerException;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
 import org.theShire.domain.media.Media;
-import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.messenger.Message;
-import org.theShire.foundation.Knowledges;
 
 import java.io.*;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.theShire.presentation.Main.caseRepo;
 import static org.theShire.presentation.Main.userRepo;
 
-public class MessangerRepository extends AbstractRepository<Chat>{
+public class MessengerRepository extends AbstractRepository<Chat>{
     @Override
     public void saveEntryMap(String filepath) {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath))) {

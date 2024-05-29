@@ -1,14 +1,6 @@
 package org.theShire.domain.medicalCase;
 
-import org.theShire.domain.medicalDoctor.User;
-import org.theShire.domain.medicalCase.Case;
-import org.theShire.foundation.DomainAssertion;
-import org.theShire.repository.CaseRepository;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
 
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
