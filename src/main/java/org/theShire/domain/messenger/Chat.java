@@ -14,8 +14,6 @@ public class Chat extends BaseEntity {
     private Set<User> people;
     // All past sent messanges
     private static List<Message> chatHistory;
-    // If the chat is a Group or single chat
-
 
     public Chat(User ... chatters) {
         super();
