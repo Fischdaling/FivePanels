@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;
-import static org.theShire.presentation.Main.userRepo;
+import static org.theShire.service.UserService.userRepo;
 
 public class UserRelationShip {
     /*      UUID(User)    RELATION
@@ -40,7 +40,6 @@ public class UserRelationShip {
 
     public static void sendRequest(User sender, User receiver) {
         DomainAssertion.isNotEqual(sender, receiver, "sender and receiver", exTypeUser);
-        DomainAssertion.isTrue(!sender.equals(receiver), () -> "sender and receiver can't be the same", exTypeUser);
         DomainAssertion.isInCollection(sender, userRepo.findAll(), "sender", exTypeUser);
         DomainAssertion.isInCollection(receiver, userRepo.findAll(), "receiver", exTypeUser);
 
