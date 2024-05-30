@@ -13,7 +13,8 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.theShire.presentation.Main.userRepo;
+import static org.theShire.service.UserService.userRepo;
+
 
 public class MessengerRepository extends AbstractRepository<Chat>{
     @Override

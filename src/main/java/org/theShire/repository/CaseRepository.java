@@ -1,17 +1,13 @@
 package org.theShire.repository;
 
-import org.theShire.domain.exception.MediaException;
 import org.theShire.domain.exception.MedicalCaseException;
-import org.theShire.domain.exception.MessengerException;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
-import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalCase.Answer;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalCase.CaseVote;
 import org.theShire.domain.medicalCase.Vote;
 import org.theShire.domain.medicalDoctor.User;
-import org.theShire.domain.richType.Name;
 import org.theShire.foundation.Knowledges;
 import org.theShire.presentation.Main;
 
@@ -19,11 +15,10 @@ import org.theShire.presentation.Main;
 import java.io.*;
 import java.time.Instant;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static org.theShire.presentation.Main.userRepo;
+import static org.theShire.service.UserService.userRepo;
+
 
 public class CaseRepository extends AbstractRepository<Case> {
     public Set<Case> getCaseByOwner(UUID ownerId) {

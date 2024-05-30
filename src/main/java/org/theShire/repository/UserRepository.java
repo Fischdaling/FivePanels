@@ -17,6 +17,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.theShire.presentation.Main.*;
+import static org.theShire.service.CaseService.caseRepo;
+import static org.theShire.service.ChatService.messengerRepo;
 
 public class UserRepository extends AbstractRepository<User>{
 

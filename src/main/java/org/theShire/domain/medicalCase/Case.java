@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
-import static org.theShire.presentation.Main.userRepo;
+
 
 public class Case extends BaseEntity {
 
