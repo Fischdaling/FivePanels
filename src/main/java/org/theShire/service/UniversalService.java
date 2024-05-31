@@ -15,7 +15,7 @@ import static org.theShire.service.UserService.userRepo;
 public class UniversalService {
 
     public static void loadEntry() {
-//        messangerRepo.loadEntryMap("src/main/java/org/theShire/persistence/chatRepoCSV.csv");
+//        messengerRepo.loadEntryMap("src/main/java/org/theShire/persistence/chatRepoCSV.csv");
 //        caseRepo.loadEntryMap("src/main/java/org/theShire/persistence/caseRepoCSV.csv");
 //        userRepo.loadEntryMap("src/main/java/org/theShire/persistence/userLoadTest.csv");
         System.out.println("Buy premium to unlock this feature");
