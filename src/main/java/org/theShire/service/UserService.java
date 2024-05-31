@@ -125,7 +125,7 @@ public class UserService {
         String location = scanner.nextLine();
         System.out.println("Enter Picture path");
         String profilePic = scanner.nextLine();
-        System.out.println("How many educational titels do you want to add?");
+        System.out.println("How many educational titles do you want to add?");
         int i = scanner.nextInt();
         scanner.nextLine();
         String[] title = new String[i];

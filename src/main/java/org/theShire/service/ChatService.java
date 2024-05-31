@@ -4,7 +4,6 @@ import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.messenger.Message;
-import org.theShire.presentation.Main;
 import org.theShire.repository.MessengerRepository;
 
 import java.util.UUID;
