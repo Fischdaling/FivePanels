@@ -147,7 +147,7 @@ try {
                 System.out.println("Invalid choice");
         }
     }
-}catch (Exception e){
+}catch (Exception e){ //catches only once
     System.err.println(e.getMessage());
     userLoggedIn = init();
 }
