@@ -7,6 +7,9 @@ import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserProfile;
 import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.richType.*;
+
+import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
+import static org.theShire.foundation.DomainAssertion.*;
 import org.theShire.foundation.Knowledges;
 import org.theShire.repository.UserRepository;
 
@@ -113,6 +116,9 @@ public class UserService {
         String email = scanner.nextLine();
         System.out.println("Enter Password");
         String password = scanner.nextLine();
+        System.out.println("Confirm Password");
+        String confirmPassword = scanner.nextLine();
+        isEqual(confirmPassword, password, "passwords", exTypeUser);
         System.out.println("Enter Language");
         String language = scanner.nextLine();
         System.out.println("Enter Location");
