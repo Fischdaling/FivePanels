@@ -86,7 +86,7 @@ public class UserService {
 
                     UUID receiverUUID3 = enterUUID("Enter target's id");
                     User receiver3 = userRepo.findByID(receiverUUID3);
-                    if (userRepo.getEntryMap().containsKey(receiverUUID3)) {
+                    if (UserRelationShip.getRequest(sender3).contains(receiver3)) {
                         UserRelationShip.acceptRequest(sender3, receiver3);
                         System.out.println("Request from " + sender3.getProfile().getFirstName()+" "+ sender3.getEntityId() + " to " + receiver3.getProfile().getFirstName() + " accepted.");
                     } else {
@@ -131,10 +131,12 @@ public class UserService {
         }
         System.out.println("How many specialties do you want to add?");
         i = scanner.nextInt();
+        Knowledges.getLegalKnowledges().forEach(System.out::println);
+        System.out.println();
         scanner.nextLine();
         Set<String> specialty= new HashSet<>();
         for (int j = 0; j < i; j++) {
-            System.out.println("Enter Specialty");
+            System.out.println("Enter Specialty:");
             String value = scanner.nextLine();
             specialty.add(value);
         }

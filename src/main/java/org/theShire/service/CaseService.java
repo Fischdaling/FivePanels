@@ -124,10 +124,17 @@ public class CaseService {
 
         System.out.println("How many Knowledges do you want to add?");
         int knowledges = scanner.nextInt();
+        if (knowledges <= 0) {
+            System.err.println("You must at least add 1 Knowledge to the case! (You have 1 more chance)");
+            System.out.println("How many Knowledges do you want to add?");
+            knowledges = scanner.nextInt();
+        }
         Set<String> knowledgesSet= new HashSet<>();
+        Knowledges.getLegalKnowledges().forEach(System.out::println);
+        System.out.println();
         scanner.nextLine();
         for(int i = 0; i < knowledges; i++){
-            System.out.println("Enter Knowledge");
+            System.out.println("Enter Knowledge:");
             knowledgesSet.add(scanner.nextLine());
         }
         createCase(userRepo.findByID(ownerId),title,knowledgesSet,caseContents,caseVote,members);

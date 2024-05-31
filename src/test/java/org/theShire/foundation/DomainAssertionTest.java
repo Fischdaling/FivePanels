@@ -328,4 +328,5 @@ public class DomainAssertionTest {
         String zxcvbn3Confirm = "Spengergasse";
         assertEquals(zxcvbn3Confirm ,isZxcvbn3Confirm(zxcvbn3Confirm,"zxcvbn3Confirm",exType));
     }
+
 }

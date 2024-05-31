@@ -12,7 +12,7 @@ import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.isInCollection;
 public class Knowledges {
     // list of legal knowledges that are good and confirmed
-    private static Set<String> legalKnowledges;
+    protected static Set<String> legalKnowledges;
     // the knowledge the user wants
     private String knowledge;
 
@@ -24,6 +24,10 @@ public class Knowledges {
 
     public String getKnowledge() {
         return knowledge;
+    }
+
+    public static Set<String> getLegalKnowledges() {
+        return legalKnowledges;
     }
 
     public void setKnowledge(String knowledge) {

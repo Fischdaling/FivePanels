@@ -38,17 +38,17 @@ public class Main {
         Set<String> knowledges1 = new HashSet<>();
         knowledges1.add("Test");
         knowledges1.add("adult cardiothoracic anesthesiology");
-        User user1 = UserService.createUser(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"),"Bilbo","Beutlin","Bilbo@hobbit.com","VerySafe123","Hobbitisch","Auenland","Bilbo Profile",knowledges1,"Fassreiter","Meister Dieb");
+        User user1 = UserService.createUser(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"),"Bilbo","Beutlin","Bilbo@hobbit.orc","VerySafe123","Hobbitisch","Auenland","Bilbo Profile",knowledges1,"Fassreiter","Meister Dieb");
         //CREATE USER2-----------------------------------------------------------------
         Set<String> knowledges2 = new HashSet<>();
         knowledges2.add("critical care or pain medicine");
         knowledges2.add("pediatric anesthesiology");
-        User user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"),"Aragorn","Arathorn","Aragorn@gondor.at","EvenSaver1234","Gondorisch","Gondor","Aragorn Profile",knowledges2,"Arathorns Sohn","König von Gondor");
+        User user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"),"Aragorn","Arathorn","Aragorn@gondor.orc","EvenSaver1234","Gondorisch","Gondor","Aragorn Profile",knowledges2,"Arathorns Sohn","König von Gondor");
         //CREATE USER3-----------------------------------------------------------------
         Set<String> knowledges3 = new HashSet<>();
         knowledges3.add("pediatric emergency medicine");
         knowledges3.add("hand surgery");
-        User user3 = UserService.createUser(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"),"Gandalf","Wizardo","Gandalf@Wizardo.out","ICastFireBall!","all","world", "Gandalf Profile",knowledges3,"The Gray","The White","Ainur");
+        User user3 = UserService.createUser(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"),"Gandalf","Wizardo","Gandalf@Wizardo.beard","ICastFireBall!","all","world", "Gandalf Profile",knowledges3,"The Gray","The White","Ainur");
 //TODO TESTI
         // Send a friend request
         UserRelationShip.sendRequest(user1, user2);
