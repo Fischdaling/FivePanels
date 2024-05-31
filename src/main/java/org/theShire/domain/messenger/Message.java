@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.theShire.domain.messenger.Message.Stage.SENT;
+import static org.theShire.service.UserService.userRepo;
 
 public class Message extends BaseEntity {//TODO assertions
 
@@ -72,10 +73,10 @@ public class Message extends BaseEntity {//TODO assertions
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Message: ");
-        sb.append(System.lineSeparator()).append(/*DB.getUser(senderId)*/ senderId);
-        sb.append(System.lineSeparator()).append(stage);
+        final StringBuilder sb = new StringBuilder();
+        sb.append("From: ").append(userRepo.findByID(senderId).getProfile().getFirstName());
         sb.append(System.lineSeparator()).append(contents);
+        sb.append(System.lineSeparator()).append(stage);
         return sb.toString();
     }
 

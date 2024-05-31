@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;
+import static org.theShire.service.ChatService.createChat;
 import static org.theShire.service.UserService.userRepo;
 
 public class UserRelationShip {
@@ -22,11 +23,7 @@ public class UserRelationShip {
     }
 
     private static String createMapKey(User user1, User user2) {
-        if (user1.getEntityId().compareTo(user2.getEntityId()) < 0) {
             return user1.getEntityId().toString() + user2.getEntityId().toString();
-        } else {
-            return user2.getEntityId().toString() + user1.getEntityId().toString();
-        }
     }
 
     public static Relation getRelation(User user1, User user2) {
@@ -43,13 +40,13 @@ public class UserRelationShip {
         DomainAssertion.isInCollection(sender, userRepo.findAll(), "sender", exTypeUser);
         DomainAssertion.isInCollection(receiver, userRepo.findAll(), "receiver", exTypeUser);
 
-//        String keyOutgoing = createMapKey(receiver, sender);
+        String keyOutgoing = createMapKey(receiver, sender);
         String keyIncoming = createMapKey(sender, receiver);
 
-//        Relation relationOutgoing = new Relation( sender, receiver, OUTGOING);
+        Relation relationOutgoing = new Relation( sender, receiver, OUTGOING);
         Relation relationIncoming = new Relation( receiver, sender, INCOMING);
 
-//        relationShip.put(keyOutgoing, relationOutgoing);
+        relationShip.put(keyOutgoing, relationOutgoing);
         relationShip.put(keyIncoming, relationIncoming);
     }
 
@@ -71,7 +68,7 @@ public class UserRelationShip {
             relationShip.put(keyOutgoing, relationOutgoing);
 
             if (messageable(sender, receiver)) {
-                new Chat(sender, receiver);
+                createChat(sender, receiver);
             }
         }
     }
@@ -99,7 +96,7 @@ public class UserRelationShip {
     public static Set<User> getRequest(User user1) {
         return relationShip.values().stream()
                 .filter(relation -> relation.getUser1().equals(user1) && relation.getType() == Relation.RelationType.INCOMING)
-                .map(Relation::getUser1)
+                .map(relation -> relation.getUser2())
                 .collect(Collectors.toSet());
     /*
     Filters the relationships in the hashmap to find those that are incoming requests for the user.

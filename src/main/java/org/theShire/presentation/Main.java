@@ -52,20 +52,10 @@ public class Main {
 //TODO TESTI
         // Send a friend request
         UserRelationShip.sendRequest(user1, user2);
-
-        // Check incoming requests for user2
-        Set<User> incomingRequests = UserRelationShip.getRequest(user2);
-        System.out.println("Incoming requests for " + user2.getProfile().getFirstName() + ": " + incomingRequests);
-
-        Set<User> incomingRequests1 = UserRelationShip.getRequest(user1);
-        System.out.println("Incoming requests for " + user1.getProfile().getFirstName() + ": " + incomingRequests1);
-
-        // Accept the friend request
-        UserRelationShip.acceptRequest(user2, user1);
-
-        // Check the relation type
-        Relation.RelationType relationType = UserRelationShip.getRelationType(user1, user2);
-        System.out.println("Relation type between " + user1.getProfile().getFirstName().value() + " and " + user2.getProfile().getFirstName().value() + ": " + relationType);
+        UserRelationShip.acceptRequest(user1, user2);
+        UserRelationShip.sendRequest(user2, user3);
+        UserRelationShip.sendRequest(user3, user1);
+        
 
         //init Content
         List<Content> contents = new ArrayList<>();

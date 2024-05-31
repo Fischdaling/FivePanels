@@ -9,6 +9,7 @@ import java.util.*;
 import static org.theShire.domain.exception.MessengerException.exTypeMes;
 import static org.theShire.foundation.DomainAssertion.isNotInCollection;
 import static org.theShire.foundation.DomainAssertion.isNotNull;
+import static org.theShire.service.ChatService.messengerRepo;
 
 public class Chat extends BaseEntity {
     // The Users in the chat
@@ -53,9 +54,10 @@ public class Chat extends BaseEntity {
     }
 
     public void sendMessage(Message message){
-        addChatHistory(isNotNull(message,"content",exTypeMes));
+        addChatHistory(message);
         message.setStage(Message.Stage.SENT);
     }
+
     public void addPerson(User chatter){
         people.add(isNotNull(chatter,"chatter",exTypeMes));
     }
