@@ -12,7 +12,7 @@ import static org.theShire.foundation.DomainAssertion.isNotNull;
 
 public class Chat extends BaseEntity {
     // The Users in the chat
-    private Set<User> people;
+    private final Set<User> people;
     // All past sent messanges
     private static List<Message> chatHistory;
 

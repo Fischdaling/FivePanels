@@ -3,10 +3,7 @@ package org.theShire.domain.medicalDoctor;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.foundation.DomainAssertion;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
@@ -40,19 +37,20 @@ public class UserRelationShip {
     //important to know! The relation type always differs
     //from the direction of the relation. User1 and User2 have a different POVs
 
+    //TODO
     public static void sendRequest(User sender, User receiver) {
         DomainAssertion.isNotEqual(sender, receiver, "sender and receiver", exTypeUser);
         DomainAssertion.isInCollection(sender, userRepo.findAll(), "sender", exTypeUser);
         DomainAssertion.isInCollection(receiver, userRepo.findAll(), "receiver", exTypeUser);
 
+//        String keyOutgoing = createMapKey(receiver, sender);
         String keyIncoming = createMapKey(sender, receiver);
-        String keyOutgoing = createMapKey(receiver, sender);
 
-        Relation relationIncoming = new Relation(sender, receiver, INCOMING);
-        Relation relationOutgoing = new Relation(receiver, sender, OUTGOING);
+//        Relation relationOutgoing = new Relation( sender, receiver, OUTGOING);
+        Relation relationIncoming = new Relation( receiver, sender, INCOMING);
 
+//        relationShip.put(keyOutgoing, relationOutgoing);
         relationShip.put(keyIncoming, relationIncoming);
-        relationShip.put(keyOutgoing, relationOutgoing);
     }
 
 
@@ -78,7 +76,7 @@ public class UserRelationShip {
         }
     }
 
-    public Relation.RelationType getRelationType(User user1, User user2) {
+    public static Relation.RelationType getRelationType(User user1, User user2) {
         return Optional.of(getRelation(user1, user2)).map(Relation::getType).orElse(null);
         /*
         creates a collection of Relations and returns the type of Relation
@@ -97,14 +95,16 @@ public class UserRelationShip {
     }
 
 
+    //TODO
     public static Set<User> getRequest(User user1) {
         return relationShip.values().stream()
-                .filter(relation -> relation.getUser1().equals(user1) && relation.getType() == INCOMING).map(Relation::getUser2)
+                .filter(relation -> relation.getUser1().equals(user1) && relation.getType() == Relation.RelationType.INCOMING)
+                .map(Relation::getUser1)
                 .collect(Collectors.toSet());
-        /*
-        Takes the values of each User in the Hashmap (the enums), filters out
-        the INCOMING enums and returns a Map that wields the user2 and the Relation to User2
-        */
+    /*
+    Filters the relationships in the hashmap to find those that are incoming requests for the user.
+    Collects the users who have sent the requests and returns them as a set.
+    */
     }
 
     public static Map<User, Relation> getSent(User user1) {

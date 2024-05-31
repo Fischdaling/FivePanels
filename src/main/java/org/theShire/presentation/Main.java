@@ -6,7 +6,9 @@ import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalCase.Answer;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalCase.CaseVote;
+import org.theShire.domain.medicalDoctor.Relation;
 import org.theShire.domain.medicalDoctor.User;
+import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.service.CaseService;
 import org.theShire.service.ChatService;
@@ -16,6 +18,8 @@ import org.theShire.service.UserService;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.theShire.domain.medicalDoctor.UserRelationShip.acceptRequest;
+import static org.theShire.domain.medicalDoctor.UserRelationShip.sendRequest;
 import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UniversalService.loadEntry;
@@ -45,10 +49,23 @@ public class Main {
         knowledges3.add("pediatric emergency medicine");
         knowledges3.add("hand surgery");
         User user3 = UserService.createUser(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"),"Gandalf","Wizardo","Gandalf@Wizardo.out","ICastFireBall!","all","world", "Gandalf Profile",knowledges3,"The Gray","The White","Ainur");
+//TODO TESTI
+        // Send a friend request
+        UserRelationShip.sendRequest(user1, user2);
 
-//        sendRequest(user1,user2);
-//        acceptRequest(user1,user2);
-//        sendRequest(user3,user1);
+        // Check incoming requests for user2
+        Set<User> incomingRequests = UserRelationShip.getRequest(user2);
+        System.out.println("Incoming requests for " + user2.getProfile().getFirstName() + ": " + incomingRequests);
+
+        Set<User> incomingRequests1 = UserRelationShip.getRequest(user1);
+        System.out.println("Incoming requests for " + user1.getProfile().getFirstName() + ": " + incomingRequests1);
+
+        // Accept the friend request
+        UserRelationShip.acceptRequest(user2, user1);
+
+        // Check the relation type
+        Relation.RelationType relationType = UserRelationShip.getRelationType(user1, user2);
+        System.out.println("Relation type between " + user1.getProfile().getFirstName().value() + " and " + user2.getProfile().getFirstName().value() + ": " + relationType);
 
         //init Content
         List<Content> contents = new ArrayList<>();

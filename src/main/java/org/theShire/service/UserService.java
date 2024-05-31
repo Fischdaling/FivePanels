@@ -66,7 +66,6 @@ public class UserService {
             case 2:
 
                 User sender2 = userLoggedIn;
-                if (userRepo.getEntryMap().containsKey(sender2.getEntityId())) {
                     UUID receiverUUID2 = enterUUID("Enter target's Id");
                     User receiver2 = userRepo.findByID(receiverUUID2);
                     if (userRepo.getEntryMap().containsKey(receiverUUID2)) {
@@ -76,9 +75,6 @@ public class UserService {
                     } else {
                         System.out.println("Receiver not found.");
                     }
-                } else {
-                    System.out.println("Sender not found.");
-                }
                 break;
 
             case 3:
@@ -165,6 +161,7 @@ public class UserService {
 
         System.out.println("1. Login");
         System.out.println("2. Create new User");
+        System.out.println("3. Exit");
         int choice = scanner.nextInt();
         switch (choice){
             case 1:
@@ -173,6 +170,8 @@ public class UserService {
             case 2:
                 scanner.nextLine();
                 return addUser();
+            case 0:
+                System.exit(0);
             default:
                 System.out.println("Invalid option.");
         }

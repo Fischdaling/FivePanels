@@ -44,6 +44,14 @@ public class Relation extends BaseEntity {
 
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("From ").append(user1.getProfile().getFirstName());
+        sb.append(" to ").append(user2.getProfile().getFirstName());
+        sb.append(" is ").append(type);
+        return sb.toString();
+    }
 
     public enum RelationType {
         OUTGOING,
