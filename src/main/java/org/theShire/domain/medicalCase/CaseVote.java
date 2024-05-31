@@ -1,10 +1,10 @@
 package org.theShire.domain.medicalCase;
 
 
+import java.util.*;
+
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
-
-import java.util.*;
 
 public class CaseVote {
     //a LinkedHashSet (it's simply a sorted HashSet) of the answers related to a specific case

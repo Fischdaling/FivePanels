@@ -2,13 +2,10 @@ package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.BaseEntity;
 import org.theShire.domain.exception.MedicalDoctorException;
-import org.theShire.domain.media.Content;
-import org.theShire.domain.media.ContentText;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.messenger.Chat;
-import org.theShire.domain.messenger.Message;
-import org.theShire.domain.richType.*;
-import org.theShire.domain.media.Media;
+import org.theShire.domain.richType.Email;
+import org.theShire.domain.richType.Password;
 import org.theShire.foundation.Knowledges;
 
 import java.time.Instant;
@@ -193,4 +190,7 @@ public class User extends BaseEntity {
     }
 
 
+    public Password getPassword() {
+        return password;
+    }
 }

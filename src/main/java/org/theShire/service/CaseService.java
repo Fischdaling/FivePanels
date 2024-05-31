@@ -9,13 +9,14 @@ import org.theShire.domain.medicalCase.CaseVote;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.richType.Name;
 import org.theShire.foundation.Knowledges;
-import org.theShire.presentation.Main;
 import org.theShire.repository.CaseRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.theShire.presentation.Main.*;
+import static org.theShire.presentation.Main.enterUUID;
+import static org.theShire.presentation.Main.scanner;
+import static org.theShire.service.UserService.userLoggedIn;
 import static org.theShire.service.UserService.userRepo;
 
 
@@ -54,11 +55,6 @@ public class CaseService {
     }
 
     public static void vote() {
-        UUID userId = enterUUID("Enter your User ID");
-        while (!userRepo.getEntryMap().containsKey(userId)) {
-            System.out.println("User not found");
-            userId = enterUUID("Enter your User ID");
-        }
         UUID caseId = enterUUID("Enter Case ID to Vote for");
         while (!caseRepo.getEntryMap().containsKey(caseId)) {
             System.out.println("Case not found");
@@ -81,9 +77,9 @@ public class CaseService {
             double percentage = scanner.nextDouble();
             percentTrack += percentage;
             if (percentTrack <= 100.0) {
-                medCase.getCaseVote().voting(userId, answer, percentage);
+                medCase.getCaseVote().voting(userLoggedIn.getEntityId(), answer, percentage);
             }else {
-                medCase.getCaseVote().voting(userId, answer, percentTrack - percentage);
+                medCase.getCaseVote().voting(userLoggedIn.getEntityId(), answer, percentTrack - percentage);
                 percentTrack = 100.0;
             }
         }
@@ -114,7 +110,12 @@ public class CaseService {
         User[] members = new User[doctors];
         scanner.nextLine();
         for (int i = 0; i < doctors; i++) {
-            members[i] = userRepo.findByID(enterUUID("Enter Member id"));
+            UUID uuid = enterUUID("Enter Member id");
+            if (uuid != ownerId) {
+                members[i] = userRepo.findByID(uuid);
+            }else{
+                System.out.println("Member Cannot be owner");
+            }
         }
 
         for (int i = 0; i < ansCount; i++) {

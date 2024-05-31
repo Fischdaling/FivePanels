@@ -2,8 +2,10 @@ package org.theShire.repository;
 
 import org.theShire.domain.BaseEntity;
 
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 public abstract class AbstractRepository<T extends BaseEntity> implements IRepository<T> {
 

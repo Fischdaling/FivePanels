@@ -2,7 +2,8 @@ package org.theShire.domain.richType;
 
 import org.theShire.domain.exception.MedicalDoctorException;
 
-import static org.theShire.foundation.DomainAssertion.*;
+import static org.theShire.foundation.DomainAssertion.containsSymbols;
+import static org.theShire.foundation.DomainAssertion.hasMaxLength;
 
 public record Email(String value) {
     public Email(String value) {

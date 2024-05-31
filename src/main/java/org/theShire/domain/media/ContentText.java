@@ -1,7 +1,7 @@
 package org.theShire.domain.media;
 
 import static org.theShire.domain.exception.MediaException.exTypeMedia;
-import static org.theShire.foundation.DomainAssertion.*;
+import static org.theShire.foundation.DomainAssertion.isNotBlank;
 
 public class ContentText{
     //a String that holds text

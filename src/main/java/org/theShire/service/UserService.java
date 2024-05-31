@@ -1,11 +1,11 @@
 package org.theShire.service;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
+import org.theShire.domain.exception.MedicalDoctorException;
 import org.theShire.domain.media.Media;
-import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserProfile;
 import org.theShire.domain.medicalDoctor.UserRelationShip;
-import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.richType.*;
 import org.theShire.foundation.Knowledges;
 import org.theShire.repository.UserRepository;
@@ -13,10 +13,12 @@ import org.theShire.repository.UserRepository;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.theShire.presentation.Main.*;
+import static org.theShire.presentation.Main.enterUUID;
+import static org.theShire.presentation.Main.scanner;
 
 public class UserService {
     public static final UserRepository userRepo = new UserRepository();
+    public static final User userLoggedIn = login();
 
     public static void deleteUserById() {
         UUID userId = enterUUID("Enter User Id");
@@ -46,9 +48,8 @@ public class UserService {
         scanner.nextLine();
         switch (answer) {
             case 1:
-                UUID userUUID1 = enterUUID("Enter your ID");
-                User user1 = userRepo.findByID(userUUID1);
-                if (userRepo.getEntryMap().containsKey(userUUID1)) {
+                User user1 = userLoggedIn;
+                if (userRepo.getEntryMap().containsKey(user1.getEntityId())) {
 
                     Set<User> incomingRequests = UserRelationShip.getRequest(user1);
                     if (incomingRequests.isEmpty()) {
@@ -62,9 +63,9 @@ public class UserService {
                 break;
 
             case 2:
-                UUID senderUUID2 = enterUUID("Enter your Id");
-                User sender2 = userRepo.findByID(senderUUID2);
-                if (userRepo.getEntryMap().containsKey(senderUUID2)) {
+
+                User sender2 = userLoggedIn;
+                if (userRepo.getEntryMap().containsKey(sender2.getEntityId())) {
                     UUID receiverUUID2 = enterUUID("Enter target's Id");
                     User receiver2 = userRepo.findByID(receiverUUID2);
                     if (userRepo.getEntryMap().containsKey(receiverUUID2)) {
@@ -80,15 +81,14 @@ public class UserService {
                 break;
 
             case 3:
-                UUID senderUUID3 = enterUUID("Enter your Id");
-                User sender3 = userRepo.findByID(senderUUID3);
-                if (userRepo.getEntryMap().containsKey(senderUUID3)) {
+                User sender3 = userLoggedIn;
+                if (userRepo.getEntryMap().containsKey(sender3.getEntityId())) {
 
                     UUID receiverUUID3 = enterUUID("Enter target's id");
                     User receiver3 = userRepo.findByID(receiverUUID3);
                     if (userRepo.getEntryMap().containsKey(receiverUUID3)) {
                         UserRelationShip.acceptRequest(sender3, receiver3);
-                        System.out.println("Request from " + sender3.getProfile().getFirstName()+" "+ senderUUID3 + " to " + receiver3.getProfile().getFirstName() + " accepted.");
+                        System.out.println("Request from " + sender3.getProfile().getFirstName()+" "+ sender3.getEntityId() + " to " + receiver3.getProfile().getFirstName() + " accepted.");
                     } else {
                         System.out.println("Receiver not found.");
                     }
@@ -158,5 +158,24 @@ public class UserService {
         User user = new User(uuid,passwort,emayl,profile,knowledges);
         userRepo.save(user);
         return user;
+    }
+
+    public static User login() {
+        System.out.println("Enter Email: ");
+        String email = scanner.nextLine();
+        System.out.println("Enter Password: ");
+        String password = scanner.nextLine();
+        Optional<User> userOpt = userRepo.findByEmail(new Email(email));
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword().value());
+            if (result.verified) {
+                return user;
+            } else {
+                throw new MedicalDoctorException("Invalid password.");
+            }
+        } else {
+            throw new MedicalDoctorException("User not found.");
+        }
     }
 }

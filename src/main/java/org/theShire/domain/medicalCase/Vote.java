@@ -1,9 +1,9 @@
 package org.theShire.domain.medicalCase;
 
 
-
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
-import static org.theShire.foundation.DomainAssertion.*;
+import static org.theShire.foundation.DomainAssertion.greaterEqualsZero;
+import static org.theShire.foundation.DomainAssertion.isNotNull;
 
 public class Vote {
     //saves an answer with the verified Rich type Answer

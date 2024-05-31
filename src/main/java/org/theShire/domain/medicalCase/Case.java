@@ -5,7 +5,6 @@ import org.theShire.domain.media.Content;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.foundation.Knowledges;
-import org.theShire.presentation.Main;
 
 import java.time.Instant;
 import java.util.*;

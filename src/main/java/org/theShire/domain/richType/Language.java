@@ -2,7 +2,7 @@ package org.theShire.domain.richType;
 
 import org.theShire.domain.exception.MedicalDoctorException;
 
-import static org.theShire.foundation.DomainAssertion.*;
+import static org.theShire.foundation.DomainAssertion.hasMaxLength;
 
 public record Language(String value) {
     public Language(String value) {

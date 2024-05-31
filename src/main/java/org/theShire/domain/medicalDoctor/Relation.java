@@ -2,9 +2,6 @@ package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.BaseEntity;
 
-
-
-
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.isNotNull;
 

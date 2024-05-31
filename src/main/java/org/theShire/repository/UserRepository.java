@@ -8,15 +8,15 @@ import org.theShire.domain.medicalDoctor.UserProfile;
 import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.richType.*;
+import org.theShire.foundation.DomainAssertion;
 import org.theShire.foundation.Knowledges;
-import org.theShire.presentation.Main;
 
 import java.io.*;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.theShire.presentation.Main.*;
+import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.ChatService.messengerRepo;
 
@@ -66,7 +66,7 @@ public class UserRepository extends AbstractRepository<User>{
     private User parseUser(String line) {
         String[] parts = line.split(";");
 
-//        isTrue(parts.length == 17, () -> "Error: CSV lines not matching", exTypeUser);
+        DomainAssertion.isTrue(parts.length == 17, () -> "Error: CSV lines not matching", exTypeUser);
         UUID entityId = UUID.fromString(parts[0]);
         Instant createdAt = Instant.parse(parts[1]);
         Instant updatedAt = Instant.parse(parts[2]);
@@ -78,12 +78,12 @@ public class UserRepository extends AbstractRepository<User>{
         Set<Knowledges> specializations = parseSpecializations(parts[8]);
         Set<Case> ownedCases = parseCases(parts[9]);
         Set<Case> memberOfCase = parseCases(parts[10]);
-        Name firstName = new Name(parts[11]);
-        Name lastName = new Name(parts[12]);
-        List<EducationalTitle> educationalTitles = parseEducationalTitles(parts[13]);
-        Media profilePicture = parseMedia(parts[14]);
-        Language language = new Language(parts[15]);
-        Location location = new Location(parts[16]);
+        Language language = new Language(parts[11]);
+        Location location = new Location(parts[12]);
+        Media profilePicture = parseMedia(parts[13]);
+        Name firstName = new Name(parts[14]);
+        Name lastName = new Name(parts[15]);
+        List<EducationalTitle> educationalTitles = parseEducationalTitles(parts[16]);
 
         UserProfile profile = new UserProfile(language, location, profilePicture, firstName, lastName, educationalTitles);
         User user = new User(entityId, createdAt, updatedAt, email, password, profile, score, contacts, chats, ownedCases, memberOfCase, specializations);
@@ -91,76 +91,46 @@ public class UserRepository extends AbstractRepository<User>{
         return user;
     }
 
-    private Media parseMedia(String part) {
-        String[] parts = part.split(",");
-        return new Media(Integer.parseInt(parts[0]),Integer.parseInt(parts[1]),parts[2],parts[3]);
-    }
-
     private Set<UserRelationShip> parseContacts(String value) {
-        String[] parts = value.split(";");
-        if (parts.length >0) {
-            return null;
-        }
-        return Arrays.stream(value.split(","))
-                .map(s -> findByID(UUID.fromString(s)).getContacts())
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
+        // TODO
+        return new HashSet<>();
     }
 
     private Set<Chat> parseChats(String value) {
-        String[] parts = value.split(";");
-        if (parts.length >0) {
-            return null;
-        }
-        return Arrays.stream(value.split(","))
-                .map(s -> messengerRepo.findByID(UUID.fromString(s)))
+        return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
+                .filter(s -> !s.trim().isEmpty())
+                .map(s -> messengerRepo.findByID(UUID.fromString(s.trim())))
                 .collect(Collectors.toSet());
     }
 
     private Set<Knowledges> parseSpecializations(String value) {
-
-        String[] parts = value.split(",");
-        Set<Knowledges> knowledges = new HashSet<>();
-        for (String part : parts) {
-            part = part.trim();
-            part = part.replace("[","");
-            part = part.replace("]","");
-            knowledges.add(new Knowledges(part));
-
-        }
-        return knowledges;
+        return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
+                .filter(s -> !s.trim().isEmpty())
+                .map(Knowledges::new)
+                .collect(Collectors.toSet());
     }
 
     private Set<Case> parseCases(String value) {
-        value = value.replace("[","");
-        value = value.replace("]","");
-        if (value.trim().isEmpty() || value.trim().isBlank() || value.equals("null")){
-            return new HashSet<>();
-        }
-        if (caseRepo.entryMap.containsKey(UUID.fromString(value))) {
-            return Arrays.stream(value.split(","))
-                    .map(s -> caseRepo.findByID(UUID.fromString(s)))
-                    .collect(Collectors.toSet());
-        }else {
-            Set<Case> cases = new HashSet<>();
-            System.out.println("case import failed input manuel: ");
-            System.out.println("how many cases do you want to add");
-            int j = scanner.nextInt();
-            for (int i = 0; i < j; i++) {
-                UUID caseId = Main.enterUUID("Please enter the caseId");
-                cases.add(caseRepo.findByID(caseId));
-            }
-
-            return cases;
-        }
-
+        return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
+                .filter(s -> !s.trim().isEmpty())
+                .map(s -> caseRepo.findByID(UUID.fromString(s.trim())))
+                .collect(Collectors.toSet());
     }
 
     private List<EducationalTitle> parseEducationalTitles(String value) {
-        value = value.replace("[","");
-        value = value.replace("]","");
-        return Arrays.stream(value.split(","))
+        return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
+                .filter(s -> !s.trim().isEmpty())
                 .map(EducationalTitle::new)
                 .collect(Collectors.toList());
     }
+
+    private Media parseMedia(String value) {
+        String[] parts = value.split(",");
+        int width = Integer.parseInt(parts[0]);
+        int height = Integer.parseInt(parts[1]);
+        String altText = parts[2];
+        String resolution = parts[3];
+        return new Media(width, height, altText, resolution);
+    }
+
 }

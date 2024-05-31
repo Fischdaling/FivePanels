@@ -1,10 +1,15 @@
 package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.media.Media;
-import org.theShire.domain.richType.*;
+import org.theShire.domain.richType.EducationalTitle;
+import org.theShire.domain.richType.Language;
+import org.theShire.domain.richType.Location;
+import org.theShire.domain.richType.Name;
 import org.theShire.foundation.Knowledges;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;

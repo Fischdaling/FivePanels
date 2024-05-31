@@ -1,7 +1,5 @@
 package org.theShire.domain.richType;
 
-import java.util.List;
-
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.hasMaxLength;
 

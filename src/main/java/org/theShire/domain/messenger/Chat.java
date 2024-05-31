@@ -7,7 +7,8 @@ import java.time.Instant;
 import java.util.*;
 
 import static org.theShire.domain.exception.MessengerException.exTypeMes;
-import static org.theShire.foundation.DomainAssertion.*;
+import static org.theShire.foundation.DomainAssertion.isNotInCollection;
+import static org.theShire.foundation.DomainAssertion.isNotNull;
 
 public class Chat extends BaseEntity {
     // The Users in the chat

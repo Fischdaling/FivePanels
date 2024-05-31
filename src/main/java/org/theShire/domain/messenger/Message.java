@@ -1,14 +1,14 @@
 package org.theShire.domain.messenger;
 
-import org.theShire.domain.media.Content;
 import org.theShire.domain.BaseEntity;
+import org.theShire.domain.media.Content;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.theShire.domain.messenger.Message.Stage.*;
+import static org.theShire.domain.messenger.Message.Stage.SENT;
 
 public class Message extends BaseEntity {//TODO assertions
 

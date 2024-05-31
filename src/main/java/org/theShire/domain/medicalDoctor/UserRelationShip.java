@@ -3,7 +3,10 @@ package org.theShire.domain.medicalDoctor;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.foundation.DomainAssertion;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;

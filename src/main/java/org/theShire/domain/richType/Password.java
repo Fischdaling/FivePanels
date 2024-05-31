@@ -1,10 +1,7 @@
 package org.theShire.domain.richType;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import com.nulabinc.zxcvbn.Zxcvbn;
 import org.theShire.domain.exception.MedicalDoctorException;
-
-import java.util.Arrays;
 
 import static org.theShire.foundation.DomainAssertion.isZxcvbn3Confirm;
 

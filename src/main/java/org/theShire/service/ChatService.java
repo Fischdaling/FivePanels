@@ -10,6 +10,7 @@ import org.theShire.repository.MessengerRepository;
 import java.util.UUID;
 
 import static org.theShire.presentation.Main.scanner;
+import static org.theShire.service.UserService.userLoggedIn;
 
 public class ChatService {
     public static final MessengerRepository messengerRepo = new MessengerRepository();
@@ -22,13 +23,11 @@ public class ChatService {
             System.out.println(chat.getChatHistory());
 
             while (!exit) {
-                System.out.println("Enter your UUID");
-                String user = scanner.nextLine();
                 System.out.println("Send a message? true/false");
                 exit = scanner.nextBoolean();
                 System.out.println("Enter your Message?");
                 String message = scanner.nextLine();
-                chat.sendMessage(new Message(UUID.fromString(user), new Content(new ContentText(message))));
+                chat.sendMessage(new Message(userLoggedIn.getEntityId(), new Content(new ContentText(message))));
             }
         }else {
             System.out.println("Chat not found");

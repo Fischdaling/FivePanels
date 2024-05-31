@@ -1,10 +1,10 @@
 package org.theShire.domain.medicalCase;
 
-import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
-import static org.theShire.foundation.DomainAssertion.*;
-
 import java.util.Set;
 import java.util.UUID;
+
+import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
+import static org.theShire.foundation.DomainAssertion.isNotNull;
 
 public class Category {
     //A UUID for each Category

@@ -3,7 +3,7 @@ package org.theShire.domain.media;
 import org.theShire.domain.BaseEntity;
 
 import static org.theShire.domain.exception.MediaException.exTypeMedia;
-import static org.theShire.foundation.DomainAssertion.*;
+import static org.theShire.foundation.DomainAssertion.isNotNull;
 
 
 

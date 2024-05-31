@@ -7,24 +7,17 @@ import org.theShire.domain.medicalCase.Answer;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalCase.CaseVote;
 import org.theShire.domain.medicalDoctor.User;
-import org.theShire.domain.medicalDoctor.UserProfile;
-import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.messenger.Chat;
-import org.theShire.domain.messenger.Message;
-import org.theShire.domain.richType.*;
-import org.theShire.foundation.Knowledges;
-import org.theShire.repository.CaseRepository;
-import org.theShire.repository.MessengerRepository;
-import org.theShire.repository.UserRepository;
-import org.theShire.service.UserService;
-import org.theShire.service.ChatService;
 import org.theShire.service.CaseService;
+import org.theShire.service.ChatService;
+import org.theShire.service.UserService;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.ChatService.messengerRepo;
+import static org.theShire.service.UserService.userLoggedIn;
 import static org.theShire.service.UserService.userRepo;
 
 public class Main {
@@ -71,6 +64,7 @@ public class Main {
         answers.add(new Answer("Answer 1"));
         answers.add(new Answer("Answer 2"));
         Case case1 = CaseService.createCase(user1,"my First Case",knowledges4, contents,new CaseVote(answers),user2,user3);
+
 
         //TODO Check Main and conditions... z.B. Owner kann kein member bei seinem case sein.
         while(true){

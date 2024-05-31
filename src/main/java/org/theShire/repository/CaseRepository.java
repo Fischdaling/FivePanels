@@ -11,7 +11,6 @@ import org.theShire.domain.medicalDoctor.User;
 import org.theShire.foundation.Knowledges;
 import org.theShire.presentation.Main;
 
-
 import java.io.*;
 import java.time.Instant;
 import java.util.*;

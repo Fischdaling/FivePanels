@@ -9,7 +9,8 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.theShire.domain.exception.MediaException.exTypeMedia;
-import static org.theShire.foundation.DomainAssertion.*;
+import static org.theShire.foundation.DomainAssertion.greaterZero;
+import static org.theShire.foundation.DomainAssertion.isNotBlank;
 
 public class Media {
     //declares the width of a picture in pixels
