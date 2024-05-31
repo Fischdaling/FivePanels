@@ -10,13 +10,15 @@ import org.theShire.repository.MessengerRepository;
 import java.util.UUID;
 
 import static org.theShire.presentation.Main.scanner;
+import static org.theShire.service.UniversalService.enterUUID;
 import static org.theShire.service.UserService.userLoggedIn;
 
 public class ChatService {
     public static final MessengerRepository messengerRepo = new MessengerRepository();
+
     public static void openChat() {
         boolean exit = false;
-        UUID uuid = Main.enterUUID("Enter chat uuid");
+        UUID uuid = enterUUID("Enter chat uuid");
         Chat chat = messengerRepo.findByID(uuid);
         if (messengerRepo.getEntryMap().containsKey(uuid)) {
             System.out.println("chat with " + chat.getPeople() + " opened");

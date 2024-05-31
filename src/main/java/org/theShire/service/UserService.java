@@ -13,12 +13,13 @@ import org.theShire.repository.UserRepository;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.theShire.presentation.Main.enterUUID;
-import static org.theShire.presentation.Main.scanner;
+import static org.theShire.presentation.Main.*;
+import static org.theShire.service.UniversalService.enterUUID;
 
 public class UserService {
     public static final UserRepository userRepo = new UserRepository();
-    public static final User userLoggedIn = login();
+    public static UserRelationShip relations = new UserRelationShip();
+    public static User userLoggedIn = null;
 
     public static void deleteUserById() {
         UUID userId = enterUUID("Enter User Id");
@@ -103,7 +104,7 @@ public class UserService {
         }
     }
 
-    public static void addUser() {
+    public static User addUser() {
         System.out.println("Enter Firstname");
         String firstname =scanner.nextLine();
         System.out.println("Enter Lastname");
@@ -135,8 +136,7 @@ public class UserService {
             String value = scanner.nextLine();
             specialty.add(value);
         }
-        User user = createUser(null,firstname,lastname,email,password,language,location,profilePic,specialty ,title);
-
+        return createUser(null,firstname,lastname,email,password,language,location,profilePic,specialty ,title);
     }
 
 
@@ -158,6 +158,25 @@ public class UserService {
         User user = new User(uuid,passwort,emayl,profile,knowledges);
         userRepo.save(user);
         return user;
+    }
+
+    public static User init(){
+
+
+        System.out.println("1. Login");
+        System.out.println("2. Create new User");
+        int choice = scanner.nextInt();
+        switch (choice){
+            case 1:
+                scanner.nextLine();
+                return login();
+            case 2:
+                scanner.nextLine();
+                return addUser();
+            default:
+                System.out.println("Invalid option.");
+        }
+        throw new MedicalDoctorException("Unexpected Error");
     }
 
     public static User login() {

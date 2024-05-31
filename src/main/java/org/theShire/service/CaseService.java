@@ -14,8 +14,8 @@ import org.theShire.repository.CaseRepository;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.theShire.presentation.Main.enterUUID;
-import static org.theShire.presentation.Main.scanner;
+import static org.theShire.presentation.Main.*;
+import static org.theShire.service.UniversalService.enterUUID;
 import static org.theShire.service.UserService.userLoggedIn;
 import static org.theShire.service.UserService.userRepo;
 
@@ -100,7 +100,7 @@ public class CaseService {
 
         System.out.println("Enter Case Title");
         String title = scanner.nextLine();
-        UUID ownerId = enterUUID("Enter Owner ID");
+        UUID ownerId = userLoggedIn.getEntityId();
         List<Content> caseContents = new ArrayList<>();
 
         contentUtil(caseContents);

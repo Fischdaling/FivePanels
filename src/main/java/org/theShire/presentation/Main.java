@@ -10,6 +10,7 @@ import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.service.CaseService;
 import org.theShire.service.ChatService;
+import org.theShire.service.UniversalService;
 import org.theShire.service.UserService;
 
 import java.util.*;
@@ -17,8 +18,9 @@ import java.util.stream.Collectors;
 
 import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.ChatService.messengerRepo;
-import static org.theShire.service.UserService.userLoggedIn;
-import static org.theShire.service.UserService.userRepo;
+import static org.theShire.service.UniversalService.loadEntry;
+import static org.theShire.service.UniversalService.saveEntry;
+import static org.theShire.service.UserService.*;
 
 public class Main {
     public static final Scanner scanner = new Scanner(System.in);
@@ -65,7 +67,7 @@ public class Main {
         answers.add(new Answer("Answer 2"));
         Case case1 = CaseService.createCase(user1,"my First Case",knowledges4, contents,new CaseVote(answers),user2,user3);
 
-
+        userLoggedIn = init();
         //TODO Check Main and conditions... z.B. Owner kann kein member bei seinem case sein.
         while(true){
             System.out.println("Commands");
@@ -82,7 +84,7 @@ public class Main {
             System.out.println("11. Leave a like for Case Answer");
             System.out.println("12. Save Data");
             System.out.println("13. Load Data");
-            System.out.println("0. Exit");
+            System.out.println("0. Logout");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -98,7 +100,7 @@ public class Main {
                     ChatService.openChat();
                     break;
                 case 4:
-                    findAll();
+                    UniversalService.findAll();
                     break;
                 case 5:
                     UserService.findByName();
@@ -129,94 +131,13 @@ public class Main {
                     break;
                 case 0:
                     System.out.println("Goodbye");
-                    System.exit(0);
+                    userLoggedIn = init();
+                    break;
                 default:
                     System.out.println("Invalid choice");
             }
         }
 
     }
-
-
-
-
-
-
-
-
-
-
-
-    private static void loadEntry() {
-//        messangerRepo.loadEntryMap("src/main/java/org/theShire/persistence/chatRepoCSV.csv");
-//        caseRepo.loadEntryMap("src/main/java/org/theShire/persistence/caseRepoCSV.csv");
-//        userRepo.loadEntryMap("src/main/java/org/theShire/persistence/userLoadTest.csv");
-        System.out.println("Buy premium to unlock this feature");
-
-    }
-
-
-
-
-    private static void saveEntry() {
-        caseRepo.saveEntryMap("src/main/java/org/theShire/persistence/caseRepoCSV.csv");
-        messengerRepo.saveEntryMap("src/main/java/org/theShire/persistence/chatRepoCSV.csv");
-        userRepo.saveEntryMap("src/main/java/org/theShire/persistence/userRepoCSV.csv");
-    }
-
-
-
-    private static void findAll() {
-        System.out.println("Enter Entity");
-        System.out.println("1. Doctor");
-        System.out.println("2. Case");
-        System.out.println("3. Chat");
-        int entityId = scanner.nextInt();
-        switch (entityId){
-            case 1:
-                userRepo.findAll().forEach(System.out::println);
-                break;
-            case 2:
-                caseRepo.findAll().forEach(aCase -> aCase.setViewcount(aCase.getViewcount()+1));
-                caseRepo.findAll().forEach(System.out::println);
-                break;
-            case 3:
-                messengerRepo.findAll().forEach(System.out::println);
-                break;
-            default:
-                System.out.println("invalid command");
-        }
-
-    }
-
-
-
-
-    public static UUID enterUUID(String enterMessage){
-        StringBuilder str = new StringBuilder();
-        for (User user : userRepo.findAll()) {
-            str.append(user.getProfile().getFirstName()).append(" ").append(user.getProfile().getLastName()).append(System.lineSeparator());
-            str.append(user.getEntityId()).append(System.lineSeparator());
-        }
-        for (Case medCase : caseRepo.findAll()) {
-            str.append(medCase.getTitle()).append(System.lineSeparator());
-            str.append(medCase.getEntityId()).append(System.lineSeparator());
-        }
-
-        for (Chat chat : messengerRepo.findAll()) {
-            str.append(chat.getPeople().stream().map(aChat -> aChat.getProfile().getFirstName()).collect(Collectors.toSet()));
-            str.append(chat.getEntityId()).append(System.lineSeparator());
-        }
-        System.out.println(str);
-
-        System.out.println(enterMessage);
-        return UUID.fromString(scanner.nextLine());
-
-    }
-
-
-
-
-
 
 }

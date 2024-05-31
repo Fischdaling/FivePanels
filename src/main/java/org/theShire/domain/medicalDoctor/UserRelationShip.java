@@ -22,7 +22,6 @@ public class UserRelationShip {
 
     public UserRelationShip() {
         relationShip = new HashMap<>();
-
     }
 
     private static String createMapKey(User user1, User user2) {
