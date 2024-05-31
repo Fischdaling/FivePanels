@@ -21,30 +21,29 @@ import static org.theShire.service.UniversalService.enterUUID;
 
 public class UserService {
     public static final UserRepository userRepo = new UserRepository();
-    public static UserRelationShip relations = new UserRelationShip();
+    public static UserRelationShip relations = new UserRelationShip(); // Important or Error
     public static User userLoggedIn = null;
-
-    public static void deleteUserById() {
+        public static void deleteUserById () {
         UUID userId = enterUUID("Enter User Id");
-        if(userRepo.getEntryMap().containsKey(userId)){
+        if (userRepo.getEntryMap().containsKey(userId)) {
             userRepo.deleteById(userId);
-        }else {
+        } else {
             System.out.println("User not found");
         }
     }
 
-    public static void findByName() {
+        public static void findByName () {
         System.out.println("Enter name");
         String name = scanner.nextLine();
         Set<User> user = userRepo.findByName(new Name(name));
-        if(user != null){
+        if (user != null) {
             System.out.println(user);
-        }else{
+        } else {
             System.out.println("User not found");
         }
     }
 
-    public static void relationCommands() {
+        public static void relationCommands () {
         System.out.println("1. See Incoming");
         System.out.println("2. send request");
         System.out.println("3. accept request");
@@ -69,15 +68,15 @@ public class UserService {
             case 2:
 
                 User sender2 = userLoggedIn;
-                    UUID receiverUUID2 = enterUUID("Enter target's Id");
-                    User receiver2 = userRepo.findByID(receiverUUID2);
-                    if (userRepo.getEntryMap().containsKey(receiverUUID2)) {
-                        UserRelationShip.sendRequest(sender2, receiver2);
-                        System.out.println("Request sent from " + sender2.getProfile().getFirstName() + " to " + receiver2.getProfile().getFirstName());
+                UUID receiverUUID2 = enterUUID("Enter target's Id");
+                User receiver2 = userRepo.findByID(receiverUUID2);
+                if (userRepo.getEntryMap().containsKey(receiverUUID2)) {
+                    UserRelationShip.sendRequest(sender2, receiver2);
+                    System.out.println("Request sent from " + sender2.getProfile().getFirstName() + " to " + receiver2.getProfile().getFirstName());
 
-                    } else {
-                        System.out.println("Receiver not found.");
-                    }
+                } else {
+                    System.out.println("Receiver not found.");
+                }
                 break;
 
             case 3:
@@ -88,7 +87,7 @@ public class UserService {
                     User receiver3 = userRepo.findByID(receiverUUID3);
                     if (UserRelationShip.getRequest(sender3).contains(receiver3)) {
                         UserRelationShip.acceptRequest(sender3, receiver3);
-                        System.out.println("Request from " + sender3.getProfile().getFirstName()+" "+ sender3.getEntityId() + " to " + receiver3.getProfile().getFirstName() + " accepted.");
+                        System.out.println("Request from " + sender3.getProfile().getFirstName() + " " + sender3.getEntityId() + " to " + receiver3.getProfile().getFirstName() + " accepted.");
                     } else {
                         System.out.println("Receiver not found.");
                     }
@@ -103,9 +102,9 @@ public class UserService {
         }
     }
 
-    public static User addUser() {
+        public static User addUser () {
         System.out.println("Enter Firstname");
-        String firstname =scanner.nextLine();
+        String firstname = scanner.nextLine();
         System.out.println("Enter Lastname");
         String lastname = scanner.nextLine();
         System.out.println("Enter Email");
@@ -134,18 +133,19 @@ public class UserService {
         Knowledges.getLegalKnowledges().forEach(System.out::println);
         System.out.println();
         scanner.nextLine();
-        Set<String> specialty= new HashSet<>();
+        Set<String> specialty = new HashSet<>();
         for (int j = 0; j < i; j++) {
             System.out.println("Enter Specialty:");
             String value = scanner.nextLine();
             specialty.add(value);
         }
-        return createUser(null,firstname,lastname,email,password,language,location,profilePic,specialty ,title);
+        return createUser(null, firstname, lastname, email, password, language, location, profilePic, specialty, title);
     }
 
 
-
-    public static User createUser(UUID uuid, String firstname, String lastname, String email, String password,String language,String location,String picture,Set<String> specialization,String...educationalTitle){
+        public static User createUser (UUID uuid, String firstname, String lastname, String email, String
+        password, String language, String location, String picture, Set < String > specialization, String...
+        educationalTitle){
         if (uuid == null) {
             uuid = UUID.randomUUID();
         }
@@ -156,22 +156,22 @@ public class UserService {
         Language lang = new Language(language);
         Location loc = new Location(location);
         List<EducationalTitle> titles = Arrays.stream(educationalTitle).map(EducationalTitle::new).toList();
-        Media media = new Media(500,400,picture,"500x400");
-        Set<Knowledges> knowledges  = specialization.stream().map(Knowledges::new).collect(Collectors.toSet());
-        UserProfile profile = new UserProfile(lang,loc,media,firstName,lastName,titles);
-        User user = new User(uuid,passwort,emayl,profile,knowledges);
+        Media media = new Media(500, 400, picture, "500x400");
+        Set<Knowledges> knowledges = specialization.stream().map(Knowledges::new).collect(Collectors.toSet());
+        UserProfile profile = new UserProfile(lang, loc, media, firstName, lastName, titles);
+        User user = new User(uuid, passwort, emayl, profile, knowledges);
         userRepo.save(user);
         return user;
     }
 
-    public static User init(){
+        public static User init () {
 
 
         System.out.println("1. Login");
         System.out.println("2. Create new User");
         System.out.println("3. Exit");
         int choice = scanner.nextInt();
-        switch (choice){
+        switch (choice) {
             case 1:
                 scanner.nextLine();
                 return login();
@@ -186,7 +186,7 @@ public class UserService {
         throw new MedicalDoctorException("Unexpected Error");
     }
 
-    public static User login() {
+        public static User login () {
         System.out.println("Enter Email: ");
         String email = scanner.nextLine();
         System.out.println("Enter Password: ");
