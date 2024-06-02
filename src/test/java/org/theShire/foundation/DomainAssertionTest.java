@@ -5,14 +5,15 @@ import org.theShire.domain.exception.MedicalCaseException;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.foundation.DomainAssertion.*;
 
 public class DomainAssertionTest {
-    private static final Class<MedicalCaseException> exType = MedicalCaseException.class;
-    
+    private static final Class<RuntimeException> exType = RuntimeException.class;
 
     @Test
     void isNotNull_shouldReturnStr_WhenStrIsNotNull() {
@@ -267,7 +268,19 @@ public class DomainAssertionTest {
         list.add(i2);
         list.add(i3);
 
-        assertEquals(i1, isInCollection(i1,list,"TestCaseList",exType));
+        Set<Integer> set = new HashSet<>();
+//        set.add(i1);
+        set.add(i2);
+        set.add(i3);
+
+        assertEquals(i1, isNotInCollection(i1,set,"TestCaseList",exType));
+
+        assertEquals(i1, isNotInCollection(i1,list,"TestCaseList",exType));
+
+        list.add(i1);
+        set.add(i1);
+        assertThrows(exType, () -> isNotInCollection(i1,list,"TestCaseList",exType));
+        assertThrows(exType,()-> isNotInCollection(i1,set,"TestCaseList",exType));
     }
 
     @Test
@@ -277,7 +290,7 @@ public class DomainAssertionTest {
         int i2 = 2;
         int i3 = 0;
 
-        list.add(i1);
+        // list.add(i1);
         list.add(i2);
         list.add(i3);
 
