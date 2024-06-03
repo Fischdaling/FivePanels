@@ -138,7 +138,7 @@ public class Case extends BaseEntity {
         for (UUID userId : userIdsWithCorrectVotes) {
             User user = userRepo.findByID(userId);
             isNotNull(user, "user", exTypeCase);
-                int newScore = user.getScore() + (int) (5 * caseVote.getVotes().get(userId).stream()
+                int newScore = user.getScore() + (int) (2 * caseVote.getVotes().get(userId).stream()
                         .filter(vote -> vote.getAnswer().equals(correctAnswer))
                         .mapToDouble(Vote::getPercent)
                         .sum());

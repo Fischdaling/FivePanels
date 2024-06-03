@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 import static org.theShire.domain.medicalDoctor.UserRelationShip.acceptRequest;
 import static org.theShire.domain.medicalDoctor.UserRelationShip.sendRequest;
 import static org.theShire.service.CaseService.caseRepo;
+import static org.theShire.service.CaseService.correctAnswer;
 import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UniversalService.loadEntry;
 import static org.theShire.service.UniversalService.saveEntry;
@@ -108,6 +109,7 @@ public class Main {
             System.out.println("11. Leave a like for Case Answer");
             System.out.println("12. Save Data");
             System.out.println("13. Load Data");
+            System.out.println("14. Set correct Answer");
             System.out.println("0. Logout");
 
             int choice = scanner.nextInt();
@@ -152,6 +154,9 @@ public class Main {
                     break;
                 case 13:
                     loadEntry();
+                    break;
+                case 14:
+                    correctAnswer();
                     break;
                 case 0:
                     System.out.println("Goodbye");

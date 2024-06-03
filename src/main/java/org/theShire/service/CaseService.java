@@ -180,5 +180,11 @@ public class CaseService {
         return medCase;
     }
 
+    public static void correctAnswer(){
+        UUID caseId = enterUUID("Enter Case ID for your Answer");
+        System.out.println("Enter Correct Answer");
+        String answer = scanner.nextLine();
+        caseRepo.findByID(caseId).setCorrectAnswer(new Answer(answer));
+    }
 
 }
