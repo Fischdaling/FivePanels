@@ -46,44 +46,43 @@ public class UserService {
     }
 
     public static void relationCommands () {
+        User sender = userLoggedIn;
+        isTrue(userRepo.getEntryMap().containsKey(sender.getEntityId()),()->"Sender not found.",exTypeUser);
+
         System.out.println("1. See Incoming");
         System.out.println("2. send request");
         System.out.println("3. accept request");
+        System.out.println("4. decline request or remove friend");
         int answer = scanner.nextInt();
         scanner.nextLine();
         switch (answer) {
             case 1:
-                User user1 = userLoggedIn;
-                isTrue(userRepo.getEntryMap().containsKey(user1.getEntityId()),()->"User not Found",exTypeUser);
-                    Set<User> incomingRequests = UserRelationShip.getRequest(user1);
+                    Set<User> incomingRequests = UserRelationShip.getRequest(sender);
                     if (incomingRequests.isEmpty()){
                         System.out.println("No Request");
                     }else
-                        incomingRequests.forEach((sender) -> System.out.println("Request from: " + sender.getProfile().getFirstName()));
+                        incomingRequests.forEach((aSender) -> System.out.println("Request from: " + aSender.getProfile().getFirstName()));
                 break;
 
             case 2:
-
-                User sender2 = userLoggedIn;
                 UUID receiverUUID2 = enterUUID("Enter target's Id");
                 User receiver2 = userRepo.findByID(receiverUUID2);
                 isTrue(userRepo.getEntryMap().containsKey(receiverUUID2),()->"Receiver not found.",exTypeUser);
-                    UserRelationShip.sendRequest(sender2, receiver2);
-                    System.out.println("Request sent from " + sender2.getProfile().getFirstName() + " to " + receiver2.getProfile().getFirstName());
+                    UserRelationShip.sendRequest(sender, receiver2);
+                    System.out.println("Request sent from " + sender.getProfile().getFirstName() + " to " + receiver2.getProfile().getFirstName());
 
                 break;
 
             case 3:
-                User sender3 = userLoggedIn;
-                isTrue(userRepo.getEntryMap().containsKey(sender3.getEntityId()),()->"Sender not found.",exTypeUser);
-
                     UUID receiverUUID3 = enterUUID("Enter target's id");
                     User receiver3 = userRepo.findByID(receiverUUID3);
-                    isTrue(UserRelationShip.getRequest(sender3).contains(receiver3),()->"Receiver not found.", exTypeUser);
-                        UserRelationShip.acceptRequest(sender3, receiver3);
-                        System.out.println("Request from " + sender3.getProfile().getFirstName() + " " + sender3.getEntityId() + " to " + receiver3.getProfile().getFirstName() + " accepted.");
+                    isTrue(UserRelationShip.getRequest(sender).contains(receiver3),()->"Receiver not found.", exTypeUser);
+                        UserRelationShip.acceptRequest(sender, receiver3);
+                        System.out.println("Request from " + sender.getProfile().getFirstName() + " " + sender.getEntityId() + " to " + receiver3.getProfile().getFirstName() + " accepted.");
                 break;
+            case 4:
 
+                break;
             default:
                 System.out.println("Invalid option.");
                 break;

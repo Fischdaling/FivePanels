@@ -77,7 +77,17 @@ public class UserRelationShip {
         }
 
     }
-    //TODO DECLINE REQUEST
+
+    public static void declineRequest(User sender, User receiver){
+        DomainAssertion.isNotNull(sender, "sender", exTypeUser);
+        DomainAssertion.isNotNull(receiver, "receiver", exTypeUser);
+
+        String keyIncoming = createMapKey(sender, receiver);
+        String keyOutgoing = createMapKey(receiver, sender);
+
+        relationShip.remove(keyIncoming);
+        relationShip.remove(keyOutgoing);
+    }
 
     public static Relation.RelationType getRelationType(User user1, User user2) {
         return Optional.of(getRelation(user1, user2)).map(Relation::getType).orElse(null);
