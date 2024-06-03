@@ -1,0 +1,75 @@
+package org.theShire.domain.service;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.theShire.domain.exception.MedicalDoctorException;
+import org.theShire.domain.medicalDoctor.User;
+import org.theShire.service.UserService;
+
+import java.io.ByteArrayInputStream;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.UUID;
+
+import static java.lang.System.in;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.theShire.presentation.Main.scanner;
+import static org.theShire.service.UserService.userRepo;
+
+public class UserServiceTest {
+    User user1;
+    User user2;
+
+    @BeforeEach
+    public void setUp(){
+        Set<String> knowledges1 = new HashSet<>();
+        knowledges1.add("Test");
+        knowledges1.add("adult cardiothoracic anesthesiology");
+        user1 = UserService.createUser(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"), "Bilbo", "Beutlin", "Bilbo@hobbit.orc", "VerySafe123", "Hobbitisch", "Auenland", "Bilbo Profile", knowledges1, "Fassreiter", "Meister Dieb");
+        Set<String> knowledges2 = new HashSet<>();
+        knowledges2.add("critical care or pain medicine");
+        knowledges2.add("pediatric anesthesiology");
+        user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"), "Aragorn", "Arathorn", "Aragorn@gondor.orc", "EvenSaver1234", "Gondorisch", "Gondor", "Aragorn Profile", knowledges2, "Arathorns Sohn", "König von Gondor");
+    }
+
+    @Test
+    public void testCreateUser_ShouldAddUserToRepo_WhenCorrectlyFilled(){
+        UUID uuid = UUID.randomUUID();
+        Set<String> knowledges3 = new HashSet<>();
+        knowledges3.add("pediatric emergency medicine");
+        knowledges3.add("hand surgery");
+        User user3 = UserService.createUser(uuid, "Gandalf", "Wizardo", "Gandalf@Wizardo.beard", "ICastFireBall!", "all", "world", "Gandalf Profile", knowledges3, "The Gray", "The White", "Ainur");
+
+        assertEquals(userRepo.findByID(uuid),user3);
+    }
+    @Test
+    public void testCreateUser_ShouldThrowMedicalDoctorException_WhenWrongParamter(){
+        UUID uuid = UUID.randomUUID();
+        Set<String> knowledges3 = new HashSet<>();
+        knowledges3.add("pediatric emergency medicine");
+        knowledges3.add("hand surgery");
+
+        assertThrows(MedicalDoctorException.class,()->{
+            UserService.createUser(uuid, null, "Wizardo", "Gandalf@Wizardo.beard", "ICastFireBall!", "all", "world", "Gandalf Profile", knowledges3, "The Gray", "The White", "Ainur");
+        });
+    }
+
+    @Test
+    public void testDeleteUser_ShouldRemoveUserFromRepo_WhenCalled(){
+        System.setIn(new ByteArrayInputStream(user1.getEntityId().toString().getBytes()));
+        UserService.deleteUserById();
+
+        userRepo.deleteById(user1.getEntityId());
+        assertFalse(userRepo.existsById(user1.getEntityId()));
+    }
+
+    @Test
+    public void testDeleteUser_ShouldThrowMedicalDoctorException_WhenWrongParameter(){
+        System.setIn(new ByteArrayInputStream(UUID.randomUUID().toString().getBytes()));
+
+        assertThrows(MedicalDoctorException.class, UserService::deleteUserById);
+    }
+
+
+}

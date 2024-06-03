@@ -22,7 +22,7 @@ public class UserRelationShip {
         relationShip = new HashMap<>();
     }
 
-    private static String createMapKey(User user1, User user2) {
+    public static String createMapKey(User user1, User user2) {
             return user1.getEntityId().toString() + user2.getEntityId().toString();
     }
 
@@ -40,8 +40,8 @@ public class UserRelationShip {
         DomainAssertion.isInCollection(sender, userRepo.findAll(), "sender", exTypeUser);
         DomainAssertion.isInCollection(receiver, userRepo.findAll(), "receiver", exTypeUser);
 
-        String keyOutgoing = createMapKey(receiver, sender);
-        String keyIncoming = createMapKey(sender, receiver);
+        String keyOutgoing = createMapKey(sender, receiver);
+        String keyIncoming = createMapKey(receiver, sender);
 
         Relation relationOutgoing = new Relation( sender, receiver, OUTGOING);
         Relation relationIncoming = new Relation( receiver, sender, INCOMING);
@@ -104,10 +104,11 @@ public class UserRelationShip {
     */
     }
 
-    public static Map<User, Relation> getSent(User user1) {
+    public static Set<User> getSent(User user1) {
         return relationShip.values().stream()
                 .filter(relation -> relation.getUser1().equals(user1) && relation.getType() == OUTGOING)
-                .collect(Collectors.toMap(Relation::getUser2, relation -> relation));
+                .map(relation -> relation.getUser2())
+                .collect(Collectors.toSet());
 
         /*
         Takes the values of each User in the Hashmap (the enums), filters out

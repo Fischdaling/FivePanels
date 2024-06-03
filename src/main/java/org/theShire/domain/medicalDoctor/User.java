@@ -139,11 +139,11 @@ public class User extends BaseEntity {
     }
 
     public void addOwnedCase(Case medCase){
-        this.ownedCases.add(medCase);
+        this.ownedCases.add(isNotNull(medCase,"medCase",exTypeUser));
     }
 
     public void addMemberOfCase(Case medCase){
-        this.memberOfCase.add(medCase);
+        this.memberOfCase.add(isNotInCollection(medCase,memberOfCase,"memberOfCase",exTypeUser));
     }
 
 
