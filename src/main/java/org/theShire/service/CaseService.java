@@ -14,6 +14,8 @@ import org.theShire.repository.CaseRepository;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
+import static org.theShire.foundation.DomainAssertion.*;
 import static org.theShire.presentation.Main.*;
 import static org.theShire.service.UniversalService.enterUUID;
 import static org.theShire.service.UserService.userLoggedIn;
@@ -25,41 +27,29 @@ public class CaseService {
 
     public static void deleteCaseById() {
         Case tmpCase = caseRepo.findByID(enterUUID("Enter Case Id"));
-        if (caseRepo.getEntryMap().containsValue(tmpCase)) {
+        isTrue(caseRepo.getEntryMap().containsValue(tmpCase),()->"Case not found",exTypeCase);
             tmpCase.getOwner().removeCase(tmpCase);
             tmpCase.getMembers().forEach(aUser -> aUser.removeCase(tmpCase));
             caseRepo.deleteById(tmpCase.getEntityId());
-        }else {
-            System.out.println("Case not found");
-        }
     }
 
     public static void likeCase() {
         Case medCase = caseRepo.findByID(enterUUID("Enter Case Id"));
-        if (caseRepo.getEntryMap().containsValue(medCase)) {
+        isTrue(caseRepo.getEntryMap().containsValue(medCase),()->"Case not found",exTypeCase);
             medCase.setViewcount(medCase.getViewcount()+1);
-            medCase.like(enterUUID("Enter Your Id"));
-        }else {
-            System.out.println("Case not found");
-        }
+            medCase.like(userLoggedIn.getEntityId());
     }
 
     public static void findCaseById() {
         Case medicCase =  caseRepo.findByID(enterUUID("Enter Case Id"));
-        if (caseRepo.getEntryMap().containsValue(medicCase)) {
+        isTrue(caseRepo.getEntryMap().containsValue(medicCase),()->"Case not found",exTypeCase);
             medicCase.setViewcount(medicCase.getViewcount() + 1);
             System.out.println(medicCase);
-        }else {
-            System.out.println("Case not found");
-        }
     }
 
     public static void vote() {
         UUID caseId = enterUUID("Enter Case ID to Vote for");
-        while (!caseRepo.getEntryMap().containsKey(caseId)) {
-            System.out.println("Case not found");
-            caseId = enterUUID("Enter Case ID");
-        }
+        isTrue(caseRepo.getEntryMap().containsValue(caseRepo.findByID(caseId)),()->"Case not found",exTypeCase);
         Case medCase = caseRepo.findByID(caseId);
         for (Answer answer : medCase.getCaseVote().getAnswers()) {
             System.out.println(answer.getName());
@@ -111,11 +101,9 @@ public class CaseService {
         scanner.nextLine();
         for (int i = 0; i < doctors; i++) {
             UUID uuid = enterUUID("Enter Member id");
-            if (uuid != ownerId) {
+            isNotEqual(uuid,ownerId,"Id",exTypeCase);
                 members[i] = userRepo.findByID(uuid);
-            }else{
-                System.out.println("Member Cannot be owner");
-            }
+
         }
 
         for (int i = 0; i < ansCount; i++) {
@@ -124,11 +112,11 @@ public class CaseService {
 
         System.out.println("How many Knowledges do you want to add?");
         int knowledges = scanner.nextInt();
-        if (knowledges <= 0) {
+        greaterEqualsZero(knowledges,()->"Case must have Knowledges",exTypeCase);
             System.err.println("You must at least add 1 Knowledge to the case! (You have 1 more chance)");
             System.out.println("How many Knowledges do you want to add?");
             knowledges = scanner.nextInt();
-        }
+
         Set<String> knowledgesSet= new HashSet<>();
         Knowledges.getLegalKnowledges().forEach(System.out::println);
         System.out.println();
@@ -141,7 +129,7 @@ public class CaseService {
 
     }
 
-    private static List<Content> contentUtil(List<Content> content) { //TODO return value never used
+    private static List<Content> contentUtil(List<Content> content) {
         while(true) {
             System.out.println("Do you want to add Content true/false");
             boolean addContent = scanner.nextBoolean();

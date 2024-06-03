@@ -138,10 +138,11 @@ public class Case extends BaseEntity {
         for (UUID userId : userIdsWithCorrectVotes) {
             User user = userRepo.findByID(userId);
             isNotNull(user, "user", exTypeCase);
-                int newScore = user.getScore() + (int) (2 * caseVote.getVotes().get(userId).stream()
-                        .filter(vote -> vote.getAnswer().equals(correctAnswer))
-                        .mapToDouble(Vote::getPercent)
-                        .sum());
+            double percentVoted = caseVote.getVotes().get(userId).stream()
+                    .filter(vote -> vote.getAnswer().equals(correctAnswer))
+                    .mapToDouble(Vote::getPercent)
+                    .sum();
+                int newScore = user.getScore() + (int)(2 * percentVoted/100+1);
                 user.setScore(newScore);
         }
     }
