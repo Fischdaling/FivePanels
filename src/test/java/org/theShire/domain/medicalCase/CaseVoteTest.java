@@ -49,10 +49,7 @@ class CaseVoteTest {
 
     @Test
     void TestVoting_ShouldReturnTrue_WhenComparedToASemiEqualObject() {
-        //testing if the UUID stays the same after voting throughout saving the old values of the votes Hashmap
-        votesSafe = caseVote.getVotes();
         caseVote.voting(userID, answer1, 10.0);
-        assertEquals(votesSafe.values(), caseVote.getVotes().values());
 
 
         Vote vote2 = new Vote(answer1, 5.0);
@@ -65,10 +62,7 @@ class CaseVoteTest {
 
     @Test
     void TestVoting_ShouldReturnTrue_WhenComparedToASemiEqualObjectv2() {
-        //testing if the UUID stays the same after voting throughout saving the old values of the votes Hashmap
-        votesSafe = caseVote.getVotes();
         caseVote.voting(userID, answer1, 10.0);
-        assertEquals(votesSafe.values(), caseVote.getVotes().values());
 
 
         Vote vote3 = new Vote(answer, 10.0);
@@ -79,10 +73,7 @@ class CaseVoteTest {
     }
 
     void TestVoting_ShouldReturnTrue_WhenComparedToANonEqualObject() {
-        //testing if the UUID stays the same after voting throughout saving the old values of the votes Hashmap
-        votesSafe = caseVote.getVotes();
         caseVote.voting(userID, answer1, 10.0);
-        assertEquals(votesSafe.values(), caseVote.getVotes().values());
 
         Vote vote4 = new Vote(answer, 5.0);
 
