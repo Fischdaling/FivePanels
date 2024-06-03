@@ -63,7 +63,7 @@ public class Main {
         knowledges3.add("pediatric emergency medicine");
         knowledges3.add("hand surgery");
         User user3 = UserService.createUser(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"), "Gandalf", "Wizardo", "Gandalf@Wizardo.beard", "ICastFireBall!", "all", "world", "Gandalf Profile", knowledges3, "The Gray", "The White", "Ainur");
-//TODO TESTI
+
         // Send a friend request
         UserRelationShip.sendRequest(user1, user2);
         UserRelationShip.acceptRequest(user1, user2);
@@ -87,12 +87,12 @@ public class Main {
         answers.add(new Answer("Answer 1"));
         answers.add(new Answer("Answer 2"));
         Case case1 = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2, user3);
+        userLoggedIn = init();
     }
 
 
 
     private static void inputHandler() {
-        userLoggedIn = init();
         //TODO Check Main and conditions... z.B. Owner kann kein member bei seinem case sein.
             System.out.println("Commands");
             System.out.println("1. add Doctor");

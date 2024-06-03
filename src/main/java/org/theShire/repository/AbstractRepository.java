@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import static org.theShire.foundation.DomainAssertion.isInCollection;
+
 public abstract class AbstractRepository<T extends BaseEntity> implements IRepository<T> {
 
     protected HashMap<UUID, T> entryMap = new HashMap<>();

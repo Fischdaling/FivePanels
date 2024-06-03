@@ -10,6 +10,8 @@ import org.theShire.domain.richType.*;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.*;
+
+import org.theShire.foundation.DomainAssertion;
 import org.theShire.foundation.Knowledges;
 import org.theShire.repository.UserRepository;
 
@@ -23,24 +25,20 @@ public class UserService {
     public static final UserRepository userRepo = new UserRepository();
     public static UserRelationShip relations = new UserRelationShip(); // Important or Error
     public static User userLoggedIn = null;
-        public static void deleteUserById () {
+
+    public static void deleteUserById () {
         UUID userId = enterUUID("Enter User Id");
-        if (userRepo.getEntryMap().containsKey(userId)) {
-            userRepo.deleteById(userId);
-        } else {
-            System.out.println("User not found");
-        }
+        isInCollection(userId,userRepo.getEntryMap().keySet(),"User not found",exTypeUser);
+        userRepo.deleteById(userId);
+
     }
 
         public static void findByName () {
         System.out.println("Enter name");
         String name = scanner.nextLine();
         Set<User> user = userRepo.findByName(new Name(name));
-        if (user != null) {
-            System.out.println(user);
-        } else {
-            System.out.println("User not found");
-        }
+
+        System.out.println(isNotNull(user,"user",exTypeUser));
     }
 
         public static void relationCommands () {
@@ -52,17 +50,10 @@ public class UserService {
         switch (answer) {
             case 1:
                 User user1 = userLoggedIn;
-                if (userRepo.getEntryMap().containsKey(user1.getEntityId())) {
-
+                isTrue(userRepo.getEntryMap().containsKey(user1.getEntityId()),()->"User not Found",exTypeUser);
                     Set<User> incomingRequests = UserRelationShip.getRequest(user1);
-                    if (incomingRequests.isEmpty()) {
-                        System.out.println("No Requests");
-                    } else {
+                    isTrue(incomingRequests.isEmpty(),()->"No Request",exTypeUser);
                         incomingRequests.forEach((sender) -> System.out.println("Request from: " + sender.getProfile().getFirstName()));
-                    }
-                } else {
-                    System.out.println("User not found.");
-                }
                 break;
 
             case 2:
@@ -70,30 +61,21 @@ public class UserService {
                 User sender2 = userLoggedIn;
                 UUID receiverUUID2 = enterUUID("Enter target's Id");
                 User receiver2 = userRepo.findByID(receiverUUID2);
-                if (userRepo.getEntryMap().containsKey(receiverUUID2)) {
+                isTrue(userRepo.getEntryMap().containsKey(receiverUUID2),()->"Receiver not found.",exTypeUser);
                     UserRelationShip.sendRequest(sender2, receiver2);
                     System.out.println("Request sent from " + sender2.getProfile().getFirstName() + " to " + receiver2.getProfile().getFirstName());
 
-                } else {
-                    System.out.println("Receiver not found.");
-                }
                 break;
 
             case 3:
                 User sender3 = userLoggedIn;
-                if (userRepo.getEntryMap().containsKey(sender3.getEntityId())) {
+                isTrue(userRepo.getEntryMap().containsKey(sender3.getEntityId()),()->"Sender not found.",exTypeUser);
 
                     UUID receiverUUID3 = enterUUID("Enter target's id");
                     User receiver3 = userRepo.findByID(receiverUUID3);
-                    if (UserRelationShip.getRequest(sender3).contains(receiver3)) {
+                    isTrue(UserRelationShip.getRequest(sender3).contains(receiver3),()->"Receiver not found.", exTypeUser);
                         UserRelationShip.acceptRequest(sender3, receiver3);
                         System.out.println("Request from " + sender3.getProfile().getFirstName() + " " + sender3.getEntityId() + " to " + receiver3.getProfile().getFirstName() + " accepted.");
-                    } else {
-                        System.out.println("Receiver not found.");
-                    }
-                } else {
-                    System.out.println("Sender not found.");
-                }
                 break;
 
             default:
@@ -192,16 +174,12 @@ public class UserService {
         System.out.println("Enter Password: ");
         String password = scanner.nextLine();
         Optional<User> userOpt = userRepo.findByEmail(new Email(email));
-        if (userOpt.isPresent()) {
+
+        isTrue(userOpt.isPresent(),()->"User not found.", exTypeUser);
             User user = userOpt.get();
             BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword().value());
-            if (result.verified) {
+            isTrue(result.verified,()->"Invalid password.",exTypeUser);
                 return user;
-            } else {
-                throw new MedicalDoctorException("Invalid password.");
-            }
-        } else {
-            throw new MedicalDoctorException("User not found.");
-        }
+
     }
 }
