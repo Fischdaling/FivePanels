@@ -83,6 +83,7 @@ public class CaseService {
                 percentTrack = 100.0;
             }
         }
+        userLoggedIn.setScore(userLoggedIn.getScore()+5);
     }
 
     public static void addCase() {
@@ -174,6 +175,7 @@ public class CaseService {
         Set<Knowledges> knowledgesSet  = knowledges.stream().map(Knowledges::new).collect(Collectors.toSet());
         Case medCase = new Case(owner, title, knowledgesSet, content, caseVote , members);
         owner.addOwnedCase(medCase);
+        owner.setScore(owner.getScore()+5);
         Arrays.stream(members).forEach(user -> user.addMemberOfCase(medCase));
         caseRepo.save(medCase);
         return medCase;
