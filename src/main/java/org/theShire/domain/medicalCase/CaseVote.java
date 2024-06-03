@@ -32,6 +32,8 @@ public class CaseVote {
         Vote vote = new Vote(answerChosen, percent);
         isInCollection(vote.getAnswer(), answers, "vote", exTypeCase);
         if (votes.containsKey(voter)) {
+            double sumVotes = votes.get(voter).stream().mapToDouble(Vote::getPercent).sum();
+            isTrue(sumVotes >= 100.0,()->"Vote Limit Reached",exTypeCase);
             votes.get(voter).add(vote);
         } else {
             Set<Vote> voteSet = new HashSet<>();
@@ -62,6 +64,7 @@ public class CaseVote {
         greaterEqualsZero(percentCount, "percentCount", exTypeCase);
         this.percentCount = percentCount;
     }
+
 
     @Override
     public String toString() {

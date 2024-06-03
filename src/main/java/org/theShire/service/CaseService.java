@@ -83,7 +83,6 @@ public class CaseService {
                 percentTrack = 100.0;
             }
         }
-        userLoggedIn.setScore(userLoggedIn.getScore()+5);
     }
 
     public static void addCase() {
@@ -180,4 +179,6 @@ public class CaseService {
         caseRepo.save(medCase);
         return medCase;
     }
+
+
 }

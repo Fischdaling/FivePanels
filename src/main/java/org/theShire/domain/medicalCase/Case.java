@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
+import static org.theShire.service.UserService.userRepo;
 
 
 public class Case extends BaseEntity {
@@ -125,6 +126,27 @@ public class Case extends BaseEntity {
     public void setViewcount(int viewcount) {
         this.viewcount = viewcount;
     }
+
+    public void setCorrectAnswer(Answer correctAnswer) {
+        isInCollection(correctAnswer, caseVote.getAnswers(), "correctAnswer", exTypeCase);
+
+        Set<UUID> userIdsWithCorrectVotes = caseVote.getVotes().entrySet().stream()
+                .filter(entry -> entry.getValue().stream().anyMatch(vote -> vote.getAnswer().equals(correctAnswer)))
+                .map(entry -> entry.getKey())
+                .collect(Collectors.toSet());
+
+        for (UUID userId : userIdsWithCorrectVotes) {
+            User user = userRepo.findByID(userId);
+            isNotNull(user, "user", exTypeCase);
+                int newScore = user.getScore() + (int) (5 * caseVote.getVotes().get(userId).stream()
+                        .filter(vote -> vote.getAnswer().equals(correctAnswer))
+                        .mapToDouble(Vote::getPercent)
+                        .sum());
+                user.setScore(newScore);
+        }
+    }
+
+
 
     //------------------
     public void addMember(User member) {

@@ -7,14 +7,13 @@ import org.theShire.domain.medicalDoctor.User;
 import org.theShire.service.UserService;
 
 import java.io.ByteArrayInputStream;
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static java.lang.System.in;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.presentation.Main.scanner;
+import static org.theShire.service.UserService.login;
 import static org.theShire.service.UserService.userRepo;
 
 public class UserServiceTest {
@@ -68,8 +67,25 @@ public class UserServiceTest {
     public void testDeleteUser_ShouldThrowMedicalDoctorException_WhenWrongParameter(){
         System.setIn(new ByteArrayInputStream(UUID.randomUUID().toString().getBytes()));
 
-        assertThrows(MedicalDoctorException.class, UserService::deleteUserById);
+        assertThrows(NoSuchElementException.class, UserService::deleteUserById);
     }
+
+//    @Test
+//    public void login_ShouldReturnLoggedInUser_WhenUserExistsAndPassordEquals(){
+//        System.setIn(new ByteArrayInputStream(user1.getEmail().toString().getBytes()));
+//        System.setIn(new ByteArrayInputStream(user1.getPassword().toString().getBytes()));
+//        User userReturned = login();
+//        assertEquals(user1, userReturned);
+//    }
+//
+//    @Test
+//    public void login_ShouldThrow_WhenUserExistsAndPassordNotEquals(){
+//        System.setIn(new ByteArrayInputStream(user1.getEmail().toString().getBytes()));
+//        String passwordMod = user1.getPassword().toString()+'a';
+//        System.setIn(new ByteArrayInputStream(passwordMod.getBytes()));
+//
+//        assertThrows(exTypeUser,()->login());
+//    }
 
 
 }

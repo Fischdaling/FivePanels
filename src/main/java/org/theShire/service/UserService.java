@@ -169,17 +169,18 @@ public class UserService {
     }
 
         public static User login () {
-        System.out.println("Enter Email: ");
-        String email = scanner.nextLine();
-        System.out.println("Enter Password: ");
-        String password = scanner.nextLine();
-        Optional<User> userOpt = userRepo.findByEmail(new Email(email));
+            System.out.println("Enter Email: ");
+            String email = scanner.nextLine();
+            System.out.println("Enter Password: ");
+            String password = scanner.nextLine();
+            Optional<User> userOpt = userRepo.findByEmail(new Email(email));
 
-        isTrue(userOpt.isPresent(),()->"User not found.", exTypeUser);
-            User user = userOpt.get();
+            isTrue(userOpt.isPresent(),()->"User not found.", exTypeUser);
+                User user = userOpt.get();
+                                                            //The Password entered //The Password from the User
             BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword().value());
             isTrue(result.verified,()->"Invalid password.",exTypeUser);
-                return user;
+            return user;
 
     }
 }
