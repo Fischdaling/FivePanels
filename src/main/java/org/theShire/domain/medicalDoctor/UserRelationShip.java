@@ -33,8 +33,6 @@ public class UserRelationShip {
 
     //important to know! The relation type always differs
     //from the direction of the relation. User1 and User2 have a different POVs
-
-    //TODO
     public static void sendRequest(User sender, User receiver) {
         DomainAssertion.isNotEqual(sender, receiver, "sender and receiver", exTypeUser);
         DomainAssertion.isInCollection(sender, userRepo.findAll(), "sender", exTypeUser);
