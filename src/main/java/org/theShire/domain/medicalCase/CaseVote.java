@@ -15,6 +15,7 @@ public class CaseVote {
     //counts the percent in correlation to  maxPercentCount
     private double percentCount;
 
+
     public CaseVote(LinkedHashSet<Answer> answers) {
         addAnswers(answers);
         setPercentCount(0);
