@@ -1,5 +1,6 @@
 package org.theShire.domain.medicalDoctor;
 
+import org.theShire.domain.exception.MedicalDoctorException;
 import org.theShire.domain.media.Media;
 import org.theShire.domain.richType.EducationalTitle;
 import org.theShire.domain.richType.Language;
@@ -50,42 +51,27 @@ public class UserProfile {
         return firstName;
     }
 
-    public void setFirstName(Name firstName) {
-        this.firstName = isNotNull(firstName, "firstName", exTypeUser);
-    }
 
     public Name getLastName() {
         return lastName;
     }
 
-    public void setLastName(Name lastName) {
-        this.lastName = isNotNull(lastName, "lastName", exTypeUser);
-    }
 
 
     public Media getProfilePicture() {
         return profilePicture;
     }
 
-    public void setProfilePicture(Media profilePicture) {
-        this.profilePicture = isNotNull(profilePicture, "profilePicture", exTypeUser);
-    }
 
     public Location getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
-        this.location = isNotNull(location, "location", exTypeUser);
-    }
 
     public Language getLanguage() {
         return language;
     }
 
-    public void setLanguage(Language language) {
-        this.language = isNotNull(language, "language", exTypeUser);
-    }
 
     public Set<Knowledges> getExperience() {
         return experience;

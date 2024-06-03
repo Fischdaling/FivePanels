@@ -11,6 +11,7 @@ import org.theShire.domain.medicalDoctor.Relation;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.messenger.Chat;
+import org.theShire.domain.richType.*;
 import org.theShire.service.CaseService;
 import org.theShire.service.ChatService;
 import org.theShire.service.UniversalService;
@@ -19,8 +20,7 @@ import org.theShire.service.UserService;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.theShire.domain.medicalDoctor.UserRelationShip.acceptRequest;
-import static org.theShire.domain.medicalDoctor.UserRelationShip.sendRequest;
+import static org.theShire.domain.medicalDoctor.UserRelationShip.*;
 import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.CaseService.correctAnswer;
 import static org.theShire.service.ChatService.messengerRepo;
@@ -30,7 +30,10 @@ import static org.theShire.service.UserService.*;
 
 public class Main {
     public static final Scanner scanner = new Scanner(System.in);
-
+    static User user1;
+    static User user2;
+    static User user3;
+    static Case case1;
     public static void main(String[] args) {
         System.out.println("Press Enter to start...");
         String[] arguments = scanner.nextLine().split(" ");
@@ -40,6 +43,7 @@ public class Main {
                 inputHandler();
             } catch (Exception e) {
                 System.err.println(e.getMessage());//swallow
+
                 main(arguments);
             }
         }
@@ -49,29 +53,45 @@ public class Main {
 
 //        Media media = new Media("/Bilbo_Profile.png");
 //        BufferedImage img = media.getImage();
+
         //CREATE USER1 -----------------------------------------------------------------------
-        Set<String> knowledges1 = new HashSet<>();
-        knowledges1.add("Test");
-        knowledges1.add("adult cardiothoracic anesthesiology");
-        User user1 = UserService.createUser(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"), "Bilbo", "Beutlin", "Bilbo@hobbit.orc", "VerySafe123", "Hobbitisch", "Auenland", "Bilbo Profile", knowledges1, "Fassreiter", "Meister Dieb");
+        if (userRepo.existsById(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"))){
+            userRepo.deleteById(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"));
+        }
+            Set<String> knowledges1 = new HashSet<>();
+            knowledges1.add("Test");
+            knowledges1.add("adult cardiothoracic anesthesiology");
+            user1 = UserService.createUser(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"), new Name("Bilbo"), new Name("Beutlin"), new Email("Bilbo@hobbit.orc"), new Password("VerySafe123"), new Language("Hobbitisch"), new Location("Auenland"), "Bilbo Profile", knowledges1, "Fassreiter", "Meister Dieb");
+
         //CREATE USER2-----------------------------------------------------------------
-        Set<String> knowledges2 = new HashSet<>();
-        knowledges2.add("critical care or pain medicine");
-        knowledges2.add("pediatric anesthesiology");
-        User user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"), "Aragorn", "Arathorn", "Aragorn@gondor.orc", "EvenSaver1234", "Gondorisch", "Gondor", "Aragorn Profile", knowledges2, "Arathorns Sohn", "König von Gondor");
+        if (userRepo.existsById(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"))){
+            userRepo.deleteById(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"));
+        }
+            Set<String> knowledges2 = new HashSet<>();
+            knowledges2.add("critical care or pain medicine");
+            knowledges2.add("pediatric anesthesiology");
+            user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"), new Name("Aragorn"), new Name("Arathorn"), new Email("Aragorn@gondor.orc"), new Password("EvenSaver1234"), new Language("Gondorisch"), new Location("Gondor"), "Aragorn Profile", knowledges2, "Arathorns Sohn", "König von Gondor");
+
         //CREATE USER3-----------------------------------------------------------------
-        Set<String> knowledges3 = new HashSet<>();
-        knowledges3.add("pediatric emergency medicine");
-        knowledges3.add("hand surgery");
-        User user3 = UserService.createUser(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"), "Gandalf", "Wizardo", "Gandalf@Wizardo.beard", "ICastFireBall!", "all", "world", "Gandalf Profile", knowledges3, "The Gray", "The White", "Ainur");
+        if (userRepo.existsById(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"))){
+            userRepo.deleteById(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"));
+        }
+            Set<String> knowledges3 = new HashSet<>();
+            knowledges3.add("pediatric emergency medicine");
+            knowledges3.add("hand surgery");
+            user3 = UserService.createUser(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"), new Name("Gandalf"), new Name("Wizardo"), new Email("Gandalf@Wizardo.beard"), new Password("ICastFireBall!"), new Language("all"), new Location("world"), "Gandalf Profile", knowledges3, "The Gray", "The White", "Ainur");
 
-        // Send a friend request
-        UserRelationShip.sendRequest(user1, user2);
-        UserRelationShip.acceptRequest(user1, user2);
-        UserRelationShip.sendRequest(user2, user3);
-        UserRelationShip.sendRequest(user3, user1);
+        if (!relationShip.containsKey(createMapKey(user1,user2))){
+            // Send a friend request
+            UserRelationShip.sendRequest(user1, user2);
+            UserRelationShip.acceptRequest(user1, user2);
+        }
 
-
+        if (case1 != null) {
+            if (caseRepo.existsById(case1.getEntityId())) {
+                caseRepo.deleteById(case1.getEntityId());
+            }
+        }
         //init Content
         List<Content> contents = new ArrayList<>();
         //add texts
@@ -87,7 +107,7 @@ public class Main {
         LinkedHashSet<Answer> answers = new LinkedHashSet<>();
         answers.add(new Answer("Answer 1"));
         answers.add(new Answer("Answer 2"));
-        Case case1 = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2, user3);
+        case1 = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2, user3);
         userLoggedIn = init();
     }
 
@@ -104,7 +124,7 @@ public class Main {
             System.out.println("6. Find Case by id");
             System.out.println("7. Delete Doctor by id");
             System.out.println("8. Delete Case by id");
-            System.out.println("9. manage Relations"); //TODO
+            System.out.println("9. manage Relations");
             System.out.println("10. Vote for Case Answer");
             System.out.println("11. Leave a like for Case Answer");
             System.out.println("12. Save Data");

@@ -11,7 +11,7 @@ import java.util.UUID;
 import static org.theShire.domain.messenger.Message.Stage.SENT;
 import static org.theShire.service.UserService.userRepo;
 
-public class Message extends BaseEntity {//TODO assertions
+public class Message extends BaseEntity {
 
     //The ID from the Sender
     private UUID senderId;

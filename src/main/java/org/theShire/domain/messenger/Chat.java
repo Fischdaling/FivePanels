@@ -15,7 +15,7 @@ public class Chat extends BaseEntity {
     // The Users in the chat
     private final Set<User> people;
     // All past sent messanges
-    private static List<Message> chatHistory;
+    private List<Message> chatHistory;
 
     public Chat(User ... chatters) {
         super();
@@ -49,7 +49,7 @@ public class Chat extends BaseEntity {
         return chatHistory;
     }
 
-    public static void addChatHistory(Message message) {
+    public void addChatHistory(Message message) {
         chatHistory.add(isNotNull(message,"message",exTypeMes));
     }
 

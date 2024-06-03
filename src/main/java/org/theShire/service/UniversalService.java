@@ -54,15 +54,20 @@ public class UniversalService {
 
     public static UUID enterUUID(String enterMessage){
         StringBuilder str = new StringBuilder();
+
+        str.append("User").repeat('-',20).append(System.lineSeparator());
         for (User user : userRepo.findAll()) {
             str.append(user.getProfile().getFirstName()).append(" ").append(user.getProfile().getLastName()).append(System.lineSeparator());
             str.append(user.getEntityId()).append(System.lineSeparator());
         }
+
+        str.append("Cases").repeat('-',20).append(System.lineSeparator());
         for (Case medCase : caseRepo.findAll()) {
             str.append(medCase.getTitle()).append(System.lineSeparator());
             str.append(medCase.getEntityId()).append(System.lineSeparator());
         }
 
+        str.append("Chat").repeat('-',20).append(System.lineSeparator());
         for (Chat chat : messengerRepo.findAll()) {
             str.append(chat.getPeople().stream().map(aChat -> aChat.getProfile().getFirstName()).collect(Collectors.toSet()));
             str.append(chat.getEntityId()).append(System.lineSeparator());

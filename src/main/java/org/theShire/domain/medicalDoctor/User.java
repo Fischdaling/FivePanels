@@ -47,6 +47,7 @@ public class User extends BaseEntity {
         this.profile = profile;
         this.specialization = specialization;
     }
+    //Test
     public User(UUID uuid,Password password, Email email, UserProfile profile, Set<Knowledges> specialization) {
         super(uuid);
         contacts = new HashSet<>();
@@ -58,7 +59,6 @@ public class User extends BaseEntity {
         this.profile = profile;
         this.specialization = specialization;
     }
-
 
     public User(UUID uuid, Instant createdAt, Instant updatedAt, Email email, Password password, UserProfile profile, int score, Set<UserRelationShip> contacts, Set<Chat> chats, Set<Case> ownedCases, Set<Case> memberOfCase, Set<Knowledges> specialization) {
         super(uuid, createdAt, updatedAt);
@@ -81,16 +81,11 @@ public class User extends BaseEntity {
 
     // SETTER & GETTER -----------------------------------------------------------
 
-    public void setSpecialization(Knowledges[] specialization) {
-        this.specialization = new HashSet<>(Arrays.asList(isNotNull(specialization,"specialization",exTypeUser)));
-    }
+
     public UserProfile getProfile() {
         return profile;
     }
 
-    public void setProfile(UserProfile profile) {
-        this.profile = isNotNull(profile, "profile", exTypeUser);
-    }
 
     public int getScore() {
         return score;
@@ -127,9 +122,6 @@ public class User extends BaseEntity {
         return email;
     }
 
-    public void setEmail(Email email) {
-        this.email = email;
-    }
 
     // Methods ------------------------------------------------------------
 

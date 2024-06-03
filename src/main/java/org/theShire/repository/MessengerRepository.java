@@ -21,7 +21,9 @@ import static org.theShire.service.UserService.userRepo;
 
 public class MessengerRepository extends AbstractRepository<Chat>{
 
-
+    public Chat findByMembers(Set<User> members){
+       return entryMap.values().stream().filter(chat -> chat.getPeople().equals(members)).findFirst().orElse(null);
+    }
 
     @Override
     public void saveEntryMap(String filepath) {
@@ -59,7 +61,7 @@ public class MessengerRepository extends AbstractRepository<Chat>{
         Instant updatedAt = Instant.parse(parts[2]);
         Set<User> users = parseUsers(parts[3]);
         List<Message> chatHistory = parseHistory(parts[4]);
-        chatHistory.forEach(Chat::addChatHistory);
+//        chatHistory.forEach(Chat::addChatHistory);
 
         return new Chat(entityId, createdAt, updatedAt, users);
     }

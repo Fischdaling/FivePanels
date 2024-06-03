@@ -131,7 +131,8 @@ public class Case extends BaseEntity {
         isInCollection(correctAnswer, caseVote.getAnswers(), "correctAnswer", exTypeCase);
 
         Set<UUID> userIdsWithCorrectVotes = caseVote.getVotes().entrySet().stream()
-                .filter(entry -> entry.getValue().stream().anyMatch(vote -> vote.getAnswer().equals(correctAnswer)))
+                .filter(entry -> entry.getValue().
+                        stream().anyMatch(vote -> vote.getAnswer().equals(correctAnswer)))
                 .map(entry -> entry.getKey())
                 .collect(Collectors.toSet());
 
@@ -160,6 +161,10 @@ public class Case extends BaseEntity {
         for (User member : members) {
             addMember(member);
         }
+    }
+
+    public void removeMember(User member){
+        this.members.remove(isInCollection(member,this.members,"member",exTypeCase));
     }
 
     public void addContent(Content content) {

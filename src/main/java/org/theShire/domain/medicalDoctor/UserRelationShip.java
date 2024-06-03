@@ -2,19 +2,24 @@ package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.messenger.Chat;
 import org.theShire.foundation.DomainAssertion;
+import org.theShire.service.ChatService;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;
+
 import static org.theShire.service.ChatService.createChat;
 import static org.theShire.service.UserService.userRepo;
 
 public class UserRelationShip {
+    //      KEY             VALUE
     /*      UUID(User)    RELATION
      *       User12       User1,User2,TYPE:OUTGOING
+     *       User21       User1,User2,TYPE:INCOMING
      *       User34       User3, User4, TYPE:ESTABLISHED
+     *
      */
     public static HashMap<String, Relation> relationShip;
 
@@ -34,7 +39,6 @@ public class UserRelationShip {
     //important to know! The relation type always differs
     //from the direction of the relation. User1 and User2 have a different POVs
 
-    //TODO
     public static void sendRequest(User sender, User receiver) {
         DomainAssertion.isNotEqual(sender, receiver, "sender and receiver", exTypeUser);
         DomainAssertion.isInCollection(sender, userRepo.findAll(), "sender", exTypeUser);
@@ -71,7 +75,9 @@ public class UserRelationShip {
                 createChat(sender, receiver);
             }
         }
+
     }
+    //TODO DECLINE REQUEST
 
     public static Relation.RelationType getRelationType(User user1, User user2) {
         return Optional.of(getRelation(user1, user2)).map(Relation::getType).orElse(null);
@@ -92,7 +98,6 @@ public class UserRelationShip {
     }
 
 
-    //TODO
     public static Set<User> getRequest(User user1) {
         return relationShip.values().stream()
                 .filter(relation -> relation.getUser1().equals(user1) && relation.getType() == Relation.RelationType.INCOMING)

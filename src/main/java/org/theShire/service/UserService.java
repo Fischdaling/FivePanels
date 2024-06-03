@@ -3,6 +3,7 @@ package org.theShire.service;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.theShire.domain.exception.MedicalDoctorException;
 import org.theShire.domain.media.Media;
+import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserProfile;
 import org.theShire.domain.medicalDoctor.UserRelationShip;
@@ -19,6 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.theShire.presentation.Main.*;
+import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.UniversalService.enterUUID;
 
 public class UserService {
@@ -28,12 +30,14 @@ public class UserService {
 
     public static void deleteUserById () {
         UUID userId = enterUUID("Enter User Id");
+        User user = userRepo.findByID(userId);
         isInCollection(userId,userRepo.getEntryMap().keySet(),"User not found",exTypeUser);
         userRepo.deleteById(userId);
-
+        Set<Case> medCase = user.isMemberOfCases();
+        medCase.forEach(mCase -> mCase.removeMember(user));
     }
 
-        public static void findByName () {
+    public static void findByName () {
         System.out.println("Enter name");
         String name = scanner.nextLine();
         Set<User> user = userRepo.findByName(new Name(name));
@@ -41,7 +45,7 @@ public class UserService {
         System.out.println(isNotNull(user,"user",exTypeUser));
     }
 
-        public static void relationCommands () {
+    public static void relationCommands () {
         System.out.println("1. See Incoming");
         System.out.println("2. send request");
         System.out.println("3. accept request");
@@ -52,7 +56,9 @@ public class UserService {
                 User user1 = userLoggedIn;
                 isTrue(userRepo.getEntryMap().containsKey(user1.getEntityId()),()->"User not Found",exTypeUser);
                     Set<User> incomingRequests = UserRelationShip.getRequest(user1);
-                    isTrue(incomingRequests.isEmpty(),()->"No Request",exTypeUser);
+                    if (incomingRequests.isEmpty()){
+                        System.out.println("No Request");
+                    }else
                         incomingRequests.forEach((sender) -> System.out.println("Request from: " + sender.getProfile().getFirstName()));
                 break;
 
@@ -84,22 +90,28 @@ public class UserService {
         }
     }
 
-        public static User addUser () {
+    public static User addUser () {
         System.out.println("Enter Firstname");
-        String firstname = scanner.nextLine();
+        String inFirstName = scanner.nextLine();
+        Name firstname = new Name(inFirstName);
         System.out.println("Enter Lastname");
-        String lastname = scanner.nextLine();
+        String inLastName = scanner.nextLine();
+        Name lastname = new Name(inLastName);
         System.out.println("Enter Email");
-        String email = scanner.nextLine();
+        String inEmail = scanner.nextLine();
+        Email email = new Email(inEmail);
         System.out.println("Enter Password");
-        String password = scanner.nextLine();
+        String inPassword = scanner.nextLine();
+        Password password = new Password(inPassword);
         System.out.println("Confirm Password");
-        String confirmPassword = scanner.nextLine();
-        isEqual(confirmPassword, password, "passwords", exTypeUser);
+        String inConfirmPassword = scanner.nextLine();
+        isEqual(inConfirmPassword, inPassword, "passwords", exTypeUser);
         System.out.println("Enter Language");
-        String language = scanner.nextLine();
+        String inLanguage = scanner.nextLine();
+        Language language = new Language(inLanguage);
         System.out.println("Enter Location");
-        String location = scanner.nextLine();
+        String inLocation = scanner.nextLine();
+        Location location = new Location(inLocation);
         System.out.println("Enter Picture path");
         String profilePic = scanner.nextLine();
         System.out.println("How many educational titles do you want to add?");
@@ -125,18 +137,17 @@ public class UserService {
     }
 
 
-        public static User createUser (UUID uuid, String firstname, String lastname, String email, String
-        password, String language, String location, String picture, Set < String > specialization, String...
-        educationalTitle){
+    public static User createUser (UUID uuid, Name firstname, Name lastname, Email email, Password
+        password, Language language, Location location, String picture, Set < String > specialization, String... educationalTitle){
         if (uuid == null) {
             uuid = UUID.randomUUID();
         }
-        Name firstName = new Name(firstname);
-        Name lastName = new Name(lastname);
-        Email emayl = new Email(email);
-        Password passwort = new Password(password);
-        Language lang = new Language(language);
-        Location loc = new Location(location);
+        Name firstName = firstname;
+        Name lastName = lastname;
+        Email emayl = email;
+        Password passwort = password;
+        Language lang = language;
+        Location loc = location;
         List<EducationalTitle> titles = Arrays.stream(educationalTitle).map(EducationalTitle::new).toList();
         Media media = new Media(500, 400, picture, "500x400");
         Set<Knowledges> knowledges = specialization.stream().map(Knowledges::new).collect(Collectors.toSet());
@@ -146,9 +157,7 @@ public class UserService {
         return user;
     }
 
-        public static User init () {
-
-
+    public static User init () {
         System.out.println("1. Login");
         System.out.println("2. Create new User");
         System.out.println("3. Exit");

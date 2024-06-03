@@ -15,8 +15,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
+import static org.theShire.domain.medicalDoctor.UserRelationShip.createMapKey;
+import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
 import static org.theShire.foundation.DomainAssertion.*;
 import static org.theShire.presentation.Main.*;
+import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UniversalService.enterUUID;
 import static org.theShire.service.UserService.userLoggedIn;
 import static org.theShire.service.UserService.userRepo;
@@ -86,7 +89,7 @@ public class CaseService {
 
             answers[i] = scanner.nextLine();
         }
-        CaseVote caseVote = new CaseVote(answer);
+
 
         System.out.println("Enter Case Title");
         String title = scanner.nextLine();
@@ -109,11 +112,10 @@ public class CaseService {
         for (int i = 0; i < ansCount; i++) {
             answer.add(new Answer(answers[i]));
         }
-
+        CaseVote caseVote = new CaseVote(answer);
         System.out.println("How many Knowledges do you want to add?");
         int knowledges = scanner.nextInt();
         greaterEqualsZero(knowledges,()->"Case must have Knowledges",exTypeCase);
-            System.err.println("You must at least add 1 Knowledge to the case! (You have 1 more chance)");
             System.out.println("How many Knowledges do you want to add?");
             knowledges = scanner.nextInt();
 
@@ -165,6 +167,10 @@ public class CaseService {
         owner.setScore(owner.getScore()+5);
         Arrays.stream(members).forEach(user -> user.addMemberOfCase(medCase));
         caseRepo.save(medCase);
+        Set<User> chatters = Arrays.stream(members).filter(Objects::nonNull).collect(Collectors.toSet());;
+        chatters.add(owner);
+        if (messengerRepo.findByMembers(chatters) == null)
+            ChatService.createChat(chatters.toArray(User[]::new));
         return medCase;
     }
 

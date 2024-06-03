@@ -7,7 +7,7 @@ import static org.theShire.foundation.DomainAssertion.isNotNull;
 
 
 
-public class Content extends BaseEntity { //TODO imageWriter
+public class Content extends BaseEntity {
     private ContentText text;
     //wields metadata of the Media class
     private Media media;

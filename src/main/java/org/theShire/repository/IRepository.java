@@ -16,5 +16,4 @@ public interface IRepository<T extends BaseEntity> {
      void deleteAll();
      void saveAll(List<T> entities);
 
-
 }
