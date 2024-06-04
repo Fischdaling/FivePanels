@@ -99,8 +99,8 @@ public class Main {
         knowledges4.add("pediatric emergency medicine");
         knowledges4.add("critical care or pain medicine");
         LinkedHashSet<Answer> answers = new LinkedHashSet<>();
-        answers.add(new Answer("Answer 1"));
-        answers.add(new Answer("Answer 2"));
+        answers.add(new Answer("Krebs"));
+        answers.add(new Answer("League of Legends Sucht"));
         case1 = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2, user3);
         userLoggedIn = init();
     }
@@ -120,7 +120,7 @@ public class Main {
             System.out.println("8. Delete Case by id");
             System.out.println("9. manage Relations");
             System.out.println("10. Vote for Case Answer");
-            System.out.println("11. Leave a like for Case Answer");
+            System.out.println("11. Leave a like for a Case");
             System.out.println("12. Save Data");
             System.out.println("13. Change Profile");
             System.out.println("14. Set correct Answer");
