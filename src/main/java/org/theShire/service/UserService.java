@@ -8,19 +8,15 @@ import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserProfile;
 import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.richType.*;
-
-import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
-import static org.theShire.foundation.DomainAssertion.*;
-
-import org.theShire.foundation.DomainAssertion;
 import org.theShire.foundation.Knowledges;
 import org.theShire.repository.UserRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.theShire.presentation.Main.*;
-import static org.theShire.service.CaseService.caseRepo;
+import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
+import static org.theShire.foundation.DomainAssertion.*;
+import static org.theShire.presentation.Main.scanner;
 import static org.theShire.service.UniversalService.enterUUID;
 
 public class UserService {

@@ -1,15 +1,15 @@
 package org.theShire.domain.medicalDoctor;
 
-import org.theShire.domain.messenger.Chat;
 import org.theShire.foundation.DomainAssertion;
-import org.theShire.service.ChatService;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;
-
 import static org.theShire.service.ChatService.createChat;
 import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UserService.userRepo;
@@ -121,7 +121,7 @@ public class UserRelationShip {
     public static Set<User> getRequest(User user1) {
         return relationShip.values().stream()
                 .filter(relation -> relation.getUser1().equals(user1) && relation.getType() == Relation.RelationType.INCOMING)
-                .map(relation -> relation.getUser2())
+                .map(Relation::getUser2)
                 .collect(Collectors.toSet());
     /*
     Filters the relationships in the hashmap to find those that are incoming requests for the user.
@@ -132,7 +132,7 @@ public class UserRelationShip {
     public static Set<User> getSent(User user1) {
         return relationShip.values().stream()
                 .filter(relation -> relation.getUser1().equals(user1) && relation.getType() == OUTGOING)
-                .map(relation -> relation.getUser2())
+                .map(Relation::getUser2)
                 .collect(Collectors.toSet());
 
         /*

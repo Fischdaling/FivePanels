@@ -1,16 +1,13 @@
 package org.theShire.presentation;
 
-import org.theShire.domain.exception.MedicalDoctorException;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
 import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalCase.Answer;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalCase.CaseVote;
-import org.theShire.domain.medicalDoctor.Relation;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserRelationShip;
-import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.richType.*;
 import org.theShire.service.CaseService;
 import org.theShire.service.ChatService;
@@ -18,12 +15,10 @@ import org.theShire.service.UniversalService;
 import org.theShire.service.UserService;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static org.theShire.domain.medicalDoctor.UserRelationShip.*;
-import static org.theShire.service.CaseService.*;
-import static org.theShire.service.ChatService.messengerRepo;
-import static org.theShire.service.UniversalService.loadEntry;
+import static org.theShire.domain.medicalDoctor.UserRelationShip.createMapKey;
+import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
+import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.UniversalService.saveEntry;
 import static org.theShire.service.UserService.*;
 

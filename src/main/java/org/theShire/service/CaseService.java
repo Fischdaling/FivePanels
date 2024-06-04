@@ -1,6 +1,5 @@
 package org.theShire.service;
 
-import org.theShire.domain.BaseEntity;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
 import org.theShire.domain.media.Media;
@@ -16,10 +15,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
-import static org.theShire.domain.medicalDoctor.UserRelationShip.createMapKey;
-import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
 import static org.theShire.foundation.DomainAssertion.*;
-import static org.theShire.presentation.Main.*;
+import static org.theShire.presentation.Main.scanner;
 import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UniversalService.enterUUID;
 import static org.theShire.service.UserService.userLoggedIn;
