@@ -100,7 +100,7 @@ public class Main {
         knowledges4.add("critical care or pain medicine");
         LinkedHashSet<Answer> answers = new LinkedHashSet<>();
         answers.add(new Answer("Krebs"));
-        answers.add(new Answer("League of Legends Sucht"));
+        answers.add(new Answer("League of Legends addiction"));
         case1 = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2, user3);
         userLoggedIn = init();
     }
