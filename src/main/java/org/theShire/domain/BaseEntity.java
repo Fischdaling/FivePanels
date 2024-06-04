@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.UUID;
 
-import static org.theShire.foundation.DomainAssertion.isBeforeTime;
+import static org.theShire.foundation.DomainAssertion.isAfterTime;
 
 
 public class BaseEntity {
@@ -46,7 +46,7 @@ public class BaseEntity {
     }
 
     public void setUpdatedAt(Instant updatedAt) {
-        isBeforeTime(updatedAt,createdAt,"updatedAt", RuntimeException.class);
+        isAfterTime(updatedAt,createdAt,"updatedAt", RuntimeException.class);
         this.updatedAt = updatedAt;
     }
 

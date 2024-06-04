@@ -1,7 +1,6 @@
 package org.theShire.foundation;
 
 import org.junit.jupiter.api.Test;
-import org.theShire.domain.exception.MedicalCaseException;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -320,14 +319,14 @@ public class DomainAssertionTest {
     void isBeforeTime_ShouldThrow_WhenIsAfterTime(){
         Instant instant = Instant.ofEpochSecond(50).minusSeconds(10);
         Instant instant1 = Instant.ofEpochSecond(50);
-        assertThrows(exType,()-> isBeforeTime(instant,instant1,"TestCaseInstant",exType));
+        assertThrows(exType,()-> isAfterTime(instant,instant1,"TestCaseInstant",exType));
     }
 
     @Test
     void isBeforeTime_ShouldReturnTime_WhenIsBeforeTime(){
         Instant instant = Instant.ofEpochSecond(50);
         Instant instant1 = Instant.ofEpochSecond(50).minusSeconds(10);
-        assertEquals(instant, isBeforeTime(instant,instant1,"TestCaseInstant",exType));
+        assertEquals(instant, isAfterTime(instant,instant1,"TestCaseInstant",exType));
     }
 
     @Test

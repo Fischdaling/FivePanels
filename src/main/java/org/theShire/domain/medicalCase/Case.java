@@ -145,6 +145,7 @@ public class Case extends BaseEntity {
                     .sum();
                 int newScore = user.getScore() + (int)(2 * percentVoted/100+1);
                 user.setScore(newScore);
+                setUpdatedAt(Instant.now());
         }
     }
 

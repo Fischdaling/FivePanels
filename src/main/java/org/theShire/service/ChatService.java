@@ -1,5 +1,6 @@
 package org.theShire.service;
 
+import org.theShire.domain.BaseEntity;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
 import org.theShire.domain.medicalDoctor.User;
@@ -7,6 +8,7 @@ import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.messenger.Message;
 import org.theShire.repository.MessengerRepository;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.theShire.presentation.Main.scanner;
@@ -40,6 +42,7 @@ public class ChatService {
                 scanner.nextLine();
                 String message = scanner.nextLine();
                 chat.sendMessage(new Message(userLoggedIn.getEntityId(), new Content(new ContentText(message))));
+                chat.setUpdatedAt(Instant.now());
             }
         }else {
             System.out.println("Chat not found");

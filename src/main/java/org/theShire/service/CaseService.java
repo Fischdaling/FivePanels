@@ -12,6 +12,7 @@ import org.theShire.domain.richType.Name;
 import org.theShire.foundation.Knowledges;
 import org.theShire.repository.CaseRepository;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -183,6 +184,7 @@ public class CaseService {
         String answer = scanner.nextLine();
         caseRepo.findByID(caseId).setCorrectAnswer(new Answer(answer));
         System.out.println(answer + " Was declared as the right Answer. Doctors that made this assumption will earn points.");
+        caseRepo.findByID(caseId).setUpdatedAt(Instant.now());
     }
 
     public static void removeMember(){

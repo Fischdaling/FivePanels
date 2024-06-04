@@ -173,7 +173,7 @@ public abstract class DomainAssertion<T> {
             return time;
         }
 
-        public static <T extends Instant, E extends RuntimeException>T isBeforeTime(T time1, T time2, String paramName, Class<E> clazz){
+        public static <T extends Instant, E extends RuntimeException>T isAfterTime(T time1, T time2, String paramName, Class<E> clazz){
             isNotNull(time1, paramName, clazz);
             isNotNull(time2, paramName, clazz);
             if (time1.isBefore(time2))

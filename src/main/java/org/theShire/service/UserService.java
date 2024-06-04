@@ -16,6 +16,7 @@ import org.theShire.foundation.DomainAssertion;
 import org.theShire.foundation.Knowledges;
 import org.theShire.repository.UserRepository;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -209,5 +210,6 @@ public class UserService {
         System.out.println(user.getProfile().toString());
         UserProfile profile = enterUserProfile();
         user.setProfile(profile);
+        user.setUpdatedAt(Instant.now());
     }
 }
