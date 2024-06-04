@@ -103,15 +103,6 @@ public class User extends BaseEntity {
     }
 
 
-    public Chat getChatByID(UUID id) {
-        return chats.stream().filter(chat -> chat.getEntityId().equals(id)).findFirst().orElse(null);
-    }
-
-    public List<Chat> getChatByUser(User name) {
-        return chats.stream().filter(chat -> chat.getPeople().contains(name)).toList();
-    }
-
-
     public Set<Case> getOwnedCases() {
         return ownedCases;
     }
@@ -125,6 +116,9 @@ public class User extends BaseEntity {
         return email;
     }
 
+    public Set<Chat> getChats(){
+        return chats;
+    }
 
     // Methods ------------------------------------------------------------
 

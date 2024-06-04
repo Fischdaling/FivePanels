@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 import static org.theShire.domain.exception.MessengerException.exTypeMes;
 import static org.theShire.foundation.DomainAssertion.isNotInCollection;
 import static org.theShire.foundation.DomainAssertion.isNotNull;
+import static org.theShire.service.ChatService.messengerRepo;
+import static org.theShire.service.UserService.userRepo;
 
 public class Chat extends BaseEntity {
     // The Users in the chat
@@ -57,6 +59,11 @@ public class Chat extends BaseEntity {
     public void sendMessage(Message message){
         addChatHistory(message);
         message.setStage(Message.Stage.SENT);
+    }
+
+    public void removeChatter(UUID chatter){
+        isNotNull(chatter, "chatter",exTypeMes);
+        people.remove(userRepo.findByID(chatter));
     }
 
     public void addPerson(User chatter){

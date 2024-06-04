@@ -37,7 +37,7 @@ public class CaseService {
     public static void likeCase() {
         Case medCase = caseRepo.findByID(enterUUID("Enter Case Id"));
         isInCollection(medCase.getEntityId(),caseRepo.getEntryMap().keySet(),()->"Case not Found",exTypeCase);
-        isInCollection(userLoggedIn,caseRepo.findByID(medCase.getEntityId()).getMembers(),()->"You are not able to vote",exTypeCase);
+        isInCollection(userLoggedIn,caseRepo.findByID(medCase.getEntityId()).getMembers(),()->"You are not able to like",exTypeCase);
             medCase.setViewcount(medCase.getViewcount()+1);
             medCase.like(userLoggedIn.getEntityId());
     }
@@ -169,6 +169,7 @@ public class CaseService {
         chatters.add(owner);
         if (messengerRepo.findByMembers(chatters) == null)
             ChatService.createChat(chatters.toArray(User[]::new));
+        medCase.setGroupchat(messengerRepo.findByMembers(chatters));
         return medCase;
     }
 
@@ -184,13 +185,14 @@ public class CaseService {
 
     public static void removeMember(){
         UUID medCaseId = enterUUID("Enter Case Id");
-        isTrue(caseRepo.findByID(medCaseId).getOwner().equals(userLoggedIn),()->"You must be the owner of the case",exTypeCase);
+        Case medCase = caseRepo.findByID(medCaseId);
+        isTrue(medCase.getOwner().equals(userLoggedIn),()->"You must be the owner of the case",exTypeCase);
 
         UUID memberId = enterUUID("Enter Member Id");
-
-        caseRepo.findByID(medCaseId).removeMember(userRepo.findByID(memberId));
-
-
+        User member = userRepo.findByID(memberId);
+        member.removeCase(medCase);
+        medCase.removeMember(member);
+        medCase.getGroupchat().removeChatter(memberId);
     }
 
 }
