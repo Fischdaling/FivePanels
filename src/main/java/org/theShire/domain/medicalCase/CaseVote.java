@@ -31,7 +31,6 @@ public class CaseVote {
         Vote vote = new Vote(answerChosen, percent);
         lesserThan(percent,100.1,"percent",exTypeCase);
         isInCollection(vote.getAnswer(), answers, "vote", exTypeCase);
-
         if (votes.containsKey(voter)) {
             double sumVotes = votes.get(voter).stream().mapToDouble(Vote::getPercent).sum();
             isTrue(sumVotes <= 100.0,()->"Vote Limit Reached",exTypeCase);

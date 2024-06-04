@@ -149,6 +149,14 @@ public class User extends BaseEntity {
         }
     }
 
+    public void setProfile(UserProfile profile) {
+        this.profile = profile;
+    }
+
+    public Set<Knowledges> getSpecialization() {
+        return specialization;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder().append(System.lineSeparator());

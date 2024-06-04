@@ -1,5 +1,6 @@
 package org.theShire.service;
 
+import org.theShire.domain.BaseEntity;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
 import org.theShire.domain.media.Media;
@@ -38,7 +39,8 @@ public class CaseService {
 
     public static void likeCase() {
         Case medCase = caseRepo.findByID(enterUUID("Enter Case Id"));
-        isTrue(caseRepo.getEntryMap().containsValue(medCase),()->"Case not found",exTypeCase);
+        isInCollection(medCase.getEntityId(),caseRepo.getEntryMap().keySet(),()->"Case not Found",exTypeCase);
+        isInCollection(userLoggedIn,caseRepo.findByID(medCase.getEntityId()).getMembers(),()->"You are not able to vote",exTypeCase);
             medCase.setViewcount(medCase.getViewcount()+1);
             medCase.like(userLoggedIn.getEntityId());
     }
@@ -52,7 +54,8 @@ public class CaseService {
 
     public static void vote() {
         UUID caseId = enterUUID("Enter Case ID to Vote for");
-        isTrue(caseRepo.getEntryMap().containsValue(caseRepo.findByID(caseId)),()->"Case not found",exTypeCase);
+        isInCollection(caseId,caseRepo.getEntryMap().keySet(),()->"Case not Found",exTypeCase);
+        isInCollection(userLoggedIn,caseRepo.findByID(caseId).getMembers(),()->"You are not able to vote",exTypeCase);
         Case medCase = caseRepo.findByID(caseId);
         for (Answer answer : medCase.getCaseVote().getAnswers()) {
             System.out.println(answer.getName());
@@ -116,8 +119,6 @@ public class CaseService {
         System.out.println("How many Knowledges do you want to add?");
         int knowledges = scanner.nextInt();
         greaterEqualsZero(knowledges,()->"Case must have Knowledges",exTypeCase);
-            System.out.println("How many Knowledges do you want to add?");
-            knowledges = scanner.nextInt();
 
         Set<String> knowledgesSet= new HashSet<>();
         Knowledges.getLegalKnowledges().forEach(System.out::println);
@@ -175,10 +176,22 @@ public class CaseService {
     }
 
     public static void correctAnswer(){
-        UUID caseId = enterUUID("Enter Case ID for your Answer");
+        UUID caseId = enterUUID("Enter Case ID");
+        isTrue(caseRepo.findByID(caseId).getOwner().equals(userLoggedIn),()->"You must be the owner of the case",exTypeCase);
         System.out.println("Enter Correct Answer");
         String answer = scanner.nextLine();
         caseRepo.findByID(caseId).setCorrectAnswer(new Answer(answer));
+    }
+
+    public static void removeMember(){
+        UUID medCaseId = enterUUID("Enter Case Id");
+        isTrue(caseRepo.findByID(medCaseId).getOwner().equals(userLoggedIn),()->"You must be the owner of the case",exTypeCase);
+
+        UUID memberId = enterUUID("Enter Member Id");
+
+        caseRepo.findByID(medCaseId).removeMember(userRepo.findByID(memberId));
+
+
     }
 
 }

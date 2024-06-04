@@ -92,12 +92,7 @@ public class UserService {
     }
 
     public static User addUser () {
-        System.out.println("Enter Firstname");
-        String inFirstName = scanner.nextLine();
-        Name firstname = new Name(inFirstName);
-        System.out.println("Enter Lastname");
-        String inLastName = scanner.nextLine();
-        Name lastname = new Name(inLastName);
+
         System.out.println("Enter Email");
         String inEmail = scanner.nextLine();
         Email email = new Email(inEmail);
@@ -107,6 +102,30 @@ public class UserService {
         System.out.println("Confirm Password");
         String inConfirmPassword = scanner.nextLine();
         isEqual(inConfirmPassword, inPassword, "passwords", exTypeUser);
+        UserProfile profile = enterUserProfile();
+        int i;
+        System.out.println("How many specialties do you want to add?");
+        i = scanner.nextInt();
+        Knowledges.getLegalKnowledges().forEach(System.out::println);
+        System.out.println();
+        scanner.nextLine();
+        Set<String> specialty = new HashSet<>();
+        for (int j = 0; j < i; j++) {
+            System.out.println("Enter Specialty:");
+            String value = scanner.nextLine();
+            specialty.add(value);
+        }
+        String[] titles = profile.getEducationalTitles().stream().map(EducationalTitle::toString).toArray(String[]::new);
+        return createUser(null, profile.getFirstName(), profile.getFirstName(), email, password, profile.getLanguage(), profile.getLocation(), profile.getProfilePicture().getAltText(), specialty,titles );
+    }
+
+    private static UserProfile enterUserProfile() {
+        System.out.println("Enter Firstname");
+        String inFirstName = scanner.nextLine();
+        Name firstname = new Name(inFirstName);
+        System.out.println("Enter Lastname");
+        String inLastName = scanner.nextLine();
+        Name lastname = new Name(inLastName);
         System.out.println("Enter Language");
         String inLanguage = scanner.nextLine();
         Language language = new Language(inLanguage);
@@ -123,23 +142,14 @@ public class UserService {
             System.out.println("Enter Title");
             title[j] = scanner.nextLine();
         }
-        System.out.println("How many specialties do you want to add?");
-        i = scanner.nextInt();
-        Knowledges.getLegalKnowledges().forEach(System.out::println);
-        System.out.println();
-        scanner.nextLine();
-        Set<String> specialty = new HashSet<>();
-        for (int j = 0; j < i; j++) {
-            System.out.println("Enter Specialty:");
-            String value = scanner.nextLine();
-            specialty.add(value);
-        }
-        return createUser(null, firstname, lastname, email, password, language, location, profilePic, specialty, title);
+        UserProfile profile = new UserProfile(language,location,new Media(profilePic),firstname,lastname,Arrays.stream(title).map(EducationalTitle::new).toList());
+        return profile;
     }
 
 
+
     public static User createUser (UUID uuid, Name firstname, Name lastname, Email email, Password
-        password, Language language, Location location, String picture, Set < String > specialization, String... educationalTitle){
+        password, Language language, Location location, String picture, Set <String> specialization, String... educationalTitle){
         if (uuid == null) {
             uuid = UUID.randomUUID();
         }
@@ -192,5 +202,12 @@ public class UserService {
             isTrue(result.verified,()->"Invalid password.",exTypeUser);
             return user;
 
+    }
+    
+    public static void changeProfile () {
+        User user = userLoggedIn;
+        System.out.println(user.getProfile().toString());
+        UserProfile profile = enterUserProfile();
+        user.setProfile(profile);
     }
 }

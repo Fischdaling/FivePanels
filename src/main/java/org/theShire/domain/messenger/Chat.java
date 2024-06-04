@@ -2,9 +2,11 @@ package org.theShire.domain.messenger;
 
 import org.theShire.domain.BaseEntity;
 import org.theShire.domain.medicalDoctor.User;
+import org.theShire.domain.medicalDoctor.UserProfile;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MessengerException.exTypeMes;
 import static org.theShire.foundation.DomainAssertion.isNotInCollection;
@@ -64,6 +66,7 @@ public class Chat extends BaseEntity {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Chat:").append(getEntityId()).append(System.lineSeparator());
+        sb.append(getPeople().stream().map(User::getProfile).map(UserProfile::getFirstName).collect(Collectors.toSet()));
         sb.append(chatHistory);
         return sb.toString();
     }

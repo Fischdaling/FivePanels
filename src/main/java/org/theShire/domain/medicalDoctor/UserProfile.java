@@ -26,7 +26,6 @@ public class UserProfile {
     private Location location;
     private Language language;
 
-    private Set<Knowledges> experience;
 
     public UserProfile(Language language, Location location, Media profilePicture, Name firstName, Name lastName, EducationalTitle...educationalTitle) {
         this.language = language;
@@ -73,11 +72,6 @@ public class UserProfile {
     }
 
 
-    public Set<Knowledges> getExperience() {
-        return experience;
-    }
-
-
     public void addEducationalTitle(EducationalTitle educationalTitle) {
         this.educationalTitles.add(isInCollection(educationalTitle, educationalTitles,"educationalTitle", exTypeUser));
     }
@@ -87,8 +81,8 @@ public class UserProfile {
         }
     }
 
-    public void setExperience(Knowledges experience) {
-        this.experience.add(isNotNull(experience, "experience", exTypeUser));
+    public List<EducationalTitle> getEducationalTitles() {
+        return educationalTitles;
     }
 
     @Override
