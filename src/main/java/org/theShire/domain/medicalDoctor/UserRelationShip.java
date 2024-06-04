@@ -11,6 +11,7 @@ import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;
 
 import static org.theShire.service.ChatService.createChat;
+import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UserService.userRepo;
 
 public class UserRelationShip {
@@ -85,8 +86,17 @@ public class UserRelationShip {
         String keyIncoming = createMapKey(sender, receiver);
         String keyOutgoing = createMapKey(receiver, sender);
 
+        Set<User> tmpSet = new HashSet<>();
+        tmpSet.add(sender);
+        tmpSet.add(receiver);
+
+        if (messengerRepo.findByMembers(tmpSet) != null){
+            messengerRepo.deleteById(messengerRepo.findByMembers(tmpSet).getEntityId());
+        }
+
         relationShip.remove(keyIncoming);
         relationShip.remove(keyOutgoing);
+
     }
 
     public static Relation.RelationType getRelationType(User user1, User user2) {
