@@ -75,7 +75,7 @@ public class UserServiceTest {
 
 
     @Test
-    public void login_ShouldReturnLoggedInUser_WhenUserExistsAndPassordEquals(){
+    public void login_ShouldReturnLoggedInUser_WhenUserExistsAndPasswordEquals(){
         String input = user1.getEmail().toString() + "\n" + "VerySafe123";
         System.setIn(new ByteArrayInputStream(input.getBytes()));
 
@@ -84,7 +84,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void login_ShouldThrow_WhenUserExistsAndPassordNotEquals(){
+    public void login_ShouldThrow_WhenUserExistsAndPasswordNotEquals(){
         String input = user1.getEmail().toString() + "\n" + "VerySafe";
         System.setIn(new ByteArrayInputStream(input.getBytes()));
 
