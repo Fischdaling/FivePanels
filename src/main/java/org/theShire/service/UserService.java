@@ -81,7 +81,9 @@ public class UserService {
                         System.out.println("Request from " + sender.getProfile().getFirstName() + " " + sender.getEntityId() + " to " + receiver3.getProfile().getFirstName() + " accepted.");
                 break;
             case 4:
-
+                UUID receiverUUID4 = enterUUID("Enter target's id");
+                User receiver4 = userRepo.findByID(receiverUUID4);
+                    UserRelationShip.declineRequest(sender,receiver4);
                 break;
             default:
                 System.out.println("Invalid option.");
