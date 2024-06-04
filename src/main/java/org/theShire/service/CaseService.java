@@ -178,9 +178,11 @@ public class CaseService {
     public static void correctAnswer(){
         UUID caseId = enterUUID("Enter Case ID");
         isTrue(caseRepo.findByID(caseId).getOwner().equals(userLoggedIn),()->"You must be the owner of the case",exTypeCase);
+        System.out.println(caseRepo.findByID(caseId).getCaseVote().getAnswers() +"\n");
         System.out.println("Enter Correct Answer");
         String answer = scanner.nextLine();
         caseRepo.findByID(caseId).setCorrectAnswer(new Answer(answer));
+        System.out.println(answer + " Was declared as the right Answer. Doctors that made this assumption will earn points.");
     }
 
     public static void removeMember(){

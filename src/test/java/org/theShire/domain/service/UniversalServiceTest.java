@@ -62,7 +62,8 @@ class UniversalServiceTest {
 //        assertEquals(test, "Buy premium to unlock this feature");
 //    }
 
-//    @Test //TODO find out how to read Console outputs called from another method... I suck
+//    @Test
+//        //TODO find out how to read Console outputs called from another method... I suck
 //    void testFindAll_ShouldDeliverAllUsers_WhenCalled() {
 //        System.setIn(new ByteArrayInputStream("1".getBytes()));
 //        UniversalService.findAll();

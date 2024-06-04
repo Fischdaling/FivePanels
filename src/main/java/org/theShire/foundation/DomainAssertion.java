@@ -145,7 +145,7 @@ public abstract class DomainAssertion<T> {
         // list Assertions -------------------------------------------------------------
         // Type erasure
         public static <T, E extends RuntimeException, C extends Collection<T>>T isInCollection(T o, C list, String paramName, Class<E> clazz){
-            return isInCollection(o, list,()-> paramName + "is in collection", clazz);
+            return isInCollection(o, list,()-> paramName + " is not in collection", clazz);
         }
         public static <T, E extends RuntimeException, C extends Collection<T>> T isInCollection(T o, C list, Supplier<String> errorMsg, Class<E> clazz){
             isNotNull(o,errorMsg.toString(), clazz);
