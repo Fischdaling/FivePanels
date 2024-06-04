@@ -32,7 +32,12 @@ public class Main {
         System.out.println("Press Enter to start...");
         String[] arguments = scanner.nextLine().split(" ");
 
-        initData();
+        try {
+            initData();
+        }catch (Exception e) {
+            System.err.println(e.getMessage());
+            initData();
+        }
 
         while (true) {
             try {
