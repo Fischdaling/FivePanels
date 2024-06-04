@@ -1,5 +1,6 @@
 package org.theShire.domain.service;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.theShire.domain.exception.MedicalDoctorException;
@@ -39,7 +40,7 @@ public class UserServiceTest {
         Set<String> knowledges3 = new HashSet<>();
         knowledges3.add("pediatric emergency medicine");
         knowledges3.add("hand surgery");
-        User user3 = UserService.createUser(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"), new Name("Gandalf"), new Name("Wizardo"), new Email("Gandalf@Wizardo.beard"), new Password("ICastFireBall!"), new Language("all"), new Location("world"), "Gandalf Profile", knowledges3, "The Gray", "The White", "Ainur");
+        User user3 = UserService.createUser(uuid, new Name("Gandalf"), new Name("Wizardo"), new Email("Gandalf@Wizardo.beard"), new Password("ICastFireBall!"), new Language("all"), new Location("world"), "Gandalf Profile", knowledges3, "The Gray", "The White", "Ainur");
 
         assertEquals(userRepo.findByID(uuid),user3);
     }
@@ -51,7 +52,7 @@ public class UserServiceTest {
         knowledges3.add("hand surgery");
 
         assertThrows(MedicalDoctorException.class,()->{
-            UserService.createUser(uuid, null, new Name("Wizardo"), new Email("Gandalf@Wizardo.beard"), new Password("ICastFireBall!"), new Language("all"), new Location("world"), "Gandalf Profile", knowledges3, "The Gray", "The White", "Ainur");
+            UserService.createUser(uuid, new Name(null), new Name("Wizardo"), new Email("Gandalf@Wizardo.beard"), new Password("ICastFireBall!"), new Language("all"), new Location("world"), "Gandalf Profile", knowledges3, "The Gray", "The White", "Ainur");
         });
     }
 
@@ -73,22 +74,22 @@ public class UserServiceTest {
 
 
 
-//    @Test
-//    public void login_ShouldReturnLoggedInUser_WhenUserExistsAndPassordEquals(){
-//        System.setIn(new ByteArrayInputStream(user1.getEmail().toString().getBytes()));
-//        System.setIn(new ByteArrayInputStream(user1.getPassword().toString().getBytes()));
-//        User userReturned = login();
-//        assertEquals(user1, userReturned);
-//    }
-//
-//    @Test
-//    public void login_ShouldThrow_WhenUserExistsAndPassordNotEquals(){
-//        System.setIn(new ByteArrayInputStream(user1.getEmail().toString().getBytes()));
-//        String passwordMod = user1.getPassword().toString()+'a';
-//        System.setIn(new ByteArrayInputStream(passwordMod.getBytes()));
-//
-//        assertThrows(exTypeUser,()->login());
-//    }
+    @Test
+    public void login_ShouldReturnLoggedInUser_WhenUserExistsAndPassordEquals(){
+        String input = user1.getEmail().toString() + "\n" + "VerySafe123";
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+
+        User userReturned = login();
+        assertEquals(user1, userReturned);
+    }
+
+    @Test
+    public void login_ShouldThrow_WhenUserExistsAndPassordNotEquals(){
+        String input = user1.getEmail().toString() + "\n" + "VerySafe";
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+
+        assertThrows(exTypeUser,()->login());
+    }
 
 
 }
