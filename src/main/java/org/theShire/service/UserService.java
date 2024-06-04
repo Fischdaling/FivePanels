@@ -9,6 +9,7 @@ import org.theShire.domain.medicalDoctor.UserProfile;
 import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.richType.*;
 import org.theShire.foundation.Knowledges;
+import org.theShire.presentation.Main;
 import org.theShire.repository.UserRepository;
 
 import java.util.*;
@@ -31,6 +32,8 @@ public class UserService {
         userRepo.deleteById(userId);
         Set<Case> medCase = user.isMemberOfCases();
         medCase.forEach(mCase -> mCase.removeMember(user));
+        if (userLoggedIn.getEntityId().equals(userId))
+            init();
     }
 
     public static void findByName () {

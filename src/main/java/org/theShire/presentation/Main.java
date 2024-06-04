@@ -31,13 +31,14 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Press Enter to start...");
         String[] arguments = scanner.nextLine().split(" ");
+
         initData();
+
         while (true) {
             try {
                 inputHandler();
             } catch (Exception e) {
-                System.err.println(e.getMessage());//swallow
-
+                System.err.println(e.getMessage());//swallow catch them all
                 main(arguments);
             }
         }
@@ -108,7 +109,6 @@ public class Main {
 
 
     private static void inputHandler() {
-        //TODO Check Main and conditions... z.B. Owner kann kein member bei seinem case sein.
             System.out.println("Commands");
             System.out.println("1. add Doctor");
             System.out.println("2. add Case");

@@ -68,11 +68,12 @@ public class CaseService {
             Answer answer = medCase.getCaseVote().getAnswers().stream().filter(answer1 -> answer1.getName().equals(userAnswer)).findFirst().orElse(null);
             System.out.println("Enter the percent you want to vote this answer with");
             double percentage = scanner.nextDouble();
+            lesserThan(percentage,101.0,"percentage",exTypeCase);
             percentTrack += percentage;
             if (percentTrack <= 100.0) {
                 medCase.getCaseVote().voting(userLoggedIn.getEntityId(), answer, percentage);
             }else {
-                medCase.getCaseVote().voting(userLoggedIn.getEntityId(), answer, percentTrack - percentage);
+                medCase.getCaseVote().voting(userLoggedIn.getEntityId(), answer,  percentage - percentTrack);
                 percentTrack = 100.0;
             }
         }

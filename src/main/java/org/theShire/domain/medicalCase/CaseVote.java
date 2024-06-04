@@ -29,7 +29,7 @@ public class CaseVote {
 
     public void voting(UUID voter, Answer answerChosen, double percent) {
         Vote vote = new Vote(answerChosen, percent);
-        lesserThan(percent,100.1,"percent",exTypeCase);
+        lesserThan(percent,101.0,"percent",exTypeCase);
         isInCollection(vote.getAnswer(), answers, "vote", exTypeCase);
         if (votes.containsKey(voter)) {
             double sumVotes = votes.get(voter).stream().mapToDouble(Vote::getPercent).sum();
