@@ -10,7 +10,6 @@ import org.theShire.foundation.Knowledges;
 
 import java.time.Instant;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;

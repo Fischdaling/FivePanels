@@ -39,6 +39,7 @@ public class Main {
             initData();
         }
 
+        // THE SHOW MUST GO ON
         while (true) {
             try {
                 inputHandler();

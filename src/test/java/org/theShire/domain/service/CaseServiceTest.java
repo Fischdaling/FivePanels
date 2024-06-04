@@ -1,5 +1,6 @@
 package org.theShire.domain.service;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.theShire.domain.media.Content;
@@ -14,12 +15,14 @@ import org.theShire.service.CaseService;
 import org.theShire.service.UserService;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.UserService.userLoggedIn;
+import static org.theShire.service.UserService.userRepo;
 
 public class CaseServiceTest {
     Case medCase;
@@ -27,6 +30,7 @@ public class CaseServiceTest {
     User user2;
     Answer a1;
     Answer a2;
+
     @BeforeEach
     public void setUp(){
         Set<String> knowledges1 = new HashSet<>();
@@ -57,16 +61,34 @@ public class CaseServiceTest {
         answers.add(a2);
         medCase = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
 
-        userLoggedIn = user1;
+        userLoggedIn = user2;
+
+
     }
 
+    @AfterEach
+    public void tearDown() {
+        System.setIn(null);
+        medCase = null;
+        user1 = null;
+        user2 = null;
+        a1 = null;
+        a2 = null;
+        caseRepo.deleteAll();
+        userRepo.deleteAll();
 
+    }
+    private void setInputStream(String input) {
+        ByteArrayInputStream testIn = new ByteArrayInputStream(input.getBytes());
+        System.setIn(testIn);
+    }
     @Test
     public void testCreateCase_ShouldAddUserToRepo_WhenCreated(){
+
         List<Content> contents = new ArrayList<>();
         //add texts
-        contents.add(new Content(new ContentText("My First Text")));
-        contents.add(new Content(new ContentText("My Second Text")));
+        contents.add(new Content(new ContentText("Test")));
+        contents.add(new Content(new ContentText("TEst2")));
         //add Media
         contents.add(new Content(new Media(200, 100, "My First Media", "200x100")));
 
@@ -83,15 +105,15 @@ public class CaseServiceTest {
 
     @Test
     public void testDeleteCaseById_ShouldAddUserToCaseRepo_WhenCreated(){
-        System.setIn(new ByteArrayInputStream(medCase.getEntityId().toString().getBytes()));
-        CaseService.deleteCaseById();
 
+        setInputStream(medCase.getEntityId().toString());
+        CaseService.deleteCaseById();
         assertNotEquals(caseRepo.findByID(medCase.getEntityId()),medCase);
     }
 
     @Test
     public void like_ShouldIncreaseLikeCounterByOne_WhenLiked(){
-        System.setIn(new ByteArrayInputStream(medCase.getEntityId().toString().getBytes()));
+        setInputStream(medCase.getEntityId().toString());
         int oldLike = medCase.getLikeCount();
         CaseService.likeCase();
 
@@ -99,17 +121,17 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void like_ShouldAddUserToUserLiked_WhenLiked(){
-        System.setIn(new ByteArrayInputStream(medCase.getEntityId().toString().getBytes()));
+    public void like_ShouldAddUserToUserLiked_WhenLiked() {
+        setInputStream(medCase.getEntityId().toString());
         CaseService.likeCase();
 
-        assertTrue(medCase.getUserLiked().contains(userLoggedIn.getEntityId()));
+        assertTrue(medCase.getUserLiked().contains(UserService.userLoggedIn.getEntityId()));
     }
 
     @Test
     public void findCaseById_ShouldIncreaseViewCountByOne_WhenFound(){
         int oldView = medCase.getViewcount();
-        System.setIn(new ByteArrayInputStream(medCase.getEntityId().toString().getBytes()));
+        setInputStream(medCase.getEntityId().toString());
         CaseService.findCaseById();
 
         assertEquals(oldView+1,medCase.getViewcount());
@@ -118,10 +140,10 @@ public class CaseServiceTest {
     @Test
     public void findCaseById_ShouldThrow_WhenNotFound(){
         int oldView = medCase.getViewcount();
-        System.setIn(new ByteArrayInputStream(UUID.randomUUID().toString().getBytes()));
+        setInputStream(UUID.randomUUID().toString());
 
 
-        assertThrows(exTypeCase,()->CaseService.findCaseById());
+        assertThrows(NoSuchElementException.class, CaseService::findCaseById);
         assertEquals(oldView,medCase.getViewcount());
     }
 

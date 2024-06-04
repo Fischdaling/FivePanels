@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import static org.theShire.domain.exception.MessengerException.exTypeMes;
 import static org.theShire.foundation.DomainAssertion.isNotInCollection;
 import static org.theShire.foundation.DomainAssertion.isNotNull;
-import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UserService.userRepo;
 
 public class Chat extends BaseEntity {

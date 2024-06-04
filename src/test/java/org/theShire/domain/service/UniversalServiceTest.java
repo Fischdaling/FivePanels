@@ -1,5 +1,6 @@
 package org.theShire.domain.service;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.theShire.domain.media.Content;
@@ -14,10 +15,7 @@ import org.theShire.service.ChatService;
 import org.theShire.service.UniversalService;
 import org.theShire.service.UserService;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,6 +49,22 @@ class UniversalServiceTest {
         answers.add(a2);
         contents = new ArrayList<>();
         case1 = CaseService.createCase(user1, "my First Case", knowledges1, contents, new CaseVote(answers), user1);
+    }
+    @AfterEach
+    public void tearDown() {
+        System.setIn(null);
+        user1 =null;
+        user2= null;
+        userSet=null;
+        case1=null;
+        knowledges1=null;
+        a1=null;
+        a2=null;
+        answers=null;
+        contents=null;
+        caseRepo.deleteAll();
+        userRepo.deleteAll();
+
     }
 
 //Just for fun lul
