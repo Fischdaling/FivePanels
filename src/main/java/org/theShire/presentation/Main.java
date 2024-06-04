@@ -1,16 +1,13 @@
 package org.theShire.presentation;
 
-import org.theShire.domain.exception.MedicalDoctorException;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
 import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalCase.Answer;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalCase.CaseVote;
-import org.theShire.domain.medicalDoctor.Relation;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserRelationShip;
-import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.richType.*;
 import org.theShire.service.CaseService;
 import org.theShire.service.ChatService;
@@ -18,12 +15,10 @@ import org.theShire.service.UniversalService;
 import org.theShire.service.UserService;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static org.theShire.domain.medicalDoctor.UserRelationShip.*;
-import static org.theShire.service.CaseService.*;
-import static org.theShire.service.ChatService.messengerRepo;
-import static org.theShire.service.UniversalService.loadEntry;
+import static org.theShire.domain.medicalDoctor.UserRelationShip.createMapKey;
+import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
+import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.UniversalService.saveEntry;
 import static org.theShire.service.UserService.*;
 
@@ -36,13 +31,20 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Press Enter to start...");
         String[] arguments = scanner.nextLine().split(" ");
-        initData();
+
+        try {
+            initData();
+        }catch (Exception e) {
+            System.err.println(e.getMessage());
+            initData();
+        }
+
+        // THE SHOW MUST GO ON
         while (true) {
             try {
                 inputHandler();
             } catch (Exception e) {
-                System.err.println(e.getMessage());//swallow
-
+                System.err.println(e.getMessage());//swallow catch them all
                 main(arguments);
             }
         }
@@ -104,8 +106,8 @@ public class Main {
         knowledges4.add("pediatric emergency medicine");
         knowledges4.add("critical care or pain medicine");
         LinkedHashSet<Answer> answers = new LinkedHashSet<>();
-        answers.add(new Answer("Answer 1"));
-        answers.add(new Answer("Answer 2"));
+        answers.add(new Answer("Krebs"));
+        answers.add(new Answer("League of Legends addiction"));
         case1 = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2, user3);
         userLoggedIn = init();
     }
@@ -113,7 +115,6 @@ public class Main {
 
 
     private static void inputHandler() {
-        //TODO Check Main and conditions... z.B. Owner kann kein member bei seinem case sein.
             System.out.println("Commands");
             System.out.println("1. add Doctor");
             System.out.println("2. add Case");
@@ -125,7 +126,7 @@ public class Main {
             System.out.println("8. Delete Case by id");
             System.out.println("9. manage Relations");
             System.out.println("10. Vote for Case Answer");
-            System.out.println("11. Leave a like for Case Answer");
+            System.out.println("11. Leave a like for a Case");
             System.out.println("12. Save Data");
             System.out.println("13. Change Profile");
             System.out.println("14. Set correct Answer");

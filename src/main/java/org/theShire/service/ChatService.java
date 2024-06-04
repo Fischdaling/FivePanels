@@ -18,6 +18,8 @@ import static org.theShire.service.UserService.userLoggedIn;
 public class ChatService {
     public static final MessengerRepository messengerRepo = new MessengerRepository();
 
+
+
     public static void createChat(User...users){
         messengerRepo.save(new Chat(users));
     }

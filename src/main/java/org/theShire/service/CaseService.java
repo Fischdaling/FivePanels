@@ -1,6 +1,5 @@
 package org.theShire.service;
 
-import org.theShire.domain.BaseEntity;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
 import org.theShire.domain.media.Media;
@@ -17,10 +16,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
-import static org.theShire.domain.medicalDoctor.UserRelationShip.createMapKey;
-import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
 import static org.theShire.foundation.DomainAssertion.*;
-import static org.theShire.presentation.Main.*;
+import static org.theShire.presentation.Main.scanner;
 import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UniversalService.enterUUID;
 import static org.theShire.service.UserService.userLoggedIn;
@@ -41,7 +38,7 @@ public class CaseService {
     public static void likeCase() {
         Case medCase = caseRepo.findByID(enterUUID("Enter Case Id"));
         isInCollection(medCase.getEntityId(),caseRepo.getEntryMap().keySet(),()->"Case not Found",exTypeCase);
-        isInCollection(userLoggedIn,caseRepo.findByID(medCase.getEntityId()).getMembers(),()->"You are not able to vote",exTypeCase);
+        isInCollection(userLoggedIn,caseRepo.findByID(medCase.getEntityId()).getMembers(),()->"You are not able to like",exTypeCase);
             medCase.setViewcount(medCase.getViewcount()+1);
             medCase.like(userLoggedIn.getEntityId());
     }
@@ -72,11 +69,12 @@ public class CaseService {
             Answer answer = medCase.getCaseVote().getAnswers().stream().filter(answer1 -> answer1.getName().equals(userAnswer)).findFirst().orElse(null);
             System.out.println("Enter the percent you want to vote this answer with");
             double percentage = scanner.nextDouble();
+            lesserThan(percentage,101.0,"percentage",exTypeCase);
             percentTrack += percentage;
             if (percentTrack <= 100.0) {
                 medCase.getCaseVote().voting(userLoggedIn.getEntityId(), answer, percentage);
             }else {
-                medCase.getCaseVote().voting(userLoggedIn.getEntityId(), answer, percentTrack - percentage);
+                medCase.getCaseVote().voting(userLoggedIn.getEntityId(), answer,  percentage - percentTrack);
                 percentTrack = 100.0;
             }
         }
@@ -173,6 +171,7 @@ public class CaseService {
         chatters.add(owner);
         if (messengerRepo.findByMembers(chatters) == null)
             ChatService.createChat(chatters.toArray(User[]::new));
+        medCase.setGroupchat(messengerRepo.findByMembers(chatters));
         return medCase;
     }
 
@@ -189,13 +188,14 @@ public class CaseService {
 
     public static void removeMember(){
         UUID medCaseId = enterUUID("Enter Case Id");
-        isTrue(caseRepo.findByID(medCaseId).getOwner().equals(userLoggedIn),()->"You must be the owner of the case",exTypeCase);
+        Case medCase = caseRepo.findByID(medCaseId);
+        isTrue(medCase.getOwner().equals(userLoggedIn),()->"You must be the owner of the case",exTypeCase);
 
         UUID memberId = enterUUID("Enter Member Id");
-
-        caseRepo.findByID(medCaseId).removeMember(userRepo.findByID(memberId));
-
-
+        User member = userRepo.findByID(memberId);
+        member.removeCase(medCase);
+        medCase.removeMember(member);
+        medCase.getGroupchat().removeChatter(memberId);
     }
 
 }

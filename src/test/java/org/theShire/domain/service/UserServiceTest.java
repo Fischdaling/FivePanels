@@ -9,21 +9,25 @@ import org.theShire.domain.richType.*;
 import org.theShire.service.UserService;
 
 import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.*;
 
 import static java.lang.System.in;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.presentation.Main.scanner;
+import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.UserService.login;
 import static org.theShire.service.UserService.userRepo;
 
 public class UserServiceTest {
     User user1;
     User user2;
+    private final InputStream originalSystemIn = System.in;
 
     @BeforeEach
     public void setUp(){
+        System.setIn(originalSystemIn);
         Set<String> knowledges1 = new HashSet<>();
         knowledges1.add("Test");
         knowledges1.add("adult cardiothoracic anesthesiology");
@@ -32,6 +36,15 @@ public class UserServiceTest {
         knowledges2.add("critical care or pain medicine");
         knowledges2.add("pediatric anesthesiology");
         user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"),  new Name("Aragorn"), new Name("Arathorn"), new Email("Aragorn@gondor.orc"), new Password("EvenSaver1234"), new Language("Gondorisch"), new Location("Gondor"), "Aragorn Profile", knowledges2, "Arathorns Sohn", "König von Gondor");
+    }
+
+    @AfterEach
+    public void tearDown() {
+        System.setIn(originalSystemIn);
+        user1 = null;
+        user2 = null;
+        caseRepo.deleteAll();
+        userRepo.deleteAll();
     }
 
     @Test

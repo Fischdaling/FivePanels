@@ -9,7 +9,9 @@ import org.theShire.domain.richType.Password;
 import org.theShire.foundation.Knowledges;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
@@ -100,15 +102,6 @@ public class User extends BaseEntity {
     }
 
 
-    public Chat getChatByID(UUID id) {
-        return chats.stream().filter(chat -> chat.getEntityId().equals(id)).findFirst().orElse(null);
-    }
-
-    public List<Chat> getChatByUser(User name) {
-        return chats.stream().filter(chat -> chat.getPeople().contains(name)).toList();
-    }
-
-
     public Set<Case> getOwnedCases() {
         return ownedCases;
     }
@@ -122,6 +115,9 @@ public class User extends BaseEntity {
         return email;
     }
 
+    public Set<Chat> getChats(){
+        return chats;
+    }
 
     // Methods ------------------------------------------------------------
 

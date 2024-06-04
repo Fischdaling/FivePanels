@@ -33,11 +33,11 @@ public class Case extends BaseEntity {
     private int likeCount;
     //remembers which user has already liked a case by their id (prevents a user to like the same case more often)
     private Set<UUID> userLiked;
+    private Chat groupchat;
     //portraits the total votes of all members combined
     private CaseVote caseVote;
 
-
-    public Case(User owner, String title,Set<Knowledges> knowledges, List<Content> content,CaseVote caseVote, User... members) {
+    public Case(User owner, String title, Set<Knowledges> knowledges, List<Content> content, CaseVote caseVote, User... members) {
         super();
         this.userLiked = new HashSet<>();
         setOwner(owner);
@@ -149,7 +149,13 @@ public class Case extends BaseEntity {
         }
     }
 
+    public Chat getGroupchat() {
+        return groupchat;
+    }
 
+    public void setGroupchat(Chat groupchat) {
+        this.groupchat = groupchat;
+    }
 
     //------------------
     public void addMember(User member) {
@@ -165,6 +171,7 @@ public class Case extends BaseEntity {
     }
 
     public void removeMember(User member){
+
         this.members.remove(isInCollection(member,this.members,"member",exTypeCase));
     }
 
