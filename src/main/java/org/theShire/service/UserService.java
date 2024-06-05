@@ -56,6 +56,8 @@ public class UserService {
         isTrue(UserRelationShip.getRequest(sender).contains(receiver),()->"Receiver not found.", exTypeUser);
         UserRelationShip.acceptRequest(sender, receiver);
         System.out.println("Request from " + sender.getProfile().getFirstName() + " " + sender.getEntityId() + " to " + receiver.getProfile().getFirstName() + " accepted.");
+        receiver.setUpdatedAt(Instant.now());
+        sender.setUpdatedAt(Instant.now());
     }
 
     public static void sendRequest(User sender, User receiver) {
@@ -94,6 +96,7 @@ public class UserService {
         Set<Knowledges> knowledges = specialization.stream().map(Knowledges::new).collect(Collectors.toSet());
         UserProfile profile = updateProfile(lang, loc, media, firstName, lastName, titles);
         User user = new User(uuid, passwort, emayl, profile, knowledges);
+        user.setUpdatedAt(Instant.now());
         userRepo.save(user);
         return user;
     }
