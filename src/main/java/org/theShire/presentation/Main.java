@@ -33,7 +33,7 @@ public class Main {
 
         try {
             initData();
-        }catch (Exception e) {
+        }catch (Throwable e) {
             System.err.println(e.getMessage());
             main(arguments);
         }
@@ -42,7 +42,7 @@ public class Main {
         while (true) {
             try {
                 inputHandler();
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 System.err.println(e.getMessage());//swallow catch them all
                 main(arguments);
             }

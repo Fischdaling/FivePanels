@@ -141,7 +141,7 @@ public class UserPresentation {
     public static User init () {
         System.out.println("1. Login");
         System.out.println("2. Create new User");
-        System.out.println("3. Exit");
+        System.out.println("0. Exit");
         int choice = scanner.nextInt();
         switch (choice) {
             case 1:

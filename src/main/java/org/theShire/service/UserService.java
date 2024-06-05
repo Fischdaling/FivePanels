@@ -71,6 +71,7 @@ public class UserService {
         UserRelationShip.sendRequest(sender, receiver);
     }
 
+    //TODO fails if cancel relation
     public static Set<User> seeIncoming(User sender) {
         Set<User> incomingRequests = UserRelationShip.getRequest(sender);
         if (incomingRequests.isEmpty()){

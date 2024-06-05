@@ -192,5 +192,36 @@ public abstract class DomainAssertion<T> {
             }
             return value;
         }
+
+        //Email Assertions--------------------------------------------------------------------
+        public static <E extends RuntimeException> String isValidEmail(String email,String paramName, Class<E> clazz) {
+            hasMaxLength(email,30,paramName,clazz);
+
+            if (!email.contains("@")) {
+                throw variableException(clazz, paramName + " doesn't contain @");
+            }
+
+            //can't be less then 1 bcs above already checked that
+            String[] parts = email.split("@");
+            if (parts.length != 2) {
+                throw variableException(clazz, paramName + " does contain more then one @");
+            }
+
+            String leftPart = parts[0];
+            String rightPart = parts[1];
+            if (leftPart.isBlank()) {
+                throw variableException(clazz, paramName + " there must be content before @");
+            }
+
+            if (rightPart.isBlank()) {
+                throw variableException(clazz, paramName + " there must be content after @");
+            }
+
+            if (!rightPart.contains(".")) {
+                throw variableException(clazz, paramName + " there must be a . after @");
+            }
+
+            return email;
+        }
     }
 

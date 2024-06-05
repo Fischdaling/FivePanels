@@ -341,4 +341,43 @@ public class DomainAssertionTest {
         assertEquals(zxcvbn3Confirm ,isZxcvbn3Confirm(zxcvbn3Confirm,()->"zxcvbn3Confirm",exType));
     }
 
+    @Test
+    void hasMaxLength_shouldReturnStr_WhenStrIsValidAndAtMaxLength() {
+        String str = "Test";
+        assertEquals(str, hasMaxLength(str, 4, "TestCase", exType));
+    }
+
+    @Test
+    void hasMaxLength_shouldNotThrowException_WhenStrIsExactlyMaxLength() {
+        String str = "1234";
+        assertEquals(str,hasMaxLength(str, 4, "TestCaseThrows", exType));
+    }
+
+    @Test
+    void hasMaxLength_shouldThrowException_WhenStrIsBiggerThanMaxLength() {
+        String str = "Test123";
+        assertThrows(exType, () -> hasMaxLength(str, 4, "TestCaseThrows", exType));
+    }
+
+
+    @Test
+    void assertionOperationTEsting() {
+        Integer num = 10;
+
+        assertDoesNotThrow(() -> {
+            isNotNull(num, "NotNullTest", exType);
+            greaterZero(num, "GreaterThanZeroTest", exType);
+            greaterThan(num, 5, "GreaterThanTest", exType);
+            lesserThan(num, 15, "LesserThanTest", exType);
+        });
+    }
+
+
+    @Test
+    void assertion_ErrorMessageTesting() {
+        String str = "";
+
+        RuntimeException exception = assertThrows(exType, () -> hasMaxLength(str, 4, "TestCaseThrows", exType));
+        assertTrue(exception.getMessage().contains("TestCaseThrows"));
+    }
 }

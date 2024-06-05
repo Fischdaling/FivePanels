@@ -23,20 +23,20 @@ public class CaseVote {
         addAnswers(answers);
         this.votes = votes;
     }
-
+    // TODO MORE TESTING (LIMIT TEST)
     public void voting(UUID voter, Answer answerChosen, double percent) {
         lesserThan(percent,101.0,"percent",exTypeCase);
+        isNotNull(voter,"voter",exTypeCase);
         Vote vote = new Vote(answerChosen, percent);
         isInCollection(vote.getAnswer(), answers, "vote", exTypeCase);
         if (votes.containsKey(voter)) {
-            double sumVotes = votes.get(voter).stream().mapToDouble(Vote::getPercent).sum();
-            if(sumVotes <= 100.0){
+            isTrue(getSumPercent(voter) <= 100.0,()->"votes over 100%",exTypeCase);
                 votes.get(voter).add(vote);
-            }
         } else {
             Set<Vote> voteSet = new HashSet<>();
             voteSet.add(vote);
             votes.put(voter, voteSet);
+            isTrue(getSumPercent(voter) <= 100.0,()->"votes over 100%",exTypeCase);
         }
     }
 
@@ -54,6 +54,9 @@ public class CaseVote {
         return votes;
     }
 
+    public double getSumPercent(UUID voter) {
+        return votes.get(voter).stream().mapToDouble(Vote::getPercent).sum();
+    }
 
     public Map<Answer,Double> getTop3Answer(){
         Map<Answer, Double> answerPercentageMap = new HashMap<>();
@@ -68,7 +71,7 @@ public class CaseVote {
         return answerPercentageMap.entrySet().stream()
                 .sorted(Map.Entry.<Answer, Double>comparingByValue().reversed())
                 .limit(3)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .collect(Collectors.toMap(Map.Entry::getKey, map -> map.setValue(map.getValue()/votes.size())));
 
     }
 

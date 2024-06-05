@@ -23,7 +23,7 @@ import static org.theShire.service.UserService.userRepo;
 public class CasePresentation {
 
     public static void findAllCase() {
-        caseRepo.findAll().forEach(aCase -> aCase.setViewcount(aCase.getViewcount() + 1));
+        CaseService.findAllCase();
         caseRepo.findAll().forEach(System.out::println);
     }
 
