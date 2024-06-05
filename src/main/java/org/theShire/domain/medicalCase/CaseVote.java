@@ -13,19 +13,15 @@ public class CaseVote {
     //a HashMap of a Set of Votes (so we can differentiate between the members)
     private HashMap<UUID, Set<Vote>> votes = new HashMap<>();
 
-    //counts the percent in correlation to  maxPercentCount
-    private double percentCount;
 
 
     public CaseVote(LinkedHashSet<Answer> answers) {
         addAnswers(answers);
-        setPercentCount(0);
     }
 
     public CaseVote(LinkedHashSet<Answer> answers, HashMap<UUID, Set<Vote>> votes) {
         addAnswers(answers);
         this.votes = votes;
-        setPercentCount(percentCount);
     }
 
     public void voting(UUID voter, Answer answerChosen, double percent) {
@@ -57,16 +53,8 @@ public class CaseVote {
         return votes;
     }
 
-    public double getPercentCount() {
-        return percentCount;
-    }
 
-    public void setPercentCount(double percentCount) {
-        greaterEqualsZero(percentCount, "percentCount", exTypeCase);
-        this.percentCount = percentCount;
-    }
-
-    public List<Answer> getTop3Answer(){
+    public Map<Answer,Double> getTop3Answer(){
         Map<Answer, Double> answerPercentageMap = new HashMap<>();
 
         for (Set<Vote> voteSet : votes.values()) {
@@ -79,8 +67,7 @@ public class CaseVote {
         return answerPercentageMap.entrySet().stream()
                 .sorted(Map.Entry.<Answer, Double>comparingByValue().reversed())
                 .limit(3)
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
     }
 
@@ -90,7 +77,6 @@ public class CaseVote {
         final StringBuffer sb = new StringBuffer();
         sb.append("answers: ").append(answers);
         sb.append("votes: ").append(votes);
-        sb.append("percentCount: ").append(percentCount);
 
         return sb.toString();
     }

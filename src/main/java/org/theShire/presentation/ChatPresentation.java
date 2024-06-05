@@ -19,7 +19,7 @@ public class ChatPresentation {
     }
 
     public static void openChat() {
-        UUID uuid = enterUUID("Enter chat uuid");
+        UUID uuid = enterUUID("Enter chat uuid",Chat.class);
         Chat chat = messengerRepo.findByID(uuid);
         if (messengerRepo.getEntryMap().containsKey(uuid) && messengerRepo.getEntryMap().get(uuid).getPeople().contains(userLoggedIn)) {
             System.out.print("chat with ");

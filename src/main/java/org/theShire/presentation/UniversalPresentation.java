@@ -1,11 +1,13 @@
 package org.theShire.presentation;
 
+import org.theShire.domain.BaseEntity;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
 import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
+import org.theShire.foundation.DomainAssertion;
 import org.theShire.service.CaseService;
 import org.theShire.service.ChatService;
 import org.theShire.service.UserService;
@@ -73,25 +75,27 @@ public class UniversalPresentation {
     }
 
 
-    public static UUID enterUUID(String enterMessage){
+    public static<T extends BaseEntity> UUID enterUUID(String enterMessage, Class<T> clazz){
+        DomainAssertion.isNotNull(clazz,"entity", RuntimeException.class);
         StringBuilder str = new StringBuilder();
-
-        str.append("User").repeat('-',20).append(System.lineSeparator());
-        for (User user : userRepo.findAll()) {
-            str.append(user.getProfile().getFirstName()).append(" ").append(user.getProfile().getLastName()).append(System.lineSeparator());
-            str.append(user.getEntityId()).append(System.lineSeparator());
-        }
-
-        str.append("Cases").repeat('-',20).append(System.lineSeparator());
-        for (Case medCase : caseRepo.findAll()) {
-            str.append(medCase.getTitle()).append(System.lineSeparator());
-            str.append(medCase.getEntityId()).append(System.lineSeparator());
-        }
-
-        str.append("Chat").repeat('-',20).append(System.lineSeparator());
-        for (Chat chat : messengerRepo.findAll()) {
-            str.append(chat.getPeople().stream().map(aChat -> aChat.getProfile().getFirstName()).collect(Collectors.toSet()));
-            str.append(chat.getEntityId()).append(System.lineSeparator());
+        if (clazz == User.class) {
+            str.append("User").repeat('-', 20).append(System.lineSeparator());
+            for (User user : userRepo.findAll()) {
+                str.append(user.getProfile().getFirstName()).append(" ").append(user.getProfile().getLastName()).append(System.lineSeparator());
+                str.append(user.getEntityId()).append(System.lineSeparator());
+            }
+        }else if (clazz == Case.class) {
+            str.append("Cases").repeat('-', 20).append(System.lineSeparator());
+            for (Case medCase : caseRepo.findAll()) {
+                str.append(medCase.getTitle()).append(System.lineSeparator());
+                str.append(medCase.getEntityId()).append(System.lineSeparator());
+            }
+        } else if (clazz == Chat.class) {
+            str.append("Chat").repeat('-', 20).append(System.lineSeparator());
+            for (Chat chat : messengerRepo.findAll()) {
+                str.append(chat.getPeople().stream().map(aChat -> aChat.getProfile().getFirstName()).collect(Collectors.toSet()));
+                str.append(chat.getEntityId()).append(System.lineSeparator());
+            }
         }
         System.out.println(str);
 

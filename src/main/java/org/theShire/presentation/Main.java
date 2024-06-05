@@ -35,7 +35,7 @@ public class Main {
             initData();
         }catch (Exception e) {
             System.err.println(e.getMessage());
-            initData();
+            main(arguments);
         }
 
         // THE SHOW MUST GO ON

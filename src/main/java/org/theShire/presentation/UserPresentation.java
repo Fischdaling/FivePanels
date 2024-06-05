@@ -24,7 +24,7 @@ public class UserPresentation {
         userRepo.findAll().forEach(System.out::println);
     }
     public static void deleteUserById () {
-        UUID userId = enterUUID("Enter User Id");
+        UUID userId = enterUUID("Enter User Id", User.class);
         UserService.deleteUserById(userId);
     }
 
@@ -51,19 +51,19 @@ public class UserPresentation {
                 break;
 
             case 2:
-                receiver = userRepo.findByID(enterUUID("Enter target's id"));
+                receiver = userRepo.findByID(enterUUID("Enter target's id",User.class));
                 UserService.sendRequest(sender, receiver);
                 System.out.println("Request sent from " + sender.getProfile().getFirstName() + " to " + receiver.getProfile().getFirstName());
                 break;
 
             case 3:
-                receiver = userRepo.findByID(enterUUID("Enter target's id"));
+                receiver = userRepo.findByID(enterUUID("Enter target's id", User.class));
                 UserService.acceptRequest(sender, receiver);
                 System.out.println("Request from " + sender.getProfile().getFirstName() + " " + sender.getEntityId() + " to " + receiver.getProfile().getFirstName() + " accepted.");
 
                 break;
             case 4:
-                receiver = userRepo.findByID(enterUUID("Enter target's id"));
+                receiver = userRepo.findByID(enterUUID("Enter target's id",User.class));
                 UserService.cancelFriendship(sender, receiver);
                 break;
             default:
