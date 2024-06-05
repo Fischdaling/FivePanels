@@ -96,7 +96,6 @@ public class UserService {
         Set<Knowledges> knowledges = specialization.stream().map(Knowledges::new).collect(Collectors.toSet());
         UserProfile profile = updateProfile(lang, loc, media, firstName, lastName, titles);
         User user = new User(uuid, passwort, emayl, profile, knowledges);
-        user.setUpdatedAt(Instant.now());
         userRepo.save(user);
         return user;
     }
