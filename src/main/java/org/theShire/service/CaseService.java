@@ -83,8 +83,10 @@ public class CaseService {
 
     public static void correctAnswer(UUID caseId, String answer){
         isTrue(caseRepo.findByID(caseId).getOwner().equals(userLoggedIn),()->"You must be the owner of the case",exTypeCase);
-        caseRepo.findByID(caseId).setCorrectAnswer(new Answer(answer));
-        caseRepo.findByID(caseId).setUpdatedAt(Instant.now());
+        if(caseRepo.findByID(caseId).getCorrectAnswer() == null) {
+            caseRepo.findByID(caseId).setCorrectAnswer(new Answer(answer));
+            caseRepo.findByID(caseId).setUpdatedAt(Instant.now());
+        }
     }
 
     public static User removeMember(UUID caseId, User member){

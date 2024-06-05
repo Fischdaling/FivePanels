@@ -36,6 +36,7 @@ public class Case extends BaseEntity {
     private Chat groupchat;
     //portraits the total votes of all members combined
     private CaseVote caseVote;
+    private Answer correctAnswer = null;
 
     public Case(User owner, String title, Set<Knowledges> knowledges, List<Content> content, CaseVote caseVote, User... members) {
         super();
@@ -82,7 +83,6 @@ public class Case extends BaseEntity {
     }
 
 
-
     public int getViewcount() {
         return viewcount;
     }
@@ -109,7 +109,6 @@ public class Case extends BaseEntity {
     }
 
 
-
     public Set<UUID> getUserLiked() {
         return userLiked;
     }
@@ -129,28 +128,33 @@ public class Case extends BaseEntity {
 
     public void setCorrectAnswer(Answer correctAnswer) {
         isInCollection(correctAnswer, caseVote.getAnswers(), "correctAnswer", exTypeCase);
-
-        Set<UUID> userIdsWithCorrectVotes = caseVote.getVotes().entrySet().stream()
-                .filter(entry -> entry.getValue().
-                        stream().anyMatch(vote -> vote.getAnswer().equals(correctAnswer)))
-                .map(entry -> entry.getKey())
-                .collect(Collectors.toSet());
-
-        for (UUID userId : userIdsWithCorrectVotes) {
-            User user = userRepo.findByID(userId);
-            isNotNull(user, "user", exTypeCase);
-            double percentVoted = caseVote.getVotes().get(userId).stream()
-                    .filter(vote -> vote.getAnswer().equals(correctAnswer))
-                    .mapToDouble(Vote::getPercent)
-                    .sum();
-                int newScore = user.getScore() + (int)(2 * percentVoted/100+1);
+        if (this.correctAnswer == null) {
+            Set<UUID> userIdsWithCorrectVotes = caseVote.getVotes().entrySet().stream().
+                    filter(entry -> entry.getValue().
+                            stream().anyMatch(vote -> vote.getAnswer().equals(correctAnswer))).
+                    map(entry -> entry.getKey()).
+                    collect(Collectors.toSet());
+            this.correctAnswer = correctAnswer;
+            for (UUID userId : userIdsWithCorrectVotes) {
+                User user = userRepo.findByID(userId);
+                isNotNull(user, "user", exTypeCase);
+                double percentVoted = caseVote.getVotes().get(userId).stream()
+                        .filter(vote -> vote.getAnswer().equals(correctAnswer))
+                        .mapToDouble(Vote::getPercent)
+                        .sum();
+                int newScore = user.getScore() + (int) (2 * percentVoted / 100 + 1);
                 user.setScore(newScore);
                 setUpdatedAt(Instant.now());
+            }
         }
     }
 
     public Chat getGroupchat() {
         return groupchat;
+    }
+
+    public Answer getCorrectAnswer() {
+        return this.correctAnswer;
     }
 
     public void setGroupchat(Chat groupchat) {
@@ -170,8 +174,8 @@ public class Case extends BaseEntity {
         }
     }
 
-    public void removeMember(User member){
-        this.members.remove(isInCollection(member,this.members,"member",exTypeCase));
+    public void removeMember(User member) {
+        this.members.remove(isInCollection(member, this.members, "member", exTypeCase));
     }
 
     public void addContent(Content content) {
@@ -203,7 +207,7 @@ public class Case extends BaseEntity {
         sb.append("members: ").append(members.stream().
                         map(user -> user.getProfile().getFirstName()).
                         collect(Collectors.toList())).
-                        append(System.lineSeparator());
+                append(System.lineSeparator());
         sb.append("likeCount: ").append(likeCount).append(System.lineSeparator());
         sb.append("userLiked: ").append(userLiked).append(System.lineSeparator());
         sb.append("caseVote: ").append(caseVote).append(System.lineSeparator());
