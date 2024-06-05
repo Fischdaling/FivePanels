@@ -132,14 +132,14 @@ public class CaseServiceTest {
 
     @Test
     public void correctAnswer_ShouldIncreaseScoreOfUser_WhenUserVotedAnswer(){
-        int oldScore = user1.getScore();
+        int oldScore = user2.getScore();
         System.out.println(medCase.getCaseVote().getAnswers());
 
-        medCase.getCaseVote().voting(user1.getEntityId(),a1,25);
-        medCase.getCaseVote().voting(user1.getEntityId(),a1,25);
-        medCase.getCaseVote().voting(user1.getEntityId(),a2,50);
+        medCase.getCaseVote().voting(user2.getEntityId(),a1,25);
+        medCase.getCaseVote().voting(user2.getEntityId(),a1,25);
+        medCase.getCaseVote().voting(user2.getEntityId(),a2,50);
         medCase.declareCorrectAnswer(a1);
-        assertEquals(oldScore +(2*50/100+1),user1.getScore());
+        assertEquals(oldScore +(2*50/100+1),user2.getScore());
     }
 
     @Test
