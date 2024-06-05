@@ -96,6 +96,7 @@ public class CaseService {
         member.removeCase(medCase);
         medCase.removeMember(member);
         medCase.getGroupchat().removeChatter(member.getEntityId());
+        medCase.setUpdatedAt(Instant.now());
     }
     public static void addMember(UUID caseId, User member){
         Case medCase = caseRepo.findByID(caseId);

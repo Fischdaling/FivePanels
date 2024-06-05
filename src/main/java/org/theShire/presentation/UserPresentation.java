@@ -61,7 +61,7 @@ public class UserPresentation {
                 break;
             case 4:
                 receiver = userRepo.findByID(enterUUID("Enter target's id"));
-                UserService.cancleFriendship(sender, receiver);
+                UserService.cancelFriendship(sender, receiver);
                 break;
             default:
                 System.out.println("Invalid option.");

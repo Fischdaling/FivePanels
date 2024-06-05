@@ -10,6 +10,7 @@ import org.theShire.domain.richType.*;
 import org.theShire.foundation.Knowledges;
 import org.theShire.repository.UserRepository;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,7 @@ public class UserService {
         medCase.forEach(mCase -> mCase.removeMember(user));
         if (userLoggedIn.getEntityId().equals(userId));
             //throw user out
+        user.isMemberOfCases().forEach(aCase -> aCase.setUpdatedAt(Instant.now()));
     }
 
     public static void findByName (String name) {
@@ -42,14 +44,20 @@ public class UserService {
         System.out.println(isNotNull(user,"user",exTypeUser));
     }
 
-    public static void cancleFriendship(User sender, User receiver) {
+    public static void cancelFriendship(User sender, User receiver) {
+        Set<User> users = new HashSet<>();
+        users.add(sender);
+        users.add(receiver);
         UserRelationShip.declineRequest(sender,receiver);
+        ChatService.messengerRepo.findByMembers(users).removeChatters(sender.getEntityId(), receiver.getEntityId());
     }
 
     public static void acceptRequest(User sender, User receiver) {
         isTrue(UserRelationShip.getRequest(sender).contains(receiver),()->"Receiver not found.", exTypeUser);
         UserRelationShip.acceptRequest(sender, receiver);
         System.out.println("Request from " + sender.getProfile().getFirstName() + " " + sender.getEntityId() + " to " + receiver.getProfile().getFirstName() + " accepted.");
+        receiver.setUpdatedAt(Instant.now());
+        sender.setUpdatedAt(Instant.now());
     }
 
     public static void sendRequest(User sender, User receiver) {
