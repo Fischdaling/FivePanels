@@ -9,10 +9,7 @@ import org.theShire.foundation.Knowledges;
 import org.theShire.service.UserService;
 
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.isEqual;
@@ -23,6 +20,9 @@ import static org.theShire.service.UserService.userLoggedIn;
 import static org.theShire.service.UserService.userRepo;
 
 public class UserPresentation {
+    public static void findAllUser(){
+        userRepo.findAll().forEach(System.out::println);
+    }
     public static void deleteUserById () {
         UUID userId = enterUUID("Enter User Id");
         UserService.deleteUserById(userId);

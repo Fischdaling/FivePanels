@@ -15,8 +15,10 @@ import java.util.*;
 import static java.lang.System.in;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
+import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
 import static org.theShire.presentation.Main.scanner;
 import static org.theShire.service.CaseService.caseRepo;
+import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UserService.*;
 
 public class UserServiceTest {
@@ -25,6 +27,7 @@ public class UserServiceTest {
 
     @BeforeEach
     public void setUp(){
+        relationShip = new HashMap<>();
         Set<String> knowledges1 = new HashSet<>();
         knowledges1.add("Test");
         knowledges1.add("adult cardiothoracic anesthesiology");
@@ -97,5 +100,52 @@ public class UserServiceTest {
         String name = "Bilbo";
 
         Set<User> result = UserService.findByName(name);
+        assertTrue(result.contains(user1));
+    }
+
+    @Test
+    public void findByName_ShouldThrow_WhenUsersDoesntExist() {
+        String name = "Grimar";
+
+        Set<User> result = UserService.findByName(name);
+        assertFalse(result.contains(user1));
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void cancelFriendship_ShouldCancelFriendship_WhenIncoming() {
+        sendRequest(user1, user2);
+        cancelFriendship(user1, user2);
+        Set<User> incoming = seeIncoming(user2);
+
+        assertNull(incoming);
+    }
+    @Test
+    public void cancelFriendship_ShouldCancelFriendship_WhenEstablished() {
+        sendRequest(user1, user2);
+        acceptRequest(user2, user1);
+        cancelFriendship(user1, user2);
+        Set<User> users = new HashSet<>();
+        users.add(user1);
+        users.add(user2);
+        assertNull(messengerRepo.findByMembers(users));
+    }
+
+    @Test
+    public void acceptFriendship_ShouldAcceptFriendship_WhenSendToUser() {
+        sendRequest(user1, user2);
+        acceptRequest(user2, user1);
+        Set<User> users = new HashSet<>();
+        users.add(user1);
+        users.add(user2);
+        assertNotNull(messengerRepo.findByMembers(users));
+    }
+
+    @Test
+    public void sendFriendship_ShouldThrowFriendship_WhenSendToAlreadyEstablishedUser() {
+        sendRequest(user1, user2);
+        acceptRequest(user2, user1);
+
+        assertThrows(exTypeUser,()->sendRequest(user1, user2));
     }
 }

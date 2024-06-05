@@ -22,9 +22,9 @@ import static org.theShire.service.UserService.userLoggedIn;
 public class CaseService {
     public static final CaseRepository caseRepo = new CaseRepository();
 
-    public static void findAllCase(){
+    public static List<Case> findAllCase(){
         caseRepo.findAll().forEach(aCase -> aCase.setViewcount(aCase.getViewcount()+1));
-        caseRepo.findAll().forEach(System.out::println);
+        return caseRepo.findAll();
     }
 
     public static void deleteCaseById(UUID caseId) {
@@ -83,13 +83,11 @@ public class CaseService {
 
     public static void correctAnswer(UUID caseId, String answer){
         isTrue(caseRepo.findByID(caseId).getOwner().equals(userLoggedIn),()->"You must be the owner of the case",exTypeCase);
-        System.out.println(caseRepo.findByID(caseId).getCaseVote().getAnswers() +"\n");
         caseRepo.findByID(caseId).setCorrectAnswer(new Answer(answer));
-        System.out.println(answer + " Was declared as the right Answer. Doctors that made this assumption will earn points.");
         caseRepo.findByID(caseId).setUpdatedAt(Instant.now());
     }
 
-    public static void removeMember(UUID caseId, User member){
+    public static User removeMember(UUID caseId, User member){
         Case medCase = caseRepo.findByID(caseId);
         isTrue(medCase.getOwner().equals(userLoggedIn),()->"You must be the owner of the case",exTypeCase);
 
@@ -97,8 +95,9 @@ public class CaseService {
         medCase.removeMember(member);
         medCase.getGroupchat().removeChatter(member.getEntityId());
         medCase.setUpdatedAt(Instant.now());
+        return member;
     }
-    public static void addMember(UUID caseId, User member){
+    public static User addMember(UUID caseId, User member){
         Case medCase = caseRepo.findByID(caseId);
         isTrue(medCase.getOwner().equals(userLoggedIn),()->"You must be the owner of the case",exTypeCase);
 
@@ -106,6 +105,7 @@ public class CaseService {
         medCase.addMember(member);
         medCase.getGroupchat().addPerson(member);
         caseRepo.findByID(caseId).setUpdatedAt(Instant.now());
+        return member;
 
     }
 

@@ -48,6 +48,8 @@ public class UserRelationShip {
         String keyOutgoing = createMapKey(sender, receiver);
         String keyIncoming = createMapKey(receiver, sender);
 
+        DomainAssertion.isTrue(!relationShip.containsKey(keyIncoming) && !relationShip.containsKey(keyOutgoing),()->"Relation already Existing",exTypeUser);
+
         Relation relationOutgoing = new Relation( sender, receiver, OUTGOING);
         Relation relationIncoming = new Relation( receiver, sender, INCOMING);
 
@@ -90,7 +92,7 @@ public class UserRelationShip {
         tmpSet.add(sender);
         tmpSet.add(receiver);
 
-        if (messengerRepo.findByMembers(tmpSet) != null){
+        if (getRelation(sender,receiver).getType().equals(ESTABLISHED)){
             messengerRepo.deleteById(messengerRepo.findByMembers(tmpSet).getEntityId());
         }
 
@@ -140,6 +142,8 @@ public class UserRelationShip {
         the OUTGOING enums and returns a Map that wields the user2 and the Relation to User2
         */
     }
+
+
 }
 
 

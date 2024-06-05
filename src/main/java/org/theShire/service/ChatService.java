@@ -6,13 +6,14 @@ import org.theShire.domain.messenger.Message;
 import org.theShire.repository.MessengerRepository;
 
 import java.time.Instant;
+import java.util.List;
 
 public class ChatService {
     public static final MessengerRepository messengerRepo = new MessengerRepository();
 
 
-    public static void findAllChat(){
-        messengerRepo.findAll().forEach(System.out::println);
+    public static List<Chat> findAllChat(){
+        return messengerRepo.findAll();
     }
 
     public static void createChat(User...users){

@@ -15,8 +15,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
+import static org.theShire.domain.medicalDoctor.Relation.RelationType.ESTABLISHED;
 import static org.theShire.foundation.DomainAssertion.isNotNull;
 import static org.theShire.foundation.DomainAssertion.isTrue;
+import static org.theShire.service.ChatService.messengerRepo;
 
 public class UserService {
     public static final UserRepository userRepo = new UserRepository();
@@ -25,7 +27,7 @@ public class UserService {
 
     public static List<User> findAllUser(){
        return userRepo.findAll();
-//        userRepo.findAll().forEach(System.out::println);
+
     }
 
     public static void deleteUserById (UUID userId) {
@@ -50,7 +52,11 @@ public class UserService {
         users.add(sender);
         users.add(receiver);
         UserRelationShip.declineRequest(sender,receiver);
-        ChatService.messengerRepo.findByMembers(users).removeChatters(sender.getEntityId(), receiver.getEntityId());
+//        if (UserRelationShip.getRelation(sender,receiver)!= null) {
+//            if (UserRelationShip.getRelation(sender, receiver).getType().equals(ESTABLISHED)) {
+//                messengerRepo.deleteById(messengerRepo.findByMembers(users).getEntityId());
+//            }
+//        }
     }
 
     public static void acceptRequest(User sender, User receiver) {

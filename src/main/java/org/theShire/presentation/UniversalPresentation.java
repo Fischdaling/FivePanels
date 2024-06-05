@@ -58,13 +58,13 @@ public class UniversalPresentation {
         int entityId = scanner.nextInt();
         switch (entityId){
             case 1:
-                UserService.findAllUser();
+                UserPresentation.findAllUser();
                 break;
             case 2:
-                CaseService.findAllCase();
+                CasePresentation.findAllCase();
                 break;
             case 3:
-                ChatService.findAllChat();
+                ChatPresentation.findAllChat();
                 break;
             default:
                 System.out.println("invalid command");

@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;
+import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
 import static org.theShire.service.ChatService.messengerRepo;
 
 public class UserRelationShipTest {
@@ -21,6 +22,7 @@ public class UserRelationShipTest {
 
     @BeforeEach
     public void setUp(){
+        relationShip= new HashMap<>();
         Set<String> knowledges1 = new HashSet<>();
         knowledges1.add("Test");
         knowledges1.add("adult cardiothoracic anesthesiology");

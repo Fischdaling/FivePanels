@@ -14,7 +14,9 @@ import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UserService.userLoggedIn;
 
 public class ChatPresentation {
-
+    public static void findAllChat(){
+        messengerRepo.findAll().forEach(System.out::println);
+    }
 
     public static void openChat() {
         UUID uuid = enterUUID("Enter chat uuid");

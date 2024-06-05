@@ -21,6 +21,12 @@ import static org.theShire.service.UserService.userLoggedIn;
 import static org.theShire.service.UserService.userRepo;
 
 public class CasePresentation {
+
+    public static void findAllCase(){
+        caseRepo.findAll().forEach(aCase -> aCase.setViewcount(aCase.getViewcount()+1));
+        caseRepo.findAll().forEach(System.out::println);
+    }
+
     public static void deleteCaseById() {
         UUID tmpCase = enterUUID("Enter Case Id");
         CaseService.deleteCaseById(tmpCase);
@@ -126,20 +132,23 @@ public class CasePresentation {
         String answer = scanner.nextLine();
         CaseService.correctAnswer(caseId,answer);
         System.out.println(answer + " Was declared as the right Answer. Doctors that made this assumption will earn points.");
+        System.out.println("Answer Voted the most was "+ caseRepo.findByID(caseId).getCaseVote().getTop3Answer());
     }
 
-    public static void removeMember(){
+    public static User removeMember(){
         UUID medCaseId = enterUUID("Enter Case Id");
         UUID memberId = enterUUID("Enter Member Id");
         User member = userRepo.findByID(memberId);
         CaseService.removeMember(medCaseId,member);
+        return member;
     }
 
-    public static void addMember(){
+    public static User addMember(){
         UUID medCaseId = enterUUID("Enter Case Id");
         UUID memberId = enterUUID("Enter Member Id");
         User member = userRepo.findByID(memberId);
         CaseService.addMember(medCaseId,member);
+        return member;
     }
 
 }
