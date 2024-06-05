@@ -138,7 +138,7 @@ public class CaseServiceTest {
         medCase.getCaseVote().voting(user1.getEntityId(),a1,25);
         medCase.getCaseVote().voting(user1.getEntityId(),a1,25);
         medCase.getCaseVote().voting(user1.getEntityId(),a2,50);
-        medCase.setCorrectAnswer(a1);
+        medCase.declareCorrectAnswer(a1);
         assertEquals(oldScore +(2*50/100+1),user1.getScore());
     }
 

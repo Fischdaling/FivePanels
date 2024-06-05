@@ -126,7 +126,7 @@ public class Case extends BaseEntity {
         this.viewcount = viewcount;
     }
 
-    public void setCorrectAnswer(Answer correctAnswer) {
+    public void declareCorrectAnswer(Answer correctAnswer) {
         isInCollection(correctAnswer, caseVote.getAnswers(), "correctAnswer", exTypeCase);
         Set<UUID> userIdsWithCorrectVotes = caseVote.getVotes().entrySet().stream().
                 filter(entry -> entry.getValue().
@@ -142,7 +142,6 @@ public class Case extends BaseEntity {
                     .sum();
             int newScore = user.getScore() + (int) (2 * percentVoted / 100 + 1);
             user.setScore(newScore);
-            this.correctAnswer = correctAnswer;
             setUpdatedAt(Instant.now());
         }
     }
@@ -152,7 +151,11 @@ public class Case extends BaseEntity {
     }
 
     public Answer getCorrectAnswer() {
-        return this.correctAnswer;
+        return correctAnswer;
+    }
+
+    public void setCorrectAnswer(Answer correctAnswer) {
+        this.correctAnswer = correctAnswer;
     }
 
     public void setGroupchat(Chat groupchat) {
