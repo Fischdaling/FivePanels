@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
 
 class CaseVoteTest {
     LinkedHashSet<Answer> answerLul;
@@ -20,6 +21,7 @@ class CaseVoteTest {
 
     @BeforeEach
     public void init() {
+        relationShip = new HashMap<>();
         //initialization of the LinkedHashSet filled with Answers
         answerLul = new LinkedHashSet<>();
         userID = UUID.randomUUID();

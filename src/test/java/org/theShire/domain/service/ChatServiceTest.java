@@ -11,11 +11,13 @@ import org.theShire.repository.MessengerRepository;
 import org.theShire.service.ChatService;
 import org.theShire.service.UserService;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
 import static org.theShire.service.ChatService.messengerRepo;
 
 class ChatServiceTest {
@@ -28,6 +30,7 @@ class ChatServiceTest {
 
     @BeforeEach
     public void init() {
+        relationShip = new HashMap<>();
         testChat = new Chat();
 
         knowledges1 = new HashSet<>();

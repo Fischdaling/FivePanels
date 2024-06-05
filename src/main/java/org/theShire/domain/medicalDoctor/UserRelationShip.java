@@ -91,11 +91,11 @@ public class UserRelationShip {
         Set<User> tmpSet = new HashSet<>();
         tmpSet.add(sender);
         tmpSet.add(receiver);
-
-        if (getRelation(sender,receiver).getType().equals(ESTABLISHED)){
-            messengerRepo.deleteById(messengerRepo.findByMembers(tmpSet).getEntityId());
+        if (UserRelationShip.getRelation(sender,receiver)!= null) {
+            if (getRelation(sender, receiver).getType().equals(ESTABLISHED)) {
+                messengerRepo.deleteById(messengerRepo.findByMembers(tmpSet).getEntityId());
+            }
         }
-
         relationShip.remove(keyIncoming);
         relationShip.remove(keyOutgoing);
 

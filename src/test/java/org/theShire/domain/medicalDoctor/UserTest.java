@@ -15,11 +15,13 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
 
 public class UserTest {
 
     @Test
     public void removeCase_ShouldDeleteRefrences_WhenCaseDeleted() {
+        relationShip = new HashMap<>();
         Set<String> knowledges1 = new HashSet<>();
         Set<String> knowledges2 = new HashSet<>();
         knowledges1.add("Test");
