@@ -3,12 +3,10 @@ package org.theShire.domain.medicalCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
 
 class CaseVoteTest {
@@ -74,6 +72,7 @@ class CaseVoteTest {
         assertEquals(caseVote.getVotes().get(userID).stream().findFirst().orElse(null).getPercent(), vote3.getPercent());
     }
 
+    @Test
     void TestVoting_ShouldReturnTrue_WhenComparedToANonEqualObject() {
         caseVote.voting(userID, answer1, 10.0);
 
@@ -84,4 +83,72 @@ class CaseVoteTest {
         assertNotEquals(caseVote.getVotes().get(userID).stream().findFirst().orElse(null).getPercent(), vote4.getPercent());
 
     }
+
+    @Test
+    void testVoting_ShouldAddVote_When0Percent() {
+        caseVote.voting(userID, answer1, 0.0);
+
+        assertTrue(caseVote.getVotes().containsKey(userID));
+    }
+
+    @Test
+    void testVoting_ShouldAddVote_When100Percent() {
+        caseVote.voting(userID, answer1, 100.0);
+
+        assertTrue(caseVote.getVotes().containsKey(userID));
+    }
+
+    @Test
+    void testVoting_ShouldNotAddVote_WhenOver100Percent() {
+        assertThrows(exTypeCase,()->caseVote.voting(userID, answer1, 101.0));
+
+        assertFalse(caseVote.getVotes().containsKey(userID));
+    }
+
+    @Test
+    void testMultipleVotes_ShouldNotUpdateVote_WhenUserVotes2TimesTheSameAnswer() {
+        caseVote.voting(userID, answer1, 10.0);
+
+        caseVote.voting(userID, answer1, 20.0);
+
+        assertEquals(10.0, caseVote.getVotes().get(userID).stream().findFirst().orElse(null).getPercent());
+    }
+
+    @Test
+    void testMultipleVotes_ShouldAddVotes_WhenSameUserForDifferentAnswers() {
+        caseVote.voting(userID, answer, 30.0);
+
+        caseVote.voting(userID, answer1, 40.0);
+
+        assertTrue(caseVote.getVotes().containsKey(userID));
+        assertEquals(2, caseVote.getVotes().get(userID).size());
+    }
+
+    @Test
+    void testVoting_ShouldNotAddVote_WhenVoterNull() {
+       assertThrows(exTypeCase,()->caseVote.voting(null, answer1, 10.0));
+    }
+
+    @Test
+    void testVoting_ShouldNotAddVote_WhenVotingForNonexxistingAnswer() {
+        Answer nonexistentAnswer = new Answer("Test Answer");
+
+        assertThrows(exTypeCase,()-> caseVote.voting(userID, nonexistentAnswer, 10.0));
+
+    }
+
+    @Test
+    void testGetTop3Answer_ShouldReturnTop3AnswersWithPercentages_WhenVoted() {
+        caseVote.voting(userID, answer, 20.0);
+        caseVote.voting(userID, answer, 20.0);
+        caseVote.voting(userID, answer1, 40.0);
+        caseVote.voting(userID, answer1, 20.0);
+
+        Map<Answer, Double> top3Answers = caseVote.getTop3Answer();
+
+        assertEquals(2, top3Answers.size());
+        assertEquals(top3Answers.get(answer),40);
+        assertEquals(top3Answers.get(answer1),60);
+    }
+
 }

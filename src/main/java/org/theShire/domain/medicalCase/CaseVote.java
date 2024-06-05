@@ -23,7 +23,7 @@ public class CaseVote {
         addAnswers(answers);
         this.votes = votes;
     }
-    // TODO MORE TESTING (LIMIT TEST)
+
     public void voting(UUID voter, Answer answerChosen, double percent) {
         lesserThan(percent,101.0,"percent",exTypeCase);
         isNotNull(voter,"voter",exTypeCase);

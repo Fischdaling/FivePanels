@@ -1,6 +1,7 @@
 package org.theShire.domain.medicalCase;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
 import org.theShire.domain.media.Media;
@@ -11,6 +12,9 @@ import org.theShire.service.UserService;
 
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.service.UserService.userLoggedIn;
 
 public class CaseTest {
@@ -51,5 +55,47 @@ public class CaseTest {
         medCase = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
 
     }
-    
+
+    @Test
+    public void testAddMember() {
+        Set<String> knowledges = new HashSet<>();
+        knowledges.add("critical care or pain medicine");
+        knowledges.add("pediatric anesthesiology");
+        User user3 = UserService.createUser(UUID.randomUUID(), new Name("Frodo"), new Name("Beutlin"), new Email("Frodo@hobbit.orc"), new Password("FrodoProved1234"), new Language("Hobbitish"), new Location("Auenland"), "Frodo Profile", knowledges, "Dr", "Hobbingen");
+        medCase.addMember(user3);
+        assertEquals(2, medCase.getMembers().size());
+    }
+
+    @Test
+    public void testRemoveMember() {
+        medCase.removeMember(user2);
+        assertEquals(0, medCase.getMembers().size());
+    }
+
+    @Test
+    public void testAddContent() {
+        Content newContent = new Content(new ContentText("Another Text"));
+        medCase.addContent(newContent);
+        assertEquals(4, medCase.getContent().size());
+    }
+
+
+    @Test
+    void declareCorrectAnswer_ValidAnswer_CorrectlyUpdatesUserScores() {
+        User owner = medCase.getOwner();
+        int initialOwnerScore = owner.getScore();
+        int initialUser2Score = user2.getScore();
+        medCase.getCaseVote().voting(user2.getEntityId(),a1,50);
+        medCase.declareCorrectAnswer(a1);
+
+        assertEquals(initialOwnerScore + 5, owner.getScore());
+        assertEquals(initialUser2Score + 2*50/100+1, user2.getScore());
+    }
+
+    @Test
+    void declareCorrectAnswer_InvalidAnswer_ThrowsException() {
+        Answer incorrectAnswer = new Answer("Wrong Answer");
+
+        assertThrows(exTypeCase, () -> medCase.declareCorrectAnswer(incorrectAnswer));
+    }
 }
