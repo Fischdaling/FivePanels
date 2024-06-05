@@ -33,6 +33,7 @@ public class CaseService {
             tmpCase.getOwner().removeCase(tmpCase);
             tmpCase.getMembers().forEach(aUser -> aUser.removeCase(tmpCase));
             caseRepo.deleteById(tmpCase.getEntityId());
+            messengerRepo.deleteById(tmpCase.getGroupchat().getEntityId());
     }
 
     public static void likeCase(UUID caseId) {
