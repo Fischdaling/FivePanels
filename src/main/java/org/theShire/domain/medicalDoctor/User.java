@@ -94,7 +94,7 @@ public class User extends BaseEntity {
     }
 
     public void setScore(int score) {
-        this.score = greaterEqualsZero(score, "score", exTypeUser);
+        this.score = score;
     }
 
     public Set<UserRelationShip> getContacts() {
@@ -161,8 +161,7 @@ public class User extends BaseEntity {
         sb.append(profile).append(System.lineSeparator());
         sb.append("email: ").append(email).append(System.lineSeparator());
         sb.append("password: ").append(password).append(System.lineSeparator());
-        sb.append("score: ").append(score).append(System.lineSeparator());
-        sb.append("contacts: ").append(contacts).append(System.lineSeparator());
+        sb.append("score: ").append(getScore()).append(System.lineSeparator());
         sb.append("chats: ").append(chats).append(System.lineSeparator());
         sb.append("specializations: ").append(specialization).append(System.lineSeparator());
         sb.append("ownedCases: ").append(ownedCases.stream().map(Case::getTitle).findAny().orElse(null)).append(System.lineSeparator());

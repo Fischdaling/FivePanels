@@ -70,7 +70,6 @@ public class CaseService {
         Set<Knowledges> knowledgesSet  = knowledges.stream().map(Knowledges::new).collect(Collectors.toSet());
         Case medCase = new Case(owner, title, knowledgesSet, content, caseVote , members);
         owner.addOwnedCase(medCase);
-        owner.setScore(owner.getScore()+5);
         Arrays.stream(members).forEach(user -> user.addMemberOfCase(medCase));
         caseRepo.save(medCase);
         Set<User> chatters = Arrays.stream(members).filter(Objects::nonNull).collect(Collectors.toSet());;
@@ -83,11 +82,9 @@ public class CaseService {
 
     public static void correctAnswer(UUID caseId, String answer){
         isTrue(caseRepo.findByID(caseId).getOwner().equals(userLoggedIn),()->"You must be the owner of the case",exTypeCase);
-        caseRepo.findByID(caseId).setCorrectAnswer(new Answer(answer));
-        if(caseRepo.findByID(caseId).getCorrectAnswer() == null) {
             caseRepo.findByID(caseId).declareCorrectAnswer(new Answer(answer));
             caseRepo.findByID(caseId).setUpdatedAt(Instant.now());
-        }
+
     }
 
     public static User removeMember(UUID caseId, User member){

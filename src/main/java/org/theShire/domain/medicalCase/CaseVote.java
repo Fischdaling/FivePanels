@@ -25,13 +25,14 @@ public class CaseVote {
     }
 
     public void voting(UUID voter, Answer answerChosen, double percent) {
-        Vote vote = new Vote(answerChosen, percent);
         lesserThan(percent,101.0,"percent",exTypeCase);
+        Vote vote = new Vote(answerChosen, percent);
         isInCollection(vote.getAnswer(), answers, "vote", exTypeCase);
         if (votes.containsKey(voter)) {
             double sumVotes = votes.get(voter).stream().mapToDouble(Vote::getPercent).sum();
-            isTrue(sumVotes <= 100.0,()->"Vote Limit Reached",exTypeCase);
-            votes.get(voter).add(vote);
+            if(sumVotes <= 100.0){
+                votes.get(voter).add(vote);
+            }
         } else {
             Set<Vote> voteSet = new HashSet<>();
             voteSet.add(vote);
