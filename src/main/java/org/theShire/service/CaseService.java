@@ -102,7 +102,7 @@ public class CaseService {
     public static User addMember(UUID caseId, User member){
         Case medCase = caseRepo.findByID(caseId);
         isTrue(medCase.getOwner().equals(userLoggedIn),()->"You must be the owner of the case",exTypeCase);
-        isTrue(userLoggedIn.equals(member),()->"You can't add yourself case",exTypeCase);
+        isTrue(!userLoggedIn.equals(member),()->"You can't add yourself to case",exTypeCase);
         member.addMemberOfCase(medCase);
         medCase.addMember(member);
         medCase.getGroupchat().addPerson(member);
