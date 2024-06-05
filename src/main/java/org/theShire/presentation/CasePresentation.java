@@ -128,7 +128,7 @@ public class CasePresentation {
 
     public static void correctAnswer() {
         UUID caseId = enterUUID("Enter Case ID",Case.class);
-        if (caseRepo.findByID(caseId).getCorrectAnswer() == null) {
+        if (!caseRepo.findByID(caseId).isCaseDone()) {
             isTrue(caseRepo.findByID(caseId).getOwner().equals(userLoggedIn), () -> "You must be the owner of the case", exTypeCase);
             System.out.println(caseRepo.findByID(caseId).getCaseVote().getAnswers() + "\n");
             System.out.println("Enter Correct Answer");
@@ -136,6 +136,8 @@ public class CasePresentation {
             CaseService.correctAnswer(caseId, answer);
             System.out.println(answer + " Was declared as the right Answer. Doctors that made this assumption will earn points.");
             System.out.println("Answer Voted the most was " + caseRepo.findByID(caseId).getCaseVote().getTop3Answer());
+
+            caseRepo.findByID(caseId).setCaseDone(true);
         }
     }
 

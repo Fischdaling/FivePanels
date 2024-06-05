@@ -36,10 +36,11 @@ public class Case extends BaseEntity {
     private Chat groupchat;
     //portraits the total votes of all members combined
     private CaseVote caseVote;
-    private Answer correctAnswer = null;
+    private boolean caseDone;
 
     public Case(User owner, String title, Set<Knowledges> knowledges, List<Content> content, CaseVote caseVote, User... members) {
         super();
+        caseDone = false;
         this.userLiked = new HashSet<>();
         setOwner(owner);
         setTitle(title);
@@ -142,20 +143,21 @@ public class Case extends BaseEntity {
                     .sum();
             int newScore = user.getScore() + (int) (2 * percentVoted / 100 + 1);
             user.setScore(newScore);
-            setUpdatedAt(Instant.now());
         }
+        owner.setScore(getOwner().getScore()+5);
+        setUpdatedAt(Instant.now());
     }
 
     public Chat getGroupchat() {
         return groupchat;
     }
 
-    public Answer getCorrectAnswer() {
-        return correctAnswer;
+    public void setCaseDone(boolean caseDone) {
+        this.caseDone = caseDone;
     }
 
-    public void setCorrectAnswer(Answer correctAnswer) {
-        this.correctAnswer = correctAnswer;
+    public boolean isCaseDone() {
+        return caseDone;
     }
 
     public void setGroupchat(Chat groupchat) {
