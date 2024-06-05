@@ -183,8 +183,8 @@ public abstract class DomainAssertion<T> {
         }
 
         // Password Assertions--------------------------------------------------------------
-        public static <E extends RuntimeException> String isZxcvbn3Confirm(String value, String paramName, Class<E> clazz) {
-            isNotNull(value, paramName, clazz);
+        public static <E extends RuntimeException> String isZxcvbn3Confirm(String value, Supplier<String> errorMsg, Class<E> clazz) {
+            isNotNull(value, errorMsg.get(), clazz);
             Zxcvbn zxcvbn = new Zxcvbn();
             Strength strength = zxcvbn.measure(value);
             if (strength.getScore() <3){

@@ -23,11 +23,9 @@ import static org.theShire.service.UserService.userRepo;
 public class UserServiceTest {
     User user1;
     User user2;
-    private final InputStream originalSystemIn = System.in;
 
     @BeforeEach
     public void setUp(){
-        System.setIn(originalSystemIn);
         Set<String> knowledges1 = new HashSet<>();
         knowledges1.add("Test");
         knowledges1.add("adult cardiothoracic anesthesiology");
@@ -40,7 +38,6 @@ public class UserServiceTest {
 
     @AfterEach
     public void tearDown() {
-        System.setIn(originalSystemIn);
         user1 = null;
         user2 = null;
         caseRepo.deleteAll();
@@ -71,37 +68,27 @@ public class UserServiceTest {
 
     @Test
     public void testDeleteUser_ShouldRemoveUserFromRepo_WhenCalled(){
-        System.setIn(new ByteArrayInputStream(user1.getEntityId().toString().getBytes()));
-        UserService.deleteUserById();
+        UserService.deleteUserById(user1.getEntityId());
 
-        userRepo.deleteById(user1.getEntityId());
         assertFalse(userRepo.existsById(user1.getEntityId()));
     }
 
     @Test
     public void testDeleteUser_ShouldThrowMedicalDoctorException_WhenWrongParameter(){
-        System.setIn(new ByteArrayInputStream(UUID.randomUUID().toString().getBytes()));
-
-        assertThrows(NoSuchElementException.class, UserService::deleteUserById);
+        assertThrows(NoSuchElementException.class, ()->UserService.deleteUserById(UUID.randomUUID()));
     }
 
 
 
     @Test
     public void login_ShouldReturnLoggedInUser_WhenUserExistsAndPasswordEquals(){
-        String input = user1.getEmail().toString() + "\n" + "VerySafe123";
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
-
-        User userReturned = login();
+        User userReturned = login(user1.getEmail().value(),"VerySafe123");
         assertEquals(user1, userReturned);
     }
 
     @Test
     public void login_ShouldThrow_WhenUserExistsAndPasswordNotEquals(){
-        String input = user1.getEmail().toString() + "\n" + "VerySafe";
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
-
-        assertThrows(exTypeUser,()->login());
+        assertThrows(exTypeUser,()->login(user1.getEmail().value(),"VerySafe"));
     }
 
 

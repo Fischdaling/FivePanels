@@ -332,13 +332,13 @@ public class DomainAssertionTest {
     @Test
     void isZxcvbn3Confirm_ShouldThrow_WhenIsNotZxcvbn3Confirm(){
         String zxcvbn3Confirm = "abc";
-        assertThrows(exType, ()->isZxcvbn3Confirm(zxcvbn3Confirm,"zxcvbn3Confirm",exType));
+        assertThrows(exType, ()->isZxcvbn3Confirm(zxcvbn3Confirm,()->"zxcvbn3Confirm",exType));
     }
 
     @Test
     void isZxcvbn3Confirm_ShouldReturnHashedPassword_WhenIsZxcvbn3Confirm(){
         String zxcvbn3Confirm = "Spengergasse";
-        assertEquals(zxcvbn3Confirm ,isZxcvbn3Confirm(zxcvbn3Confirm,"zxcvbn3Confirm",exType));
+        assertEquals(zxcvbn3Confirm ,isZxcvbn3Confirm(zxcvbn3Confirm,()->"zxcvbn3Confirm",exType));
     }
 
 }

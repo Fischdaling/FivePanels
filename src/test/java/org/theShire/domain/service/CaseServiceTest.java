@@ -105,25 +105,21 @@ public class CaseServiceTest {
 
     @Test
     public void testDeleteCaseById_ShouldAddUserToCaseRepo_WhenCreated(){
-
-        setInputStream(medCase.getEntityId().toString());
-        CaseService.deleteCaseById();
+        CaseService.deleteCaseById(medCase.getEntityId());
         assertNotEquals(caseRepo.findByID(medCase.getEntityId()),medCase);
     }
 
     @Test
     public void like_ShouldIncreaseLikeCounterByOne_WhenLiked(){
-        setInputStream(medCase.getEntityId().toString());
         int oldLike = medCase.getLikeCount();
-        CaseService.likeCase();
+        CaseService.likeCase(medCase.getEntityId() );
 
         assertEquals(oldLike+1,medCase.getLikeCount());
     }
 
     @Test
     public void like_ShouldAddUserToUserLiked_WhenLiked() {
-        setInputStream(medCase.getEntityId().toString());
-        CaseService.likeCase();
+        CaseService.likeCase(medCase.getEntityId());
 
         assertTrue(medCase.getUserLiked().contains(UserService.userLoggedIn.getEntityId()));
     }
@@ -131,8 +127,7 @@ public class CaseServiceTest {
     @Test
     public void findCaseById_ShouldIncreaseViewCountByOne_WhenFound(){
         int oldView = medCase.getViewcount();
-        setInputStream(medCase.getEntityId().toString());
-        CaseService.findCaseById();
+        CaseService.findCaseById(medCase.getEntityId());
 
         assertEquals(oldView+1,medCase.getViewcount());
     }
@@ -140,10 +135,9 @@ public class CaseServiceTest {
     @Test
     public void findCaseById_ShouldThrow_WhenNotFound(){
         int oldView = medCase.getViewcount();
-        setInputStream(UUID.randomUUID().toString());
 
 
-        assertThrows(NoSuchElementException.class, CaseService::findCaseById);
+        assertThrows(exTypeCase,()-> CaseService.findCaseById(medCase.getEntityId()));
         assertEquals(oldView,medCase.getViewcount());
     }
 

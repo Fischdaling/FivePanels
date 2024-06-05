@@ -9,6 +9,7 @@ import org.theShire.domain.medicalCase.CaseVote;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.richType.*;
+import org.theShire.presentation.CasePresentation;
 import org.theShire.service.CaseService;
 import org.theShire.service.ChatService;
 import org.theShire.service.UniversalService;
@@ -109,7 +110,7 @@ public class Main {
         answers.add(new Answer("Krebs"));
         answers.add(new Answer("League of Legends addiction"));
         case1 = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2, user3);
-        userLoggedIn = init();
+        userLoggedIn = UserPresentation.init();
     }
 
 
@@ -138,53 +139,53 @@ public class Main {
 
             switch (choice) {
                 case 1:
-                    UserService.addUser();
+                    UserPresentation.addUser();
                     break;
                 case 2:
-                    CaseService.addCase();
+                    CasePresentation.addCase();
                     break;
                 case 3:
-                    ChatService.openChat();
+                    ChatPresentation.openChat();
                     break;
                 case 4:
                     UniversalService.findAll();
                     break;
                 case 5:
-                    UserService.findByName();
+                    UserPresentation.findByName();
                     break;
                 case 6:
-                    CaseService.findCaseById();
+                    CasePresentation.findCaseById();
                     break;
                 case 7:
-                    UserService.deleteUserById();
+                    UserPresentation.deleteUserById();
                     break;
                 case 8:
-                    CaseService.deleteCaseById();
+                    CasePresentation.deleteCaseById();
                     break;
                 case 9:
-                    UserService.relationCommands();
+                    UserPresentation.relationCommands();
                     break;
                 case 10:
-                    CaseService.vote();
+                    CasePresentation.vote();
                     break;
                 case 11:
-                    CaseService.likeCase();
+                    CasePresentation.likeCase();
                     break;
                 case 12:
                     saveEntry();
                     break;
                 case 13:
-                    UserService.changeProfile();
+                    UserPresentation.changeProfile();
                     break;
                 case 14:
-                    CaseService.correctAnswer();
+                    CasePresentation.correctAnswer();
                     break;
                 case 15:
-                    CaseService.removeMember();
+                    CasePresentation.removeMember();
                     break;
                 case 0:
                     System.out.println("Goodbye");
-                    userLoggedIn = init();
+                    userLoggedIn = UserPresentation.init();
                     break;
                 default:
                     System.out.println("Invalid choice");
