@@ -140,6 +140,7 @@ public class CasePresentation {
         UUID memberId = enterUUID("Enter Member Id");
         User member = userRepo.findByID(memberId);
         CaseService.removeMember(medCaseId,member);
+        System.out.println("Member was successfully removed");
         return member;
     }
 

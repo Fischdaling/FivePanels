@@ -129,8 +129,8 @@ public class Main {
             System.out.println("12. Save Data");
             System.out.println("13. Change Profile");
             System.out.println("14. Set correct Answer");
-            System.out.println("15. remove a member from Case");
-            System.out.println("16. remove a member from Case");
+            System.out.println("15. remove member from Case");
+            System.out.println("16. add member to Case");
             System.out.println("0. Logout");
 
             int choice = scanner.nextInt();
