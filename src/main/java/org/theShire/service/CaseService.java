@@ -97,5 +97,15 @@ public class CaseService {
         medCase.removeMember(member);
         medCase.getGroupchat().removeChatter(member.getEntityId());
     }
+    public static void addMember(UUID caseId, User member){
+        Case medCase = caseRepo.findByID(caseId);
+        isTrue(medCase.getOwner().equals(userLoggedIn),()->"You must be the owner of the case",exTypeCase);
+
+        member.addMemberOfCase(medCase);
+        medCase.addMember(member);
+        medCase.getGroupchat().addPerson(member);
+        caseRepo.findByID(caseId).setUpdatedAt(Instant.now());
+
+    }
 
 }

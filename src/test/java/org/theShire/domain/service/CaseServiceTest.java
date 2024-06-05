@@ -61,27 +61,12 @@ public class CaseServiceTest {
         answers.add(a2);
         medCase = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
 
-        userLoggedIn = user2;
+        userLoggedIn = user1;
 
 
     }
 
-    @AfterEach
-    public void tearDown() {
-        System.setIn(null);
-        medCase = null;
-        user1 = null;
-        user2 = null;
-        a1 = null;
-        a2 = null;
-        caseRepo.deleteAll();
-        userRepo.deleteAll();
 
-    }
-    private void setInputStream(String input) {
-        ByteArrayInputStream testIn = new ByteArrayInputStream(input.getBytes());
-        System.setIn(testIn);
-    }
     @Test
     public void testCreateCase_ShouldAddUserToRepo_WhenCreated(){
 
@@ -111,14 +96,16 @@ public class CaseServiceTest {
 
     @Test
     public void like_ShouldIncreaseLikeCounterByOne_WhenLiked(){
+        userLoggedIn = user2;
         int oldLike = medCase.getLikeCount();
-        CaseService.likeCase(medCase.getEntityId() );
+        CaseService.likeCase(medCase.getEntityId());
 
         assertEquals(oldLike+1,medCase.getLikeCount());
     }
 
     @Test
     public void like_ShouldAddUserToUserLiked_WhenLiked() {
+        userLoggedIn = user2;
         CaseService.likeCase(medCase.getEntityId());
 
         assertTrue(medCase.getUserLiked().contains(UserService.userLoggedIn.getEntityId()));
@@ -158,5 +145,40 @@ public class CaseServiceTest {
         System.out.println(medCase.getCaseVote().getAnswers());
 
         assertThrows(exTypeCase,()->medCase.getCaseVote().voting(user1.getEntityId(),a1,105));
+    }
+
+    @Test
+    public void removeMember_ShouldRemoveMemberFromCase_WhenOwner(){
+        CaseService.removeMember(medCase.getEntityId(), user2);
+
+        assertFalse(medCase.getUserLiked().contains(user2.getEntityId()));
+        assertFalse(user2.isMemberOfCases().contains(medCase));
+    }
+
+    @Test
+    public void removeMember_ShouldThrowException_WhenNotOwner(){
+        userLoggedIn = user2;
+        assertThrows(exTypeCase, () -> {
+            CaseService.removeMember(medCase.getEntityId(), user2);
+        });
+    }
+
+    @Test
+    public void addMember_ShouldAddMemberToCase_WhenOwner(){
+        CaseService.removeMember(medCase.getEntityId(), user2);
+        CaseService.addMember(medCase.getEntityId(), user2);
+
+        assertTrue(user2.isMemberOfCases().contains(medCase));
+        assertTrue(medCase.getMembers().contains(user2));
+        assertTrue(medCase.getGroupchat().getPeople().contains(user2));
+    }
+
+    @Test
+    public void addMember_ShouldThrowException_WhenNotOwner(){
+        CaseService.removeMember(medCase.getEntityId(), user2);
+        userLoggedIn = user2;
+        assertThrows(RuntimeException.class, () -> {
+            CaseService.addMember(medCase.getEntityId(), user2);
+        });
     }
 }

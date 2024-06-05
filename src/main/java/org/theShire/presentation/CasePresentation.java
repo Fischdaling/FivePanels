@@ -135,4 +135,11 @@ public class CasePresentation {
         CaseService.removeMember(medCaseId,member);
     }
 
+    public static void addMember(){
+        UUID medCaseId = enterUUID("Enter Case Id");
+        UUID memberId = enterUUID("Enter Member Id");
+        User member = userRepo.findByID(memberId);
+        CaseService.addMember(medCaseId,member);
+    }
+
 }

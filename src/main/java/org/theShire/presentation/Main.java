@@ -130,6 +130,7 @@ public class Main {
             System.out.println("13. Change Profile");
             System.out.println("14. Set correct Answer");
             System.out.println("15. remove a member from Case");
+            System.out.println("16. remove a member from Case");
             System.out.println("0. Logout");
 
             int choice = scanner.nextInt();
@@ -180,6 +181,9 @@ public class Main {
                     break;
                 case 15:
                     CasePresentation.removeMember();
+                    break;
+                case 16:
+                    CasePresentation.addMember();
                     break;
                 case 0:
                     System.out.println("Goodbye");
