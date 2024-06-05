@@ -208,6 +208,7 @@ public class Case extends BaseEntity {
         sb.append("likeCount: ").append(likeCount).append(System.lineSeparator());
         sb.append("userLiked: ").append(userLiked).append(System.lineSeparator());
         sb.append("caseVote: ").append(caseVote).append(System.lineSeparator());
+        sb.append("Number 3 Answer: ").append(caseVote.getTop3Answer()).append(System.lineSeparator());
         return sb.toString();
     }
 

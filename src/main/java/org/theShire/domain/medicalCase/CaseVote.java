@@ -2,6 +2,7 @@ package org.theShire.domain.medicalCase;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
@@ -63,6 +64,24 @@ public class CaseVote {
     public void setPercentCount(double percentCount) {
         greaterEqualsZero(percentCount, "percentCount", exTypeCase);
         this.percentCount = percentCount;
+    }
+
+    public List<Answer> getTop3Answer(){
+        Map<Answer, Double> answerPercentageMap = new HashMap<>();
+
+        for (Set<Vote> voteSet : votes.values()) {
+            for (Vote vote : voteSet) {
+                Answer answer = vote.getAnswer();
+                double percent = vote.getPercent();
+                answerPercentageMap.put(answer, answerPercentageMap.getOrDefault(answer, 0.0) + percent);
+            }
+        }
+        return answerPercentageMap.entrySet().stream()
+                .sorted(Map.Entry.<Answer, Double>comparingByValue().reversed())
+                .limit(3)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+
     }
 
 

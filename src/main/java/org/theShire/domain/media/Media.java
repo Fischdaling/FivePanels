@@ -35,7 +35,7 @@ public class Media {
         try {
             image = ImageIO.read(new File("src/main/resources/"+filename));
         } catch (IOException e) {
-            throw new MediaException(e.getMessage());
+            this.altText = filename;
         }
     }
 
