@@ -110,8 +110,8 @@ public class UserRelationShip {
     }
 
     public static boolean messageable(User user1, User user2) {
-        return Optional.of(getRelation(user1, user2)).map(Relation::getType).
-                filter(relationType -> relationType == ESTABLISHED).isPresent();
+        Relation relation = getRelation(user1, user2);
+        return relation != null && relation.getType() == ESTABLISHED;
         /*
         Basically delivers the relationType of a Relation between 2 users
         if the relation is established.

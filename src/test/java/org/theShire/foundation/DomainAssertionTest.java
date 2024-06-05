@@ -380,4 +380,36 @@ public class DomainAssertionTest {
         RuntimeException exception = assertThrows(exType, () -> hasMaxLength(str, 4, "TestCaseThrows", exType));
         assertTrue(exception.getMessage().contains("TestCaseThrows"));
     }
+
+    @Test
+    void inRange_ShouldReturnInputValue_WhenInRange() {
+        double value = 5.0;
+        double min = 0.0;
+        double max = 10.0;
+        String paramName = "value";
+
+        double result = DomainAssertion.inRange(value, min, max, paramName, RuntimeException.class);
+
+        assertEquals(value, result);
+    }
+
+    @Test
+    void inRange_ShouldThrowException_WhenOutOfRange() {
+        double value = 15.0;
+        double min = 0.0;
+        double max = 10.0;
+        String paramName = "value";
+
+        assertThrows(RuntimeException.class, () -> DomainAssertion.inRange(value, min, max, paramName, RuntimeException.class));
+    }
+
+    @Test
+    void inRange_ShouldThrowException_WhenNullValue() {
+        Double value = null;
+        double min = 0.0;
+        double max = 10.0;
+        String paramName = "value";
+
+        assertThrows(RuntimeException.class, () -> DomainAssertion.inRange(value, min, max, paramName, RuntimeException.class));
+    }
 }

@@ -6,10 +6,7 @@ import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.richType.*;
 import org.theShire.service.UserService;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;
@@ -97,21 +94,6 @@ public class UserRelationShipTest {
     }
 
     @Test
-    public void messageable_ShouldReturnTrue_WhenRelationEstablished(){
-        UserRelationShip.sendRequest(user1,user2);
-        UserRelationShip.acceptRequest(user1,user2);
-
-        assertTrue(UserRelationShip.messageable(user1,user2));
-    }
-
-    @Test
-    public void messageable_ShouldReturnFalse_WhenRelationNotEstablished(){
-        UserRelationShip.sendRequest(user1,user2);
-
-        assertFalse(UserRelationShip.messageable(user1,user2));
-    }
-
-    @Test
     public void getRequests_ShouldReturnAllIncomingRequestsFromUser_WhenCalled(){
         UserRelationShip.sendRequest(user1,user2);
 
@@ -138,4 +120,58 @@ public class UserRelationShipTest {
         users.remove(user2);
         assertEquals(users,UserRelationShip.getSent(user1));
     }
+
+    @Test
+    public void declineRequest_ShouldRemoveRequest_WhenDeclined() {
+        UserRelationShip.sendRequest(user1, user2);
+        UserRelationShip.declineRequest(user1, user2);
+
+        assertTrue(UserRelationShip.getRequest(user2).isEmpty());
+        assertNull(UserRelationShip.getRelation(user1, user2));
+        assertNull(UserRelationShip.getRelation(user2, user1));
+    }
+
+    @Test
+    public void declineRequest_ShouldRemoveRequestAndCloseChat_WhenDeclinedWithEstablishedRelation() {
+        UserRelationShip.sendRequest(user1, user2);
+        UserRelationShip.acceptRequest(user1, user2);
+
+        UserRelationShip.declineRequest(user1, user2);
+
+        assertTrue(UserRelationShip.getRequest(user2).isEmpty());
+        assertNull(UserRelationShip.getRelation(user1, user2));
+        assertNull(UserRelationShip.getRelation(user2, user1));
+    }
+
+
+    @Test
+    public void messageable_ShouldReturnFalse_WhenNoRelationEstablished() {
+        assertFalse(UserRelationShip.messageable(user1, user2));
+    }
+
+    @Test
+    public void messageable_ShouldReturnTrue_WhenRelationEstablished(){
+        UserRelationShip.sendRequest(user1,user2);
+        UserRelationShip.acceptRequest(user1,user2);
+
+        assertTrue(UserRelationShip.messageable(user1,user2));
+    }
+    @Test
+    public void messageable_ShouldReturnFalse_WhenRelationNotEstablished() {
+        UserRelationShip.sendRequest(user1, user2);
+        assertFalse(UserRelationShip.messageable(user1, user2));
+    }
+
+    @Test
+    public void messageable_ShouldReturnFalse_WhenRelationOutgoing() {
+        UserRelationShip.sendRequest(user1, user2);
+        assertFalse(UserRelationShip.messageable(user1, user2));
+    }
+
+    @Test
+    public void messageable_ShouldReturnFalse_WhenRelationIncoming() {
+        UserRelationShip.sendRequest(user1, user2);
+        assertFalse(UserRelationShip.messageable(user2, user1));
+    }
+
 }

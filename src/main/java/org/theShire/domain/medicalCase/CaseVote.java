@@ -1,6 +1,8 @@
 package org.theShire.domain.medicalCase;
 
 
+import org.theShire.foundation.DomainAssertion;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -24,21 +26,25 @@ public class CaseVote {
         this.votes = votes;
     }
 
+
+
     public void voting(UUID voter, Answer answerChosen, double percent) {
-        lesserThan(percent,101.0,"percent",exTypeCase);
-        isNotNull(voter,"voter",exTypeCase);
+        DomainAssertion.isNotNull(voter, "voter", exTypeCase);
+        DomainAssertion.isNotNull(answerChosen, "answerChosen", exTypeCase);
+        DomainAssertion.inRange(percent, 0.0, 100.0, "percent", exTypeCase);
+
         Vote vote = new Vote(answerChosen, percent);
-        isInCollection(vote.getAnswer(), answers, "vote", exTypeCase);
-        if (votes.containsKey(voter)) {
-            isTrue(getSumPercent(voter) <= 100.0,()->"votes over 100%",exTypeCase);
-                votes.get(voter).add(vote);
-        } else {
-            Set<Vote> voteSet = new HashSet<>();
-            voteSet.add(vote);
-            votes.put(voter, voteSet);
-            isTrue(getSumPercent(voter) <= 100.0,()->"votes over 100%",exTypeCase);
-        }
+
+        DomainAssertion.isInCollection(answerChosen, answers, "answer", exTypeCase);
+
+        Set<Vote> voteSet = votes.computeIfAbsent(voter, k -> new HashSet<>());
+
+        double totalPercent = getSumPercent(voter) + percent;
+        DomainAssertion.isTrue(totalPercent <= 100.0, () -> "votes over 100%", exTypeCase);
+
+        voteSet.add(vote);
     }
+
 
     // getter & setter-----------------------------------
     public LinkedHashSet<Answer> getAnswers() {

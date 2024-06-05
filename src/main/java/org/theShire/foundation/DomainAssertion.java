@@ -135,6 +135,15 @@ public abstract class DomainAssertion<T> {
         }
         return value;
     }
+
+        public static <T extends Number&Comparable<T>, E extends RuntimeException> T inRange(T value,T min,T max, String paramName, Class<E> clazz){
+            isNotNull(value, paramName, clazz);
+            if (value.compareTo(max)>0 || value.compareTo(min)<0){
+                throw variableException(clazz, paramName+" is not in Range: "+min+"-"+max);
+            }
+            return value;
+        }
+
     // Expression Assertions -------------------------------------------------------
 
         public static <E extends RuntimeException> void isTrue(boolean expression, Supplier<String> errorMsg, Class<E> clazz) {

@@ -1,5 +1,6 @@
 package org.theShire.domain.medicalDoctor;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
@@ -13,14 +14,17 @@ import org.theShire.service.UserService;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
 
 public class UserTest {
+    User user1;
+    User user2;
+    Case case1;
+    Set<Case> set;
 
-    @Test
-    public void removeCase_ShouldDeleteRefrences_WhenCaseDeleted() {
+    @BeforeEach
+    void setUp(){
         relationShip = new HashMap<>();
         Set<String> knowledges1 = new HashSet<>();
         Set<String> knowledges2 = new HashSet<>();
@@ -28,8 +32,8 @@ public class UserTest {
         knowledges1.add("adult cardiothoracic anesthesiology");
         knowledges2.add("Test");
         knowledges2.add("adult cardiothoracic anesthesiology");
-        User user1 = UserService.createUser(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"), new Name("Bilbo"), new Name("Beutlin"), new Email("Bilbo@hobbit.orc"), new Password("VerySafe123"), new Language("Hobbitish"), new Location("Auenland"), "Bilbo Profile", knowledges1, "Fassreiter", "Meister Dieb");
-        User user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"),  new Name("Aragorn"), new Name("Arathorn"), new Email("Aragorn@gondor.orc"), new Password("EvenSaver1234"), new Language("Gondorisch"), new Location("Gondor"), "Aragorn Profile", knowledges2, "Arathorns Sohn", "König von Gondor");
+        user1 = UserService.createUser(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"), new Name("Bilbo"), new Name("Beutlin"), new Email("Bilbo@hobbit.orc"), new Password("VerySafe123"), new Language("Hobbitish"), new Location("Auenland"), "Bilbo Profile", knowledges1, "Fassreiter", "Meister Dieb");
+        user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"),  new Name("Aragorn"), new Name("Arathorn"), new Email("Aragorn@gondor.orc"), new Password("EvenSaver1234"), new Language("Gondorisch"), new Location("Gondor"), "Aragorn Profile", knowledges2, "Arathorns Sohn", "König von Gondor");
 
         List<Content> contents = new ArrayList<>();
         //add texts
@@ -45,14 +49,52 @@ public class UserTest {
         LinkedHashSet<Answer> answers = new LinkedHashSet<>();
         answers.add(new Answer("Answer 1"));
         answers.add(new Answer("Answer 2"));
-        Case case1 = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
+        case1 = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
 
-        Set<Case> set = new HashSet<>();
+         set = new HashSet<>();
+    }
 
+    @Test
+    public void removeCase_ShouldDeleteRefrences_WhenCaseDeleted() {
         user1.removeCase(case1);
         user2.removeCase(case1);
 
         assertEquals(set, user1.getOwnedCases());
         assertEquals(set, user2.isMemberOfCases());
     }
+
+    @Test
+    public void addOwnedCase_ShouldAddCase_WhenCalled() {
+        user1.addOwnedCase(case1);
+
+        // Assert
+        assertTrue(user1.getOwnedCases().contains(case1));
+    }
+
+    @Test
+    public void removeOwnedCase_ShouldRemoveCase_WhenCalled() {
+        user1.addOwnedCase(case1);
+
+        user1.removeCase(case1);
+
+        assertFalse(user1.getOwnedCases().contains(case1));
+    }
+
+    @Test
+    public void addMemberOfCase_ShouldAddCase_WhenCalled() {
+        user1.addMemberOfCase(case1);
+
+        // Assert
+        assertTrue(user1.isMemberOfCases().contains(case1));
+    }
+
+    @Test
+    public void removeMemberOfCase_ShouldRemoveCase_WhenCalled() {
+        user1.addMemberOfCase(case1);
+
+        user1.removeCase(case1);
+
+        assertFalse(user1.isMemberOfCases().contains(case1));
+    }
+
 }

@@ -50,8 +50,6 @@ class CaseVoteTest {
     @Test
     void TestVoting_ShouldReturnTrue_WhenComparedToASemiEqualObject() {
         caseVote.voting(userID, answer1, 10.0);
-
-
         Vote vote2 = new Vote(answer1, 5.0);
 
 
@@ -106,12 +104,12 @@ class CaseVoteTest {
     }
 
     @Test
-    void testMultipleVotes_ShouldNotUpdateVote_WhenUserVotes2TimesTheSameAnswer() {
+    void testMultipleVotes_ShouldUpdateVote_WhenUserVotes2TimesTheSameAnswer() {
         caseVote.voting(userID, answer1, 10.0);
 
         caseVote.voting(userID, answer1, 20.0);
 
-        assertEquals(10.0, caseVote.getVotes().get(userID).stream().findFirst().orElse(null).getPercent());
+        assertEquals(20.0, caseVote.getVotes().get(userID).stream().findFirst().orElse(null).getPercent());
     }
 
     @Test
