@@ -19,7 +19,7 @@ public class Chat extends BaseEntity {
     // All past sent messanges
     private List<Message> chatHistory;
 
-    public Chat(User ... chatters) {
+    public Chat(User... chatters) {
         super();
         people = new HashSet<>();
         chatHistory = new ArrayList<>();
@@ -33,13 +33,14 @@ public class Chat extends BaseEntity {
 
     }
 
-    private void addChatters(User...chatters) {
+    private void addChatters(User... chatters) {
         for (User chatter : chatters) {
             addChatter(chatter);
         }
     }
+
     private void addChatter(User chatter) {
-        people.add(isNotInCollection(chatter,this.people,"chatter",exTypeMes));
+        people.add(isNotInCollection(chatter, this.people, "chatter", exTypeMes));
         chatter.addChat(this);
     }
 
@@ -52,22 +53,30 @@ public class Chat extends BaseEntity {
     }
 
     public void addChatHistory(Message message) {
-        chatHistory.add(isNotNull(message,"message",exTypeMes));
+        chatHistory.add(isNotNull(message, "message", exTypeMes));
     }
 
-    public void sendMessage(Message message){
+    public void sendMessage(Message message) {
         addChatHistory(message);
         message.setStage(Message.Stage.SENT);
     }
 
-    public void removeChatter(UUID chatter){
-        isNotNull(chatter, "chatter",exTypeMes);
+    public void removeChatter(UUID chatter) {
+        isNotNull(chatter, "chatter", exTypeMes);
         people.remove(userRepo.findByID(chatter));
     }
 
-    public void addPerson(User chatter){
-        people.add(isNotNull(chatter,"chatter",exTypeMes));
+    public void removeChatters(UUID... chatters) {
+        isNotNull(chatters, "chatter", exTypeMes);
+        for (UUID chatter : chatters) {
+            people.remove(userRepo.findByID(chatter));
+        }
     }
+
+    public void addPerson(User chatter) {
+        people.add(isNotNull(chatter, "chatter", exTypeMes));
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Chat:").append(getEntityId()).append(System.lineSeparator());
@@ -77,7 +86,7 @@ public class Chat extends BaseEntity {
     }
 
     @Override
-    public String toCSVString(){
+    public String toCSVString() {
         final StringBuilder sb = new StringBuilder(super.toCSVString());
         sb.append(people).append(";");
         sb.append(chatHistory).append(";").append(System.lineSeparator());
