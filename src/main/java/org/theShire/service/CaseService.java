@@ -73,7 +73,7 @@ public class CaseService {
         owner.addOwnedCase(medCase);
         Arrays.stream(members).forEach(user -> user.addMemberOfCase(medCase));
         caseRepo.save(medCase);
-        Set<User> chatters = Arrays.stream(members).filter(Objects::nonNull).collect(Collectors.toSet());;
+        Set<User> chatters = Arrays.stream(members).filter(Objects::nonNull).collect(Collectors.toSet());
         chatters.add(owner);
         if (messengerRepo.findByMembers(chatters) == null)
             ChatService.createChat(chatters.toArray(User[]::new));
