@@ -17,8 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.presentation.Main.scanner;
 import static org.theShire.service.CaseService.caseRepo;
-import static org.theShire.service.UserService.login;
-import static org.theShire.service.UserService.userRepo;
+import static org.theShire.service.UserService.*;
 
 public class UserServiceTest {
     User user1;
@@ -34,6 +33,7 @@ public class UserServiceTest {
         knowledges2.add("critical care or pain medicine");
         knowledges2.add("pediatric anesthesiology");
         user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"),  new Name("Aragorn"), new Name("Arathorn"), new Email("Aragorn@gondor.orc"), new Password("EvenSaver1234"), new Language("Gondorisch"), new Location("Gondor"), "Aragorn Profile", knowledges2, "Arathorns Sohn", "König von Gondor");
+        userLoggedIn = user1;
     }
 
     @AfterEach
@@ -75,7 +75,7 @@ public class UserServiceTest {
 
     @Test
     public void testDeleteUser_ShouldThrowMedicalDoctorException_WhenWrongParameter(){
-        assertThrows(NoSuchElementException.class, ()->UserService.deleteUserById(UUID.randomUUID()));
+        assertThrows(MedicalDoctorException.class, ()->UserService.deleteUserById(UUID.randomUUID()));
     }
 
 

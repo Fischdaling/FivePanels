@@ -1,7 +1,6 @@
 package org.theShire.service;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import org.theShire.domain.exception.MedicalDoctorException;
 import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalDoctor.User;
@@ -11,23 +10,25 @@ import org.theShire.domain.richType.*;
 import org.theShire.foundation.Knowledges;
 import org.theShire.repository.UserRepository;
 
-import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
-import static org.theShire.foundation.DomainAssertion.*;
-import static org.theShire.presentation.Main.scanner;
-import static org.theShire.service.UniversalService.enterUUID;
+import static org.theShire.foundation.DomainAssertion.isNotNull;
+import static org.theShire.foundation.DomainAssertion.isTrue;
 
 public class UserService {
     public static final UserRepository userRepo = new UserRepository();
     public static UserRelationShip relations = new UserRelationShip(); // Important or Error
     public static User userLoggedIn = null;
 
+    public static void findAllUser(){
+        userRepo.findAll().forEach(System.out::println);
+    }
+
     public static void deleteUserById (UUID userId) {
         User user = userRepo.findByID(userId);
-        isInCollection(userId,userRepo.getEntryMap().keySet(),"User not found",exTypeUser);
+        isTrue(userRepo.existsById(userId),()->"User not found",exTypeUser);
         userRepo.deleteById(userId);
         Set<Case> medCase = user.isMemberOfCases();
         medCase.forEach(mCase -> mCase.removeMember(user));

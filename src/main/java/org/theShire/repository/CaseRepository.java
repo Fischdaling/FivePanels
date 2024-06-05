@@ -15,7 +15,7 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.theShire.service.UniversalService.enterUUID;
+import static org.theShire.presentation.UniversalPresentation.enterUUID;
 import static org.theShire.service.UserService.userRepo;
 
 
@@ -141,7 +141,7 @@ public class CaseRepository extends AbstractRepository<Case> {
                 user.add(userRepo.findByID(UUID.fromString(partsEdit[i])));
             }else {
                 System.out.println("members import failed input manuel: ");
-                UUID memberId =  enterUUID("Please enter the memberId");;
+                UUID memberId = enterUUID("Please enter the memberId");;
                 user.add(userRepo.findByID(memberId));
             }
         }

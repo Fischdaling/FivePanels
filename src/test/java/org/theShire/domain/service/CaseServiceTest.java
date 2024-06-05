@@ -137,7 +137,7 @@ public class CaseServiceTest {
         int oldView = medCase.getViewcount();
 
 
-        assertThrows(exTypeCase,()-> CaseService.findCaseById(medCase.getEntityId()));
+        assertThrows(exTypeCase,()-> CaseService.findCaseById(UUID.randomUUID()));
         assertEquals(oldView,medCase.getViewcount());
     }
 

@@ -1,14 +1,10 @@
 package org.theShire.service;
 
-import org.theShire.domain.exception.MedicalCaseException;
 import org.theShire.domain.media.Content;
-import org.theShire.domain.media.ContentText;
-import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalCase.Answer;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalCase.CaseVote;
 import org.theShire.domain.medicalDoctor.User;
-import org.theShire.domain.richType.Name;
 import org.theShire.foundation.Knowledges;
 import org.theShire.repository.CaseRepository;
 
@@ -17,15 +13,19 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
-import static org.theShire.foundation.DomainAssertion.*;
+import static org.theShire.foundation.DomainAssertion.isInCollection;
+import static org.theShire.foundation.DomainAssertion.isTrue;
 import static org.theShire.service.ChatService.messengerRepo;
-import static org.theShire.service.UniversalService.enterUUID;
 import static org.theShire.service.UserService.userLoggedIn;
-import static org.theShire.service.UserService.userRepo;
 
 
 public class CaseService {
     public static final CaseRepository caseRepo = new CaseRepository();
+
+    public static void findAllCase(){
+        caseRepo.findAll().forEach(aCase -> aCase.setViewcount(aCase.getViewcount()+1));
+        caseRepo.findAll().forEach(System.out::println);
+    }
 
     public static void deleteCaseById(UUID caseId) {
         Case tmpCase = caseRepo.findByID(caseId);

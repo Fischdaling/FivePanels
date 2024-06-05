@@ -9,10 +9,7 @@ import org.theShire.domain.medicalCase.CaseVote;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.richType.*;
-import org.theShire.presentation.CasePresentation;
 import org.theShire.service.CaseService;
-import org.theShire.service.ChatService;
-import org.theShire.service.UniversalService;
 import org.theShire.service.UserService;
 
 import java.util.*;
@@ -21,7 +18,8 @@ import static org.theShire.domain.medicalDoctor.UserRelationShip.createMapKey;
 import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
 import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.UniversalService.saveEntry;
-import static org.theShire.service.UserService.*;
+import static org.theShire.service.UserService.userLoggedIn;
+import static org.theShire.service.UserService.userRepo;
 
 public class Main {
     public static final Scanner scanner = new Scanner(System.in);
@@ -148,7 +146,7 @@ public class Main {
                     ChatPresentation.openChat();
                     break;
                 case 4:
-                    UniversalService.findAll();
+                    UniversalPresentation.findAll();
                     break;
                 case 5:
                     UserPresentation.findByName();

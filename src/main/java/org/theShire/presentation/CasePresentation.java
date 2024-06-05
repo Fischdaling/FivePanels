@@ -2,8 +2,6 @@ package org.theShire.presentation;
 
 import org.theShire.domain.exception.MedicalCaseException;
 import org.theShire.domain.media.Content;
-import org.theShire.domain.media.ContentText;
-import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalCase.Answer;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalCase.CaseVote;
@@ -11,19 +9,14 @@ import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.richType.Name;
 import org.theShire.foundation.Knowledges;
 import org.theShire.service.CaseService;
-import org.theShire.service.ChatService;
-import org.theShire.service.UniversalService;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
-import static org.theShire.foundation.DomainAssertion.isTrue;
 import static org.theShire.presentation.Main.scanner;
+import static org.theShire.presentation.UniversalPresentation.enterUUID;
 import static org.theShire.service.CaseService.caseRepo;
-import static org.theShire.service.ChatService.messengerRepo;
-import static org.theShire.service.UniversalService.enterUUID;
 import static org.theShire.service.UserService.userLoggedIn;
 import static org.theShire.service.UserService.userRepo;
 

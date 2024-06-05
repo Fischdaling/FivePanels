@@ -1,25 +1,24 @@
 package org.theShire.presentation;
 
-import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.theShire.domain.exception.MedicalDoctorException;
 import org.theShire.domain.media.Media;
-import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserProfile;
-import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.richType.*;
 import org.theShire.foundation.Knowledges;
 import org.theShire.service.UserService;
 
 import java.time.Instant;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
-import static org.theShire.foundation.DomainAssertion.*;
+import static org.theShire.foundation.DomainAssertion.isEqual;
 import static org.theShire.foundation.DomainAssertion.isTrue;
 import static org.theShire.presentation.Main.scanner;
-import static org.theShire.service.UniversalService.enterUUID;
+import static org.theShire.presentation.UniversalPresentation.enterUUID;
 import static org.theShire.service.UserService.userLoggedIn;
 import static org.theShire.service.UserService.userRepo;
 

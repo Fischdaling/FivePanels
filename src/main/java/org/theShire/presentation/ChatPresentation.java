@@ -1,22 +1,16 @@
 package org.theShire.presentation;
 
 import org.theShire.domain.media.Content;
-import org.theShire.domain.media.ContentText;
-import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.messenger.Message;
 import org.theShire.service.ChatService;
-import org.theShire.service.UniversalService;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.theShire.presentation.Main.scanner;
+import static org.theShire.presentation.UniversalPresentation.enterUUID;
 import static org.theShire.service.ChatService.messengerRepo;
-import static org.theShire.service.ChatService.sendMessage;
-import static org.theShire.service.UniversalService.enterUUID;
 import static org.theShire.service.UserService.userLoggedIn;
 
 public class ChatPresentation {
