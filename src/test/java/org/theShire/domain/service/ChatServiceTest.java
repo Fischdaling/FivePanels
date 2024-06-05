@@ -42,10 +42,7 @@ class ChatServiceTest {
         testUser2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"), new Name("Aragorn"), new Name("Arathorn"), new Email("Aragorn@gondor.orc"), new Password("EvenSaver1234"), new Language("Gondorisch"), new Location("Gondor"), "Aragorn Profile", knowledges2, "Arathorns Sohn", "König von Gondor");
 
     }
-//    @Test //TODO learn how to test Scanner properly
-//    void testOpenChat_Should() {
-//        ChatService.openChat();
-//    }
+
 
     @Test
     void testCreateChat_ShouldNotBeNull_WhenNewChatWasCreated() {

@@ -31,7 +31,7 @@ public class UserPresentation {
     public static void findByName () {
         System.out.println("Enter name");
         String name = scanner.nextLine();
-        UserService.findByName(name);
+        System.out.println(UserService.findByName(name));
     }
 
     public static void relationCommands () {
@@ -47,17 +47,20 @@ public class UserPresentation {
         scanner.nextLine();
         switch (answer) {
             case 1:
-                UserService.seeIncoming(sender);
+                UserService.seeIncoming(sender).forEach((aSender) -> System.out.println("Request from: " + aSender.getProfile().getFirstName()));
                 break;
 
             case 2:
                 receiver = userRepo.findByID(enterUUID("Enter target's id"));
                 UserService.sendRequest(sender, receiver);
+                System.out.println("Request sent from " + sender.getProfile().getFirstName() + " to " + receiver.getProfile().getFirstName());
                 break;
 
             case 3:
                 receiver = userRepo.findByID(enterUUID("Enter target's id"));
                 UserService.acceptRequest(sender, receiver);
+                System.out.println("Request from " + sender.getProfile().getFirstName() + " " + sender.getEntityId() + " to " + receiver.getProfile().getFirstName() + " accepted.");
+
                 break;
             case 4:
                 receiver = userRepo.findByID(enterUUID("Enter target's id"));

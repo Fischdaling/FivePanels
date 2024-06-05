@@ -9,6 +9,7 @@ import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalCase.Answer;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalCase.CaseVote;
+import org.theShire.domain.medicalCase.Vote;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.richType.*;
 import org.theShire.service.CaseService;
@@ -21,6 +22,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.service.CaseService.caseRepo;
+import static org.theShire.service.CaseService.removeMember;
 import static org.theShire.service.UserService.userLoggedIn;
 import static org.theShire.service.UserService.userRepo;
 
@@ -89,7 +91,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void testDeleteCaseById_ShouldAddUserToCaseRepo_WhenCreated(){
+    public void testDeleteCaseById_ShouldRemoveUserFromCaseRepo_WhenCreated(){
         CaseService.deleteCaseById(medCase.getEntityId());
         assertNotEquals(caseRepo.findByID(medCase.getEntityId()),medCase);
     }
@@ -181,4 +183,63 @@ public class CaseServiceTest {
             CaseService.addMember(medCase.getEntityId(), user2);
         });
     }
+
+    @Test
+    public void vote_ShouldVoteForAnswers_WhenValid(){
+        userLoggedIn = user2;
+
+        List<Answer> answers = Arrays.asList(a1, a2);
+        List<Double> percentages = Arrays.asList(50.0, 50.0);
+        CaseService.vote(medCase.getEntityId(), answers, percentages);
+
+        Map<UUID, Set<Vote>> votes = medCase.getCaseVote().getVotes();
+        assertTrue(votes.containsKey(userLoggedIn.getEntityId()));
+        assertEquals(2, votes.get(userLoggedIn.getEntityId()).size());
+        assertTrue(votes.get(userLoggedIn.getEntityId()).stream().allMatch(vote ->
+                (vote.getAnswer().equals(a1) && vote.getPercent() == 50.0) ||
+                        (vote.getAnswer().equals(a2) && vote.getPercent() == 50.0)
+        ));
+    }
+
+    @Test
+    public void vote_ShouldThrowException_WhenCaseNotFound(){
+        userLoggedIn = user2;
+        UUID uuid = UUID.randomUUID();
+        List<Answer> answers = Arrays.asList(a1, a2);
+        List<Double> percentages = Arrays.asList(50.0, 50.0);
+
+        assertThrows(exTypeCase, () -> {
+            CaseService.vote(uuid, answers, percentages);
+        });
+    }
+
+    @Test
+    public void vote_ShouldThrowException_WhenUserNotMember(){
+        userLoggedIn = user2;
+        if (userRepo.existsById(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"))){
+            userRepo.deleteById(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"));
+        }
+        Set<String> knowledges3 = new HashSet<>();
+        knowledges3.add("pediatric emergency medicine");
+        knowledges3.add("hand surgery");
+        User user3 = UserService.createUser(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"), new Name("Gandalf"), new Name("Wizardo"), new Email("Gandalf@Wizardo.beard"), new Password("ICastFireBall!"), new Language("all"), new Location("world"), "Gandalf Profile", knowledges3, "The Gray", "The White", "Ainur");
+
+        List<Answer> answers = Arrays.asList(a1, a2);
+        List<Double> percentages = Arrays.asList(50.0, 50.0);
+
+        assertThrows(exTypeCase, () -> {
+            CaseService.vote(user3.getEntityId(), answers, percentages);
+        });
+    }
+
+    @Test
+    public void vote_ShouldThrowException_WhenPercentagesNot100(){
+        List<Answer> answers = Arrays.asList(a1,a2);
+        List<Double> percentages = Arrays.asList(50.0, 40.0);
+
+        assertThrows(exTypeCase, () -> {
+            CaseService.vote(medCase.getEntityId(), answers, percentages);
+        });
+    }
+
 }

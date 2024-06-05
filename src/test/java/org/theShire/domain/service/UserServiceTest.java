@@ -92,4 +92,10 @@ public class UserServiceTest {
     }
 
 
+    @Test
+    public void findByName_ShouldReturnUsers_WhenUsersExist() {
+        String name = "Bilbo";
+
+        Set<User> result = UserService.findByName(name);
+    }
 }

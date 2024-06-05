@@ -23,8 +23,9 @@ public class UserService {
     public static UserRelationShip relations = new UserRelationShip(); // Important or Error
     public static User userLoggedIn = null;
 
-    public static void findAllUser(){
-        userRepo.findAll().forEach(System.out::println);
+    public static List<User> findAllUser(){
+       return userRepo.findAll();
+//        userRepo.findAll().forEach(System.out::println);
     }
 
     public static void deleteUserById (UUID userId) {
@@ -38,11 +39,11 @@ public class UserService {
         user.isMemberOfCases().forEach(aCase -> aCase.setUpdatedAt(Instant.now()));
     }
 
-    public static void findByName (String name) {
+    public static Set<User> findByName (String name) {
         Set<User> user = userRepo.findByName(new Name(name));
-
-        System.out.println(isNotNull(user,"user",exTypeUser));
+        return isNotNull(user,"user",exTypeUser);
     }
+
 
     public static void cancelFriendship(User sender, User receiver) {
         Set<User> users = new HashSet<>();
@@ -55,7 +56,6 @@ public class UserService {
     public static void acceptRequest(User sender, User receiver) {
         isTrue(UserRelationShip.getRequest(sender).contains(receiver),()->"Receiver not found.", exTypeUser);
         UserRelationShip.acceptRequest(sender, receiver);
-        System.out.println("Request from " + sender.getProfile().getFirstName() + " " + sender.getEntityId() + " to " + receiver.getProfile().getFirstName() + " accepted.");
         receiver.setUpdatedAt(Instant.now());
         sender.setUpdatedAt(Instant.now());
     }
@@ -63,15 +63,14 @@ public class UserService {
     public static void sendRequest(User sender, User receiver) {
         isTrue(userRepo.getEntryMap().containsKey(receiver.getEntityId()),()->"Receiver not found.",exTypeUser);
         UserRelationShip.sendRequest(sender, receiver);
-        System.out.println("Request sent from " + sender.getProfile().getFirstName() + " to " + receiver.getProfile().getFirstName());
     }
 
-    public static void seeIncoming(User sender) {
+    public static Set<User> seeIncoming(User sender) {
         Set<User> incomingRequests = UserRelationShip.getRequest(sender);
         if (incomingRequests.isEmpty()){
-            System.out.println("No Request");
+            return null;
         }else
-            incomingRequests.forEach((aSender) -> System.out.println("Request from: " + aSender.getProfile().getFirstName()));
+            return incomingRequests;
     }
 
 
