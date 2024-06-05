@@ -188,7 +188,7 @@ public abstract class DomainAssertion<T> {
             Zxcvbn zxcvbn = new Zxcvbn();
             Strength strength = zxcvbn.measure(value);
             if (strength.getScore() <3){
-                throw variableException(clazz, strength.getFeedback().toString());
+                throw variableException(clazz, errorMsg.get());
             }
             return value;
         }
