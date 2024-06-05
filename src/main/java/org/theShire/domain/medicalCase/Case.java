@@ -171,7 +171,6 @@ public class Case extends BaseEntity {
     }
 
     public void removeMember(User member){
-
         this.members.remove(isInCollection(member,this.members,"member",exTypeCase));
     }
 
