@@ -128,24 +128,22 @@ public class Case extends BaseEntity {
 
     public void setCorrectAnswer(Answer correctAnswer) {
         isInCollection(correctAnswer, caseVote.getAnswers(), "correctAnswer", exTypeCase);
-        if (this.correctAnswer == null) {
-            Set<UUID> userIdsWithCorrectVotes = caseVote.getVotes().entrySet().stream().
-                    filter(entry -> entry.getValue().
-                            stream().anyMatch(vote -> vote.getAnswer().equals(correctAnswer))).
-                    map(entry -> entry.getKey()).
-                    collect(Collectors.toSet());
+        Set<UUID> userIdsWithCorrectVotes = caseVote.getVotes().entrySet().stream().
+                filter(entry -> entry.getValue().
+                        stream().anyMatch(vote -> vote.getAnswer().equals(correctAnswer))).
+                map(entry -> entry.getKey()).
+                collect(Collectors.toSet());
+        for (UUID userId : userIdsWithCorrectVotes) {
+            User user = userRepo.findByID(userId);
+            isNotNull(user, "user", exTypeCase);
+            double percentVoted = caseVote.getVotes().get(userId).stream()
+                    .filter(vote -> vote.getAnswer().equals(correctAnswer))
+                    .mapToDouble(Vote::getPercent)
+                    .sum();
+            int newScore = user.getScore() + (int) (2 * percentVoted / 100 + 1);
+            user.setScore(newScore);
             this.correctAnswer = correctAnswer;
-            for (UUID userId : userIdsWithCorrectVotes) {
-                User user = userRepo.findByID(userId);
-                isNotNull(user, "user", exTypeCase);
-                double percentVoted = caseVote.getVotes().get(userId).stream()
-                        .filter(vote -> vote.getAnswer().equals(correctAnswer))
-                        .mapToDouble(Vote::getPercent)
-                        .sum();
-                int newScore = user.getScore() + (int) (2 * percentVoted / 100 + 1);
-                user.setScore(newScore);
-                setUpdatedAt(Instant.now());
-            }
+            setUpdatedAt(Instant.now());
         }
     }
 
