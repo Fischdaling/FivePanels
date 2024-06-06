@@ -147,6 +147,7 @@ public class Case extends BaseEntity {
         }
         owner.setScore(getOwner().getScore() + 5);
         setUpdatedAt(Instant.now());
+        caseDone = true;
     }
 
 
