@@ -93,6 +93,13 @@ public class CaseServiceTest {
     }
 
     @Test
+    public void testCorrectAnswer_ShouldSetCorrectAnswer_WhenCalled() {
+        userLoggedIn = user1;
+        CaseService.correctAnswer(medCase.getEntityId(), String.valueOf(a1));
+        assertTrue(medCase.isCaseDone());
+    }
+
+    @Test
     public void testDeleteCaseById_ShouldRemoveCaseFromCaseRepo_WhenCalledv2() {
         CaseService.deleteCaseById(medCase.getEntityId());
         assertNull(caseRepo.findByID(medCase.getEntityId()));
