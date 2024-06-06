@@ -1,6 +1,5 @@
 package org.theShire.domain.service;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.theShire.domain.media.Content;
@@ -15,14 +14,11 @@ import org.theShire.domain.richType.*;
 import org.theShire.service.CaseService;
 import org.theShire.service.UserService;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.service.CaseService.caseRepo;
-import static org.theShire.service.CaseService.removeMember;
 import static org.theShire.service.UserService.userLoggedIn;
 import static org.theShire.service.UserService.userRepo;
 
@@ -34,7 +30,7 @@ public class CaseServiceTest {
     Answer a2;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         Set<String> knowledges1 = new HashSet<>();
         knowledges1.add("Test");
         knowledges1.add("adult cardiothoracic anesthesiology");
@@ -43,7 +39,7 @@ public class CaseServiceTest {
         Set<String> knowledges2 = new HashSet<>();
         knowledges2.add("critical care or pain medicine");
         knowledges2.add("pediatric anesthesiology");
-        user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"),  new Name("Aragorn"), new Name("Arathorn"), new Email("Aragorn@gondor.orc"), new Password("EvenSaver1234"), new Language("Gondorisch"), new Location("Gondor"), "Aragorn Profile", knowledges2, "Arathorns Sohn", "König von Gondor");
+        user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"), new Name("Aragorn"), new Name("Arathorn"), new Email("Aragorn@gondor.orc"), new Password("EvenSaver1234"), new Language("Gondorisch"), new Location("Gondor"), "Aragorn Profile", knowledges2, "Arathorns Sohn", "König von Gondor");
         //init Content
         List<Content> contents = new ArrayList<>();
         //add texts
@@ -70,7 +66,7 @@ public class CaseServiceTest {
 
 
     @Test
-    public void testCreateCase_ShouldAddUserToRepo_WhenCreated(){
+    public void testCreateCase_ShouldAddUserToRepo_WhenCreated() {
 
         List<Content> contents = new ArrayList<>();
         //add texts
@@ -87,22 +83,35 @@ public class CaseServiceTest {
         answers.add(new Answer("Answer 2"));
         Case testCase = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
 
-        assertEquals(caseRepo.findByID(testCase.getEntityId()),testCase);
+        assertEquals(caseRepo.findByID(testCase.getEntityId()), testCase);
     }
 
     @Test
-    public void testDeleteCaseById_ShouldRemoveUserFromCaseRepo_WhenCreated(){
+    public void testDeleteCaseById_ShouldRemoveCaseFromCaseRepo_WhenCalled() {
         CaseService.deleteCaseById(medCase.getEntityId());
-        assertNotEquals(caseRepo.findByID(medCase.getEntityId()),medCase);
+        assertNotEquals(caseRepo.findByID(medCase.getEntityId()), medCase);
     }
 
     @Test
-    public void like_ShouldIncreaseLikeCounterByOne_WhenLiked(){
+    public void testCorrectAnswer_ShouldSetCorrectAnswer_WhenCalled() {
+        userLoggedIn = user1;
+        CaseService.correctAnswer(medCase.getEntityId(), String.valueOf(a1));
+        assertTrue(medCase.isCaseDone());
+    }
+
+    @Test
+    public void testDeleteCaseById_ShouldRemoveCaseFromCaseRepo_WhenCalledv2() {
+        CaseService.deleteCaseById(medCase.getEntityId());
+        assertNull(caseRepo.findByID(medCase.getEntityId()));
+    }
+
+    @Test
+    public void like_ShouldIncreaseLikeCounterByOne_WhenLiked() {
         userLoggedIn = user2;
         int oldLike = medCase.getLikeCount();
         CaseService.likeCase(medCase.getEntityId());
 
-        assertEquals(oldLike+1,medCase.getLikeCount());
+        assertEquals(oldLike + 1, medCase.getLikeCount());
     }
 
     @Test
@@ -114,43 +123,43 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void findCaseById_ShouldIncreaseViewCountByOne_WhenFound(){
+    public void findCaseById_ShouldIncreaseViewCountByOne_WhenFound() {
         int oldView = medCase.getViewcount();
         CaseService.findCaseById(medCase.getEntityId());
 
-        assertEquals(oldView+1,medCase.getViewcount());
+        assertEquals(oldView + 1, medCase.getViewcount());
     }
 
     @Test
-    public void findCaseById_ShouldThrow_WhenNotFound(){
+    public void findCaseById_ShouldThrow_WhenNotFound() {
         int oldView = medCase.getViewcount();
 
 
-        assertThrows(exTypeCase,()-> CaseService.findCaseById(UUID.randomUUID()));
-        assertEquals(oldView,medCase.getViewcount());
+        assertThrows(exTypeCase, () -> CaseService.findCaseById(UUID.randomUUID()));
+        assertEquals(oldView, medCase.getViewcount());
     }
 
     @Test
-    public void correctAnswer_ShouldIncreaseScoreOfUser_WhenUserVotedAnswer(){
+    public void correctAnswer_ShouldIncreaseScoreOfUser_WhenUserVotedAnswer() {
         int oldScore = user2.getScore();
         System.out.println(medCase.getCaseVote().getAnswers());
 
-        medCase.getCaseVote().voting(user2.getEntityId(),a1,25);
-        medCase.getCaseVote().voting(user2.getEntityId(),a1,25);
-        medCase.getCaseVote().voting(user2.getEntityId(),a2,50);
+        medCase.getCaseVote().voting(user2.getEntityId(), a1, 25);
+        medCase.getCaseVote().voting(user2.getEntityId(), a1, 25);
+        medCase.getCaseVote().voting(user2.getEntityId(), a2, 50);
         medCase.declareCorrectAnswer(a1);
-        assertEquals(oldScore +(2*50/100+1),user2.getScore());
+        assertEquals(oldScore + (2 * 50 / 100 + 1), user2.getScore());
     }
 
     @Test
-    public void correctAnswer_ShouldThrow_WhenUserVotedMoreThan100percent(){
+    public void correctAnswer_ShouldThrow_WhenUserVotedMoreThan100percent() {
         System.out.println(medCase.getCaseVote().getAnswers());
 
-        assertThrows(exTypeCase,()->medCase.getCaseVote().voting(user1.getEntityId(),a1,105));
+        assertThrows(exTypeCase, () -> medCase.getCaseVote().voting(user1.getEntityId(), a1, 105));
     }
 
     @Test
-    public void removeMember_ShouldRemoveMemberFromCase_WhenOwner(){
+    public void removeMember_ShouldRemoveMemberFromCase_WhenOwner() {
         CaseService.removeMember(medCase.getEntityId(), user2);
 
         assertFalse(medCase.getUserLiked().contains(user2.getEntityId()));
@@ -158,7 +167,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void removeMember_ShouldThrowException_WhenNotOwner(){
+    public void removeMember_ShouldThrowException_WhenNotOwner() {
         userLoggedIn = user2;
         assertThrows(exTypeCase, () -> {
             CaseService.removeMember(medCase.getEntityId(), user2);
@@ -166,7 +175,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void addMember_ShouldAddMemberToCase_WhenOwner(){
+    public void addMember_ShouldAddMemberToCase_WhenOwner() {
         CaseService.removeMember(medCase.getEntityId(), user2);
         CaseService.addMember(medCase.getEntityId(), user2);
 
@@ -176,7 +185,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void addMember_ShouldThrowException_WhenNotOwner(){
+    public void addMember_ShouldThrowException_WhenNotOwner() {
         CaseService.removeMember(medCase.getEntityId(), user2);
         userLoggedIn = user2;
         assertThrows(RuntimeException.class, () -> {
@@ -185,7 +194,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void vote_ShouldVoteForAnswers_WhenValid(){
+    public void vote_ShouldVoteForAnswers_WhenValid() {
         userLoggedIn = user2;
 
         List<Answer> answers = Arrays.asList(a1, a2);
@@ -202,7 +211,7 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void vote_ShouldThrowException_WhenCaseNotFound(){
+    public void vote_ShouldThrowException_WhenCaseNotFound() {
         userLoggedIn = user2;
         UUID uuid = UUID.randomUUID();
         List<Answer> answers = Arrays.asList(a1, a2);
@@ -214,9 +223,9 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void vote_ShouldThrowException_WhenUserNotMember(){
+    public void vote_ShouldThrowException_WhenUserNotMember() {
         userLoggedIn = user2;
-        if (userRepo.existsById(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"))){
+        if (userRepo.existsById(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"))) {
             userRepo.deleteById(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"));
         }
         Set<String> knowledges3 = new HashSet<>();
@@ -233,8 +242,8 @@ public class CaseServiceTest {
     }
 
     @Test
-    public void vote_ShouldThrowException_WhenPercentagesNot100(){
-        List<Answer> answers = Arrays.asList(a1,a2);
+    public void vote_ShouldThrowException_WhenPercentagesNot100() {
+        List<Answer> answers = Arrays.asList(a1, a2);
         List<Double> percentages = Arrays.asList(50.0, 40.0);
 
         assertThrows(exTypeCase, () -> {
