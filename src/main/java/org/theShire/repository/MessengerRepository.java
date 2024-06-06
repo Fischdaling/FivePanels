@@ -56,19 +56,26 @@ public class MessengerRepository extends AbstractRepository<Chat>{
 
     private Chat parseChat(String line) {
         String[] parts = line.split(";");
+        if (parts.length != 5) {
+            throw new MessengerException("Invalid CSV format");
+        }
+
         UUID entityId = UUID.fromString(parts[0]);
         Instant createdAt = Instant.parse(parts[1]);
         Instant updatedAt = Instant.parse(parts[2]);
         Set<User> users = parseUsers(parts[3]);
         List<Message> chatHistory = parseHistory(parts[4]);
-//        chatHistory.forEach(Chat::addChatHistory);
 
-        return new Chat(entityId, createdAt, updatedAt, users);
+        Chat chat = new Chat(entityId, createdAt, updatedAt, users);
+        chatHistory.forEach(chat::addChatHistory);
+        return chat;
     }
 
     private Set<User> parseUsers(String part) {
-        return Arrays.stream(part.split(","))
-                .map(uuid -> userRepo.findByID(UUID.fromString(uuid)))
+        return Arrays.stream(part.replaceAll("[\\[\\]]", "").split(","))
+                .filter(str -> !str.isEmpty())
+                .map(UUID::fromString)
+                .map(userRepo::findByID)
                 .collect(Collectors.toSet());
     }
 
@@ -80,13 +87,15 @@ public class MessengerRepository extends AbstractRepository<Chat>{
 
     private Message parseMessage(String messageStr) {
         String[] parts = messageStr.split(";");
+        if (parts.length != 6) {
+            throw new MessengerException("Invalid Message CSV format");
+        }
+
         UUID entityId = UUID.fromString(parts[0]);
         Instant createdAt = Instant.parse(parts[1]);
         Instant updatedAt = Instant.parse(parts[2]);
-
         UUID senderId = UUID.fromString(parts[3]);
         Message.Stage stage = Message.Stage.valueOf(parts[4]);
-
         List<Content> contents = Arrays.stream(parts[5].split(","))
                 .map(this::parseContent)
                 .collect(Collectors.toList());
@@ -105,4 +114,5 @@ public class MessengerRepository extends AbstractRepository<Chat>{
             throw new MessengerException("Unknown content format: " + contentStr);
         }
     }
+
 }

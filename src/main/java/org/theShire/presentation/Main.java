@@ -17,6 +17,7 @@ import java.util.*;
 import static org.theShire.domain.medicalDoctor.UserRelationShip.createMapKey;
 import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
 import static org.theShire.service.CaseService.caseRepo;
+import static org.theShire.service.UniversalService.loadEntry;
 import static org.theShire.service.UniversalService.saveEntry;
 import static org.theShire.service.UserService.userLoggedIn;
 import static org.theShire.service.UserService.userRepo;
@@ -163,10 +164,11 @@ public class Main {
             System.out.println("10. Vote for Case Answer");
             System.out.println("11. Leave a like for a Case");
             System.out.println("12. Save Data");
-            System.out.println("13. Change Profile");
-            System.out.println("14. Set correct Answer");
-            System.out.println("15. remove member from Case");
-            System.out.println("16. add member to Case");
+            System.out.println("13. Load Data");
+            System.out.println("14. Change Profile");
+            System.out.println("15. Set correct Answer");
+            System.out.println("16. remove member from Case");
+            System.out.println("17. add member to Case");
             System.out.println("0. Logout");
 
             int choice = scanner.nextInt();
@@ -210,15 +212,18 @@ public class Main {
                     saveEntry();
                     break;
                 case 13:
-                    UserPresentation.changeProfile();
+                    loadEntry();
                     break;
                 case 14:
-                    CasePresentation.correctAnswer();
+                    UserPresentation.changeProfile();
                     break;
                 case 15:
-                    CasePresentation.removeMember();
+                    CasePresentation.correctAnswer();
                     break;
                 case 16:
+                    CasePresentation.removeMember();
+                    break;
+                case 17:
                     CasePresentation.addMember();
                     break;
                 case 0:

@@ -65,8 +65,10 @@ public class UserRepository extends AbstractRepository<User>{
 
     private User parseUser(String line) {
         String[] parts = line.split(";");
+        if (parts.length != 17) {
+            throw new MedicalDoctorException("Invalid CSV format");
+        }
 
-        DomainAssertion.isTrue(parts.length == 17, () -> "Error: CSV lines not matching", exTypeUser);
         UUID entityId = UUID.fromString(parts[0]);
         Instant createdAt = Instant.parse(parts[1]);
         Instant updatedAt = Instant.parse(parts[2]);
@@ -87,39 +89,40 @@ public class UserRepository extends AbstractRepository<User>{
 
         UserProfile profile = new UserProfile(language, location, profilePicture, firstName, lastName, educationalTitles);
         User user = new User(entityId, createdAt, updatedAt, email, password, profile, score, contacts, chats, ownedCases, memberOfCase, specializations);
-        user.setScore(score);
         return user;
     }
 
     private Set<UserRelationShip> parseContacts(String value) {
-        // TODO
+        //TODO
         return new HashSet<>();
     }
 
     private Set<Chat> parseChats(String value) {
         return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
-                .filter(s -> !s.trim().isEmpty())
-                .map(s -> messengerRepo.findByID(UUID.fromString(s.trim())))
+                .filter(str -> !str.isEmpty())
+                .map(UUID::fromString)
+                .map(messengerRepo::findByID)
                 .collect(Collectors.toSet());
     }
 
     private Set<Knowledges> parseSpecializations(String value) {
         return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
-                .filter(s -> !s.trim().isEmpty())
+                .filter(str -> !str.isEmpty())
                 .map(Knowledges::new)
                 .collect(Collectors.toSet());
     }
 
     private Set<Case> parseCases(String value) {
         return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
-                .filter(s -> !s.trim().isEmpty())
-                .map(s -> caseRepo.findByID(UUID.fromString(s.trim())))
+                .filter(str -> !str.isEmpty())
+                .map(UUID::fromString)
+                .map(caseRepo::findByID)
                 .collect(Collectors.toSet());
     }
 
     private List<EducationalTitle> parseEducationalTitles(String value) {
         return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
-                .filter(s -> !s.trim().isEmpty())
+                .filter(str -> !str.isEmpty())
                 .map(EducationalTitle::new)
                 .collect(Collectors.toList());
     }
@@ -132,5 +135,6 @@ public class UserRepository extends AbstractRepository<User>{
         String resolution = parts[3];
         return new Media(width, height, altText, resolution);
     }
+
 
 }

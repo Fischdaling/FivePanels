@@ -135,15 +135,16 @@ public class User extends BaseEntity {
     }
 
 
-    public void removeCase(Case medCase){
-        if(memberOfCase.contains(medCase)) {
+    public void removeCase(Case medCase) {
+        if (memberOfCase.contains(medCase)) {
             this.memberOfCase.remove(medCase);
         } else if (ownedCases.contains(medCase)) {
             this.ownedCases.remove(medCase);
-        }else{
+        } else {
             throw new MedicalDoctorException("Unknown medical case");
         }
     }
+
 
     public void setProfile(UserProfile profile) {
         this.profile = profile;
@@ -168,19 +169,19 @@ public class User extends BaseEntity {
         sb.append("memberOfCase: ").append(memberOfCase.stream().map(Case::getTitle).findAny().orElse(null)).append(System.lineSeparator());
         return sb.toString();
     }
+
     @Override
-    public String toCSVString(){
+    public String toCSVString() {
         final StringBuilder sb = new StringBuilder(super.toCSVString());
         sb.append(email).append(";");
         sb.append(password).append(";");
         sb.append(score).append(";");
-        sb.append(contacts).append(";");
-        sb.append(chats.stream().map(Chat::getEntityId).collect(Collectors.toSet())).append(";");
-        sb.append(specialization).append(";");
-        sb.append(ownedCases.stream().map(Case::getEntityId).findAny().orElse(null)).append(";");
-        sb.append(memberOfCase.stream().map(Case::getEntityId).findAny().orElse(null)).append(";");
-        sb.append(profile.toCSVString());
-        sb.append(System.lineSeparator());
+        sb.append(contacts.stream().map(UserRelationShip::toString).collect(Collectors.joining(","))).append(";");
+        sb.append(chats.stream().map(Chat::getEntityId).map(UUID::toString).collect(Collectors.joining(","))).append(";");
+        sb.append(specialization.stream().map(Knowledges::toString).collect(Collectors.joining(","))).append(";");
+        sb.append(ownedCases.stream().map(Case::getEntityId).map(UUID::toString).collect(Collectors.joining(","))).append(";");
+        sb.append(memberOfCase.stream().map(Case::getEntityId).map(UUID::toString).collect(Collectors.joining(","))).append(";");
+        sb.append(profile.toCSVString()).append(System.lineSeparator());
         return sb.toString();
     }
 
