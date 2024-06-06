@@ -16,8 +16,8 @@ public class ChatService {
         return messengerRepo.findAll();
     }
 
-    public static void createChat(User...users){
-        messengerRepo.save(new Chat(users));
+    public static Chat createChat(User...users){
+        return messengerRepo.save(new Chat(users));
     }
 
     public static void sendMessage(Chat chat, Message message){

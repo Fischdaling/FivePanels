@@ -1,5 +1,6 @@
 package org.theShire.domain.medicalDoctor;
 
+import org.theShire.domain.messenger.Chat;
 import org.theShire.foundation.DomainAssertion;
 
 import java.util.HashMap;
@@ -58,7 +59,7 @@ public class UserRelationShip {
     }
 
 
-    public static void acceptRequest(User sender, User receiver) {
+    public static Chat acceptRequest(User sender, User receiver) {
         DomainAssertion.isNotNull(sender, "sender", exTypeUser);
         DomainAssertion.isNotNull(receiver, "receiver", exTypeUser);
 
@@ -75,10 +76,10 @@ public class UserRelationShip {
             relationShip.put(keyOutgoing, relationOutgoing);
 
             if (messageable(sender, receiver)) {
-                createChat(sender, receiver);
+                return createChat(sender, receiver);
             }
         }
-
+        return null;
     }
 
     public static void declineRequest(User sender, User receiver){

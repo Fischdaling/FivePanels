@@ -10,6 +10,7 @@ import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.richType.*;
 import org.theShire.service.CaseService;
+import org.theShire.service.UniversalService;
 import org.theShire.service.UserService;
 
 import java.util.*;
@@ -209,10 +210,10 @@ public class Main {
                     CasePresentation.likeCase();
                     break;
                 case 12:
-                    saveEntry();
+                    UniversalService.saveEntry();
                     break;
                 case 13:
-                    loadEntry();
+                    UniversalService.loadEntry();
                     break;
                 case 14:
                     UserPresentation.changeProfile();

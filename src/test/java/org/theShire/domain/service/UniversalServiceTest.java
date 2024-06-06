@@ -1,0 +1,126 @@
+package org.theShire.domain.service;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.theShire.domain.media.Content;
+import org.theShire.domain.media.ContentText;
+import org.theShire.domain.media.Media;
+import org.theShire.domain.medicalCase.Answer;
+import org.theShire.domain.medicalCase.Case;
+import org.theShire.domain.medicalCase.CaseVote;
+import org.theShire.domain.medicalDoctor.User;
+import org.theShire.domain.medicalDoctor.UserRelationShip;
+import org.theShire.domain.messenger.Chat;
+import org.theShire.domain.richType.*;
+import org.theShire.repository.UserRepository;
+import org.theShire.service.CaseService;
+import org.theShire.service.UniversalService;
+import org.theShire.service.UserService;
+
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.theShire.presentation.Main.initData;
+import static org.theShire.service.CaseService.caseRepo;
+import static org.theShire.service.ChatService.messengerRepo;
+import static org.theShire.service.UserService.userRepo;
+
+public class UniversalServiceTest {
+    @BeforeEach
+    void setUp(){
+        userRepo.deleteAll();
+        caseRepo.deleteAll();
+        messengerRepo.deleteAll();
+        initData();
+    }
+
+    @Test
+    void saveAndLoadUser_ShouldWriteDownAllUsersInReposInCSVAndThenLoadThemIn_WhenCalled(){
+        UUID uuid = UUID.randomUUID();
+        //CREATE USER4-----------------------------------------------------------------
+        Set<String> knowledges4 = new HashSet<>();
+        knowledges4.add("pediatric emergency medicine");
+        knowledges4.add("hand surgery");
+        UserService.createUser(uuid,
+                new Name("Sauron"),
+                new Name("Morgoth"),
+                new Email("Sauron@Mordor.orc"),
+                new Password("WorldDomination!"),
+                new Language("Elbish"),
+                new Location("Mordor"),
+                "Sauron Profile pic",
+                knowledges4,
+                "Ring Smith",
+                "The Eye");
+
+        UniversalService.saveEntry();
+        userRepo.deleteAll();
+        UniversalService.loadEntry();
+
+        assertTrue(userRepo.existsById(uuid));
+    }
+
+    @Test
+    void saveAndLoadCase_ShouldWriteDownAllCasesInReposInCSVAndThenLoadThemIn_WhenCalled(){
+
+
+        //init Content
+        List<Content> contents = new ArrayList<>();
+        //add texts
+        contents.add(new Content(new ContentText("My First Text")));
+        contents.add(new Content(new ContentText("My Second Text")));
+        //add Media
+        contents.add(new Content(new Media(200, 100, "My First Media", "200x100")));
+
+        //Create a Case with user2&user3 as member and user1 as owner
+        Set<String> knowledges4 = new HashSet<>();
+        knowledges4.add("pediatric emergency medicine");
+        knowledges4.add("critical care or pain medicine");
+        LinkedHashSet<Answer> answers = new LinkedHashSet<>();
+        answers.add(new Answer("Cancer"));
+        answers.add(new Answer("Ebola"));
+        Case case1 = CaseService.createCase(userRepo.findByID(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91")),
+                "my First Case",
+                knowledges4,
+                contents,
+                new CaseVote(answers),
+                userRepo.findByID(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2")),
+                userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
+
+        UniversalService.saveEntry();
+        caseRepo.deleteAll();
+        UniversalService.loadEntry();
+
+        assertTrue(caseRepo.existsById(case1.getEntityId()));
+    }
+
+    @Test
+    void saveAndLoadChat_ShouldWriteDownAllChatInReposInCSVAndThenLoadThemIn_WhenCalled(){
+        UUID uuid = UUID.randomUUID();
+        //CREATE USER4-----------------------------------------------------------------
+        Set<String> knowledges4 = new HashSet<>();
+        knowledges4.add("pediatric emergency medicine");
+        knowledges4.add("hand surgery");
+        User user4 = UserService.createUser(uuid,
+                new Name("Sauron"),
+                new Name("Morgoth"),
+                new Email("Sauron@Mordor.orc"),
+                new Password("WorldDomination!"),
+                new Language("Elbish"),
+                new Location("Mordor"),
+                "Sauron Profile pic",
+                knowledges4,
+                "Ring Smith",
+                "The Eye");
+
+        UserRelationShip.sendRequest(user4, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
+        Chat chat = UserRelationShip.acceptRequest(user4, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
+
+        UniversalService.saveEntry();
+        messengerRepo.deleteAll();
+        UniversalService.loadEntry();
+
+        assertTrue(messengerRepo.existsById(chat.getEntityId()));
+    }
+}
