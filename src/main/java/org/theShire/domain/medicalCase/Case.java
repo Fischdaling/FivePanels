@@ -60,9 +60,9 @@ public class Case extends BaseEntity {
         this.content = content;
         this.viewcount = viewcount;
         this.knowledges = knowledges;
-        this.members = members;
+        this.members = members!=null?members : new HashSet<>();
         this.likeCount = likeCount;
-        this.userLiked = userLiked;
+        this.userLiked = userLiked != null ? userLiked: new HashSet<>();
         this.caseVote = caseVote;
     }
 
@@ -129,24 +129,26 @@ public class Case extends BaseEntity {
 
     public void declareCorrectAnswer(Answer correctAnswer) {
         isInCollection(correctAnswer, caseVote.getAnswers(), "correctAnswer", exTypeCase);
-        Set<UUID> userIdsWithCorrectVotes = caseVote.getVotes().entrySet().stream().
-                filter(entry -> entry.getValue().
-                        stream().anyMatch(vote -> vote.getAnswer().equals(correctAnswer))).
-                map(entry -> entry.getKey()).
-                collect(Collectors.toSet());
+        Map<UUID, Set<Vote>> votes = caseVote.getVotes();
+        Set<UUID> userIdsWithCorrectVotes = votes.entrySet().stream()
+                .filter(entry -> entry.getValue().stream().anyMatch(vote -> vote.getAnswer().equals(correctAnswer)))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
+
         for (UUID userId : userIdsWithCorrectVotes) {
             User user = userRepo.findByID(userId);
             isNotNull(user, "user", exTypeCase);
-            double percentVoted = caseVote.getVotes().get(userId).stream()
+            double percentVoted = votes.get(userId).stream()
                     .filter(vote -> vote.getAnswer().equals(correctAnswer))
                     .mapToDouble(Vote::getPercent)
                     .sum();
             int newScore = user.getScore() + (int) (2 * percentVoted / 100 + 1);
             user.setScore(newScore);
         }
-        owner.setScore(getOwner().getScore()+5);
+        owner.setScore(getOwner().getScore() + 5);
         setUpdatedAt(Instant.now());
     }
+
 
     public Chat getGroupchat() {
         return groupchat;
@@ -200,17 +202,14 @@ public class Case extends BaseEntity {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         sb.append("Case: ").append(getEntityId()).append(System.lineSeparator());
-        sb.append(title).repeat('-', 60).append(System.lineSeparator());
+        sb.append(title).append("-".repeat(60)).append(System.lineSeparator());
         sb.append(content).append(System.lineSeparator());
         sb.append("knowledges: ").append(knowledges).append(System.lineSeparator());
         sb.append("viewcount: ").append(viewcount).append(System.lineSeparator());
         sb.append("owner: ").append(owner.getProfile().getFirstName()).append(System.lineSeparator());
-        sb.append("members: ").append(members.stream().
-                        map(user -> user.getProfile().getFirstName()).
-                        collect(Collectors.toList())).
-                append(System.lineSeparator());
+        sb.append("members: ").append(members.stream().map(user -> user.getProfile().getFirstName()).collect(Collectors.toList())).append(System.lineSeparator());
         sb.append("likeCount: ").append(likeCount).append(System.lineSeparator());
         sb.append("userLiked: ").append(userLiked).append(System.lineSeparator());
         sb.append("caseVote: ").append(caseVote).append(System.lineSeparator());
@@ -218,18 +217,18 @@ public class Case extends BaseEntity {
         return sb.toString();
     }
 
+
     @Override
     public String toCSVString() {
         final StringBuilder sb = new StringBuilder(super.toCSVString());
         sb.append(getOwner().getEntityId()).append(";");
         sb.append(title).append(";");
-        sb.append(content).append(";");
-        sb.append(knowledges).append(";");
+        sb.append(content.stream().map(Content::toString).collect(Collectors.joining(","))).append(";");
+        sb.append(knowledges.stream().map(Knowledges::toString).collect(Collectors.joining(","))).append(";");
         sb.append(viewcount).append(";");
-        sb.append(members.stream().
-                map(BaseEntity::getEntityId).collect(Collectors.toSet())).append(";");
+        sb.append(members.stream().map(User::getEntityId).map(UUID::toString).collect(Collectors.joining(","))).append(";");
         sb.append(likeCount).append(";");
-        sb.append(userLiked).append(";");
+        sb.append(userLiked.stream().map(UUID::toString).collect(Collectors.joining(","))).append(";");
         sb.append(caseVote.toCSVString()).append(System.lineSeparator());
         return sb.toString();
     }

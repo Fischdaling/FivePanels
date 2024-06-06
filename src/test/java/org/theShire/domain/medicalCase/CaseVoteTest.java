@@ -104,12 +104,11 @@ class CaseVoteTest {
     }
 
     @Test
-    void testMultipleVotes_ShouldUpdateVote_WhenUserVotes2TimesTheSameAnswer() {
+    void testMultipleVotes_ShouldNotUpdateVote_WhenUserVotes2TimesTheSameAnswer() {
         caseVote.voting(userID, answer1, 10.0);
-
         caseVote.voting(userID, answer1, 20.0);
 
-        assertEquals(20.0, caseVote.getVotes().get(userID).stream().findFirst().orElse(null).getPercent());
+        assertEquals(10.0, caseVote.getVotes().get(userID).stream().findFirst().orElse(null).getPercent());
     }
 
     @Test
@@ -137,16 +136,34 @@ class CaseVoteTest {
 
     @Test
     void testGetTop3Answer_ShouldReturnTop3AnswersWithPercentages_WhenVoted() {
-        caseVote.voting(userID, answer, 20.0);
-        caseVote.voting(userID, answer, 20.0);
-        caseVote.voting(userID, answer1, 40.0);
-        caseVote.voting(userID, answer1, 20.0);
+        caseVote = new CaseVote(answerLul);
+        caseVote.voting(userID, answer, 40.0);
+        caseVote.voting(userID, answer1, 60.0);
+
 
         Map<Answer, Double> top3Answers = caseVote.getTop3Answer();
 
         assertEquals(2, top3Answers.size());
-        assertEquals(top3Answers.get(answer),40);
-        assertEquals(top3Answers.get(answer1),60);
+        assertEquals(40,top3Answers.get(answer));
+        assertEquals(60, top3Answers.get(answer1));
+    }
+
+    @Test
+    void testGetTop3Answer_ShouldReturnTop3AnswersWithPercentagesDividedBy2_When2Voted() {
+        UUID uuid = UUID.randomUUID();
+        caseVote = new CaseVote(answerLul);
+        caseVote.voting(userID, answer, 40.0);
+        caseVote.voting(userID, answer1, 60.0);
+
+        caseVote.voting(uuid, answer, 80.0);
+        caseVote.voting(uuid, answer1, 20.0);
+
+
+        Map<Answer, Double> top3Answers = caseVote.getTop3Answer();
+
+        assertEquals(2, top3Answers.size());
+        assertEquals(120/2,top3Answers.get(answer));
+        assertEquals(80/2, top3Answers.get(answer1));
     }
 
 }

@@ -2,6 +2,7 @@ package org.theShire.domain.media;
 
 
 import org.theShire.domain.exception.MediaException;
+import org.theShire.domain.exception.MedicalDoctorException;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -32,11 +33,15 @@ public class Media {
 
     public Media(String filename){
 
-        try {
-            image = ImageIO.read(new File("src/main/resources/"+filename));
-        } catch (IOException e) {
-            this.altText = filename;
-        }
+        setHeight(500);
+        setWidth(500);
+        setAltText(filename);
+        setResolution("500x500");
+//        try {
+//            image = ImageIO.read(new File("src/main/resources/"+filename));
+//        } catch (IOException e) {
+//                throw new MediaException(e.getMessage());
+//        }
     }
 
     //getter and setter-----------------------

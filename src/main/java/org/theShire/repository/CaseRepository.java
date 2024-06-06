@@ -57,10 +57,14 @@ public class CaseRepository extends AbstractRepository<Case> {
 
     private Case parseCase(String line) {
         String[] parts = line.split(";");
+        if (parts.length != 12) {
+            throw new MedicalCaseException("Invalid CSV format");
+        }
+
         UUID entityId = UUID.fromString(parts[0]);
         Instant createdAt = Instant.parse(parts[1]);
         Instant updatedAt = Instant.parse(parts[2]);
-        User owner = getOwnerID(parts);
+        User owner = getOwnerID(parts[3]);
         String title = parts[4];
         List<Content> content = parseContent(parts[5]);
         Set<Knowledges> knowledges = parseKnowledges(parts[6]);
@@ -73,14 +77,14 @@ public class CaseRepository extends AbstractRepository<Case> {
         return new Case(entityId, createdAt, updatedAt, title, content, viewCount, knowledges, owner, members, likeCount, usersLiked, caseVote);
     }
 
-    private static User getOwnerID(String[] parts) {
-        if (userRepo.getEntryMap().containsKey(UUID.fromString(parts[3]))) {
-            return userRepo.findByID(UUID.fromString(parts[3]));
-        } else {
-            System.out.println("Owner import failed input manuel: ");
-            UUID ownerId = enterUUID("Please enter the ownerId",User.class);
-           return userRepo.findByID(ownerId);
+
+    private User getOwnerID(String part) {
+        UUID ownerId = UUID.fromString(part);
+        User owner = userRepo.findByID(ownerId);
+        if (owner == null) {
+            throw new MedicalCaseException("Owner not found");
         }
+        return owner;
     }
 
     private List<Content> parseContent(String part) {
@@ -93,71 +97,40 @@ public class CaseRepository extends AbstractRepository<Case> {
         String[] parts = part.split(",");
         LinkedHashSet<Answer> answers = parseAnswers(parts[0]);
         HashMap<UUID, Set<Vote>> votes = parseVotes(parts[1]);
-
         return new CaseVote(answers, votes);
     }
 
     private HashMap<UUID, Set<Vote>> parseVotes(String part) {
-
+        //TODO
         return new HashMap<>();
     }
 
 
     private LinkedHashSet<Answer> parseAnswers(String part) {
-        String[] parts = part.split(",");
-        LinkedHashSet<Answer> answers = new LinkedHashSet<>();
-        for (int i = 0; i < parts.length; i++) {
-            String name = parts[i];
-            answers.add(new Answer(name));
-        }
-        return answers;
+        return Arrays.stream(part.split(","))
+                .map(Answer::new)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     private Set<UUID> parseUsersLiked(String part) {
-        String[] parts = part.split(", ");
-        String[] partsEdit = new String[parts.length];
-        Set<UUID> user = new HashSet<>();
-        for (int i = 0; i < parts.length; i++) {
-            partsEdit[i] = parts[i].replace("[","");
-            partsEdit[i] = partsEdit[i].replace("]","");
-            if (partsEdit[i].isEmpty()) {
-                return null;
-            }
-            user.add(UUID.fromString(partsEdit[i]));
-        }
-        return user;
+        return Arrays.stream(part.replaceAll("[\\[\\]]", "").split(","))
+                .filter(str -> !str.isEmpty())
+                .map(UUID::fromString)
+                .collect(Collectors.toSet());
     }
+
 
 
     private Set<User> parseMembers(String part) {
-
-        String[] parts = part.split(", ");
-        String[] partsEdit = new String[parts.length];
-        Set<User> user = new HashSet<>();
-        for (int i = 0; i < parts.length; i++) {
-            partsEdit[i] = parts[i].replace("[","");
-            partsEdit[i] = partsEdit[i].replace("]","");
-            if (userRepo.entryMap.containsKey(UUID.fromString(partsEdit[i]))) {
-                user.add(userRepo.findByID(UUID.fromString(partsEdit[i])));
-            }else {
-                System.out.println("members import failed input manuel: ");
-                UUID memberId = enterUUID("Please enter the memberId",User.class);;
-                user.add(userRepo.findByID(memberId));
-            }
-        }
-        return user;
+        return Arrays.stream(part.replaceAll("[\\[\\]]", "").split(","))
+                .map(UUID::fromString)
+                .map(userRepo::findByID)
+                .collect(Collectors.toSet());
     }
 
     private Set<Knowledges> parseKnowledges(String part) {
-        String[] parts = part.split(",");
-        Set<Knowledges> knowledges = new HashSet<>();
-        for (String str : parts) {
-            str = str.trim();
-            str = str.replace("[","");
-            str = str.replace("]","");
-            knowledges.add(new Knowledges(str));
-
-        }
-        return knowledges;
+        return Arrays.stream(part.split(","))
+                .map(Knowledges::new)
+                .collect(Collectors.toSet());
     }
 }

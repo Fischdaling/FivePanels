@@ -88,9 +88,10 @@ public class Chat extends BaseEntity {
     @Override
     public String toCSVString() {
         final StringBuilder sb = new StringBuilder(super.toCSVString());
-        sb.append(people).append(";");
-        sb.append(chatHistory).append(";").append(System.lineSeparator());
+        sb.append(people.stream().map(User::getEntityId).map(UUID::toString).collect(Collectors.joining(","))).append(";");
+        sb.append(chatHistory.stream().map(Message::toCSVString).collect(Collectors.joining(","))).append(System.lineSeparator());
         return sb.toString();
     }
+
 
 }
