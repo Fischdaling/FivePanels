@@ -136,8 +136,6 @@ public class CasePresentation {
             CaseService.correctAnswer(caseId, answer);
             System.out.println(answer + " Was declared as the right Answer. Doctors that made this assumption will earn points.");
             System.out.println("Answer Voted the most was " + caseRepo.findByID(caseId).getCaseVote().getTop3Answer());
-
-            caseRepo.findByID(caseId).setCaseDone(true);
         }
     }
 
