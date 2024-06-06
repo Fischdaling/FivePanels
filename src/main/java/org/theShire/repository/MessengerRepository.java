@@ -87,9 +87,9 @@ public class MessengerRepository extends AbstractRepository<Chat>{
 
     private Message parseMessage(String messageStr) {
         String[] parts = messageStr.split(";");
-        if (parts.length != 6) {
-            throw new MessengerException("Invalid Message CSV format");
-        }
+//        if (parts.length != 6) {
+//            throw new MessengerException("Invalid Message CSV format");
+//        }
 
         UUID entityId = UUID.fromString(parts[0]);
         Instant createdAt = Instant.parse(parts[1]);

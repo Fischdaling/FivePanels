@@ -8,6 +8,8 @@ import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalCase.CaseVote;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserRelationShip;
+import org.theShire.domain.messenger.Chat;
+import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
 import org.theShire.service.CaseService;
 import org.theShire.service.UniversalService;
@@ -116,7 +118,10 @@ public class Main {
         if (!relationShip.containsKey(createMapKey(user1,user2))){
             // Send a friend request
             UserRelationShip.sendRequest(user1, user2);
-            UserRelationShip.acceptRequest(user1, user2);
+            Chat chat = UserRelationShip.acceptRequest(user1, user2);
+            chat.sendMessage(new Message(user1.getEntityId(),new Content(new ContentText("When can we eat something?"))));
+            chat.sendMessage(new Message(user2.getEntityId(),new Content(new ContentText("We already had breakfast"))));
+            chat.sendMessage(new Message(user1.getEntityId(),new Content(new ContentText("But whats with the second breakfast? :("))));
         }
 
         if (case1 != null) {
