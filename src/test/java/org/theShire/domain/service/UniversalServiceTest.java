@@ -12,11 +12,9 @@ import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
-import org.theShire.service.CaseService;
-import org.theShire.service.ChatService;
-import org.theShire.service.UniversalService;
-import org.theShire.service.UserService;
+import org.theShire.service.*;
 
+import java.io.IOException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -38,7 +36,7 @@ public class UniversalServiceTest {
 
 
     @Test
-    void saveAndLoadCase_ShouldWriteDownAllCasesInReposInCSVAndThenLoadThemIn_WhenCalled(){
+    void saveAndLoadCase_ShouldWriteDownAllCasesInReposInCSVAndThenLoadThemIn_WhenCalled() throws IOException {
 
 
         //init Content
@@ -72,17 +70,16 @@ public class UniversalServiceTest {
         case1.like(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"));
         case1.getGroupchat().sendMessage(new Message(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"),new Content(new ContentText("I can't"))));
 
-        UniversalService.saveEntry();
+        ImportExportService.exportDataToCSV("src/main/java/org/theShire/persistence/caseRepoCSV.csv");
         caseRepo.deleteAll();
-        UniversalService.loadChat();
-        UniversalService.loadUser();
-        UniversalService.loadCase();
+        ImportExportService.importDataFromCSV("src/main/java/org/theShire/persistence/caseRepoCSV.csv");
+
 
         assertTrue(caseRepo.existsById(case1.getEntityId()));
     }
 
     @Test
-    void saveAndLoadChat_ShouldWriteDownAllChatInReposInCSVAndThenLoadThemIn_WhenCalled(){
+    void saveAndLoadChat_ShouldWriteDownAllChatInReposInCSVAndThenLoadThemIn_WhenCalled() throws IOException {
         UUID uuid = UUID.randomUUID();
         //CREATE USER4-----------------------------------------------------------------
         Set<String> knowledges4 = new HashSet<>();
@@ -105,16 +102,16 @@ public class UniversalServiceTest {
 
         chat.sendMessage(new Message(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"),new Content(new ContentText("I can't"))));
 
-        UniversalService.saveEntry();
+        ImportExportService.exportDataToCSV("src/main/java/org/theShire/persistence/chatRepoCSV.csv");
+
         messengerRepo.deleteAll();
-        UniversalService.loadChat();
-        UniversalService.loadUser();
-        UniversalService.loadCase();
+        ImportExportService.importDataFromCSV("src/main/java/org/theShire/persistence/chatRepoCSV.csv");
+
 
         assertTrue(messengerRepo.existsById(chat.getEntityId()));
     }
     @Test
-    void saveAndLoadUser_ShouldWriteDownAllUsersInReposInCSVAndThenLoadThemIn_WhenCalled(){
+    void saveAndLoadUser_ShouldWriteDownAllUsersInReposInCSVAndThenLoadThemIn_WhenCalled() throws IOException {
         UUID uuid = UUID.randomUUID();
         //CREATE USER4-----------------------------------------------------------------
         Set<String> knowledges4 = new HashSet<>();
@@ -135,11 +132,9 @@ public class UniversalServiceTest {
         Chat chat = ChatService.acceptRequest(user, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
         chat.sendMessage(new Message(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"),new Content(new ContentText("I can't"))));
 
-        UniversalService.saveEntry();
+        ImportExportService.exportDataToCSV("src/main/java/org/theShire/persistence/userRepoCSV.csv");
         userRepo.deleteAll();
-        UniversalService.loadChat();
-        UniversalService.loadUser();
-        UniversalService.loadCase();
+        ImportExportService.importDataFromCSV("src/main/java/org/theShire/persistence/userRepoCSV.csv");
 
         assertTrue(userRepo.existsById(uuid));
     }

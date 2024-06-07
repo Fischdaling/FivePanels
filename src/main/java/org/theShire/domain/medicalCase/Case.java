@@ -1,7 +1,9 @@
 package org.theShire.domain.medicalCase;
 
 import org.theShire.domain.BaseEntity;
+import org.theShire.domain.exception.MedicalCaseException;
 import org.theShire.domain.media.Content;
+import org.theShire.domain.media.ContentText;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.foundation.Knowledges;
@@ -219,19 +221,95 @@ public class Case extends BaseEntity {
     }
 
 
-    @Override
-    public String toCSVString() {
-        final StringBuilder sb = new StringBuilder(super.toCSVString());
-        sb.append(getOwner().getEntityId()).append(";");
-        sb.append(title).append(";");
-        sb.append(content.stream().map(Content::toString).collect(Collectors.joining(","))).append(";");
-        sb.append(knowledges.stream().map(Knowledges::toString).collect(Collectors.joining(","))).append(";");
-        sb.append(viewcount).append(";");
-        sb.append(members.stream().map(User::getEntityId).map(UUID::toString).collect(Collectors.joining(","))).append(";");
-        sb.append(likeCount).append(";");
-        sb.append(userLiked.stream().map(UUID::toString).collect(Collectors.joining(","))).append(";");
-        sb.append(caseVote.toCSVString()).append(System.lineSeparator());
-        return sb.toString();
+    public static Case fromCSVString(String csv) {
+        String[] parts = csv.split(";");
+        UUID entityId = UUID.fromString(parts[0]);
+        Instant createdAt = Instant.parse(parts[1]);
+        Instant updatedAt = Instant.parse(parts[2]);
+        User owner = getOwnerID(parts[3]);
+        String title = parts[4];
+        List<Content> content = parseContent(parts[5]);
+        Set<Knowledges> knowledges = parseKnowledges(parts[6]);
+        int viewCount = Integer.parseInt(parts[7]);
+        Set<User> members = parseMembers(parts[8]);
+        int likeCount = Integer.parseInt(parts[9]);
+        Set<UUID> usersLiked = parseUsersLiked(parts[10]);
+        CaseVote caseVote = parseCaseVote(parts[11]);
+
+        return new Case(entityId, createdAt, updatedAt, title, content, viewCount, knowledges, owner, members, likeCount, usersLiked, caseVote);
     }
+
+    private static User getOwnerID(String part) {
+        if (userRepo.getEntryMap().containsKey(UUID.fromString(part))) {
+            return userRepo.findByID(UUID.fromString(part));
+        } else {
+            throw new MedicalCaseException("Owner not found");
+        }
+    }
+
+    private static List<Content> parseContent(String part) {
+        return Arrays.stream(part.split(","))
+                .map(text -> new Content(new ContentText(text)))
+                .collect(Collectors.toList());
+    }
+
+    private static CaseVote parseCaseVote(String part) {
+        String[] parts = part.split(",");
+        LinkedHashSet<Answer> answers = parseAnswers(parts[0]);
+        HashMap<UUID, Set<Vote>> votes = parseVotes(parts[1]);
+
+        return new CaseVote(answers, votes);
+    }
+
+    private static HashMap<UUID, Set<Vote>> parseVotes(String part) {
+        HashMap<UUID, Set<Vote>> votes = new HashMap<>();
+        String[] votePairs = part.split(",");
+
+        for (String votePair : votePairs) {
+            if (!votePair.isEmpty()) {
+                String[] voteData = votePair.split(":");
+                UUID userId = UUID.fromString(voteData[0]);
+                String[] votesArray = voteData[1].split(";");
+                Set<Vote> voteSet = Arrays.stream(votesArray)
+                        .map(voteStr -> {
+                            String[] voteParts = voteStr.split("=");
+                            Answer answer = new Answer(voteParts[0]);
+                            double percent = Double.parseDouble(voteParts[1]);
+                            return new Vote(answer, percent);
+                        })
+                        .collect(Collectors.toSet());
+                votes.put(userId, voteSet);
+            }
+        }
+        return votes;
+    }
+
+    private static LinkedHashSet<Answer> parseAnswers(String part) {
+        return Arrays.stream(part.split(","))
+                .map(Answer::new)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    private static Set<UUID> parseUsersLiked(String part) {
+        return Arrays.stream(part.replaceAll("[\\[\\]]", "").split(","))
+                .filter(str -> !str.isEmpty())
+                .map(UUID::fromString)
+                .collect(Collectors.toSet());
+    }
+
+    private static Set<User> parseMembers(String part) {
+        return Arrays.stream(part.replaceAll("[\\[\\]]", "").split(","))
+                .filter(str -> !str.isEmpty())
+                .map(uuid -> userRepo.findByID(UUID.fromString(uuid)))
+                .collect(Collectors.toSet());
+    }
+
+    private static Set<Knowledges> parseKnowledges(String part) {
+        return Arrays.stream(part.split(","))
+                .map(String::trim)
+                .map(Knowledges::new)
+                .collect(Collectors.toSet());
+    }
+
 
 }

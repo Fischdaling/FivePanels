@@ -2,20 +2,21 @@ package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.BaseEntity;
 import org.theShire.domain.exception.MedicalDoctorException;
+import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.messenger.Chat;
-import org.theShire.domain.richType.Email;
-import org.theShire.domain.richType.Password;
+import org.theShire.domain.richType.*;
 import org.theShire.foundation.Knowledges;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.*;
+import static org.theShire.service.CaseService.caseRepo;
+import static org.theShire.service.ChatService.messengerRepo;
+import static org.theShire.service.UserService.userRepo;
 
 public class User extends BaseEntity {
     //The Email must contain @ and . cannot be empty and has a max length
@@ -166,20 +167,6 @@ public class User extends BaseEntity {
         return sb.toString();
     }
 
-    @Override
-    public String toCSVString() {
-        final StringBuilder sb = new StringBuilder(super.toCSVString());
-        sb.append(email).append(";");
-        sb.append(password).append(";");
-        sb.append(score).append(";");
-        sb.append(contacts.stream().map(Relation::toCSVString).collect(Collectors.joining(","))).append(";");
-        sb.append(chats.stream().map(Chat::getEntityId).map(UUID::toString).collect(Collectors.joining(","))).append(";");
-        sb.append(specialization.stream().map(Knowledges::toString).collect(Collectors.joining(","))).append(";");
-        sb.append(ownedCases.stream().map(Case::getEntityId).map(UUID::toString).collect(Collectors.joining(","))).append(";");
-        sb.append(memberOfCase.stream().map(Case::getEntityId).map(UUID::toString).collect(Collectors.joining(","))).append(";");
-        sb.append(profile.toCSVString()).append(System.lineSeparator());
-        return sb.toString();
-    }
 
 
     public Password getPassword() {
@@ -188,6 +175,86 @@ public class User extends BaseEntity {
 
     public void addContacts(Relation relation) {
         contacts.add(isNotInCollection(relation,contacts,"user",exTypeUser));
+    }
+
+
+    public static User fromCSVString(String csv) {
+        String[] parts = csv.split(";");
+        UUID entityId = UUID.fromString(parts[0]);
+        Instant createdAt = Instant.parse(parts[1]);
+        Instant updatedAt = Instant.parse(parts[2]);
+        Email email = new Email(parts[3]);
+        Password password = new Password(parts[4]);
+        int score = Integer.parseInt(parts[5]);
+        Set<Relation> contacts = parseContacts(parts[6]);
+        Set<Chat> chats = parseChats(parts[7]);
+        Set<Knowledges> specializations = parseSpecializations(parts[8]);
+        Set<Case> ownedCases = parseCases(parts[9]);
+        Set<Case> memberOfCase = parseCases(parts[10]);
+        Name firstName = new Name(parts[11]);
+        Name lastName = new Name(parts[12]);
+        List<EducationalTitle> educationalTitles = parseEducationalTitles(parts[13]);
+        Media profilePicture = parseMedia(parts[14]);
+        Location location = new Location(parts[15]);
+        Language language = new Language(parts[16]);
+
+        UserProfile profile = new UserProfile(language, location, profilePicture, firstName, lastName, educationalTitles);
+        return new User(entityId, createdAt, updatedAt, email, password, profile, score, contacts, chats, ownedCases, memberOfCase, specializations);
+    }
+
+    private static Set<Relation> parseContacts(String value) {
+        return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
+                .filter(str -> !str.isEmpty())
+                .map(relStr -> {
+                    String[] relParts = relStr.split(":");
+                    UUID userId1 = UUID.fromString(relParts[0]);
+                    UUID userId2 = UUID.fromString(relParts[1]);
+                    Relation.RelationType type = Relation.RelationType.valueOf(relParts[2]);
+
+                    User user1 = userRepo.findByID(userId1);
+                    User user2 = userRepo.findByID(userId2);
+
+                    if (user1 == null || user2 == null) {
+                        throw new MedicalDoctorException("sender and receiver cannot be null");
+                    }
+
+                    return new Relation(user1, user2, type);
+                })
+                .collect(Collectors.toSet());
+    }
+
+    private static Set<Chat> parseChats(String value) {
+        return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
+                .filter(str -> !str.isEmpty())
+                .map(uuid -> messengerRepo.findByID(UUID.fromString(uuid)))
+                .collect(Collectors.toSet());
+    }
+
+    private static Set<Knowledges> parseSpecializations(String value) {
+        return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
+                .filter(str -> !str.isEmpty())
+                .map(Knowledges::new)
+                .collect(Collectors.toSet());
+    }
+
+    private static Set<Case> parseCases(String value) {
+        return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
+                .filter(str -> !str.isEmpty())
+                .map(uuid -> caseRepo.findByID(UUID.fromString(uuid)))
+                .collect(Collectors.toSet());
+    }
+
+    private static List<EducationalTitle> parseEducationalTitles(String value) {
+        return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
+                .filter(str -> !str.isEmpty())
+                .map(String::trim)
+                .map(EducationalTitle::new)
+                .collect(Collectors.toList());
+    }
+
+    private static Media parseMedia(String value) {
+        String altText = value.substring(6);
+        return new Media(altText);
     }
 
 }

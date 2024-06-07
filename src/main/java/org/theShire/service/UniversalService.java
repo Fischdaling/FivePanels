@@ -23,38 +23,6 @@ import static org.theShire.service.UserService.userRepo;
 
 public class UniversalService {
 
-    public static void loadEntry(){
-        loadChat();
-        loadUser();
-        loadCase();
-    }
-
-    public static void loadUser() {
-        String userFilePath = "src/main/java/org/theShire/persistence/userRepoCSV.csv";
-
-        userRepo.loadEntryMap(userFilePath);
-    }
-    public static void loadCase() {
-        String caseFilePath = "src/main/java/org/theShire/persistence/caseRepoCSV.csv";
-
-        caseRepo.loadEntryMap(caseFilePath);
-    }
-    public static void loadChat() {
-        String chatFilePath = "src/main/java/org/theShire/persistence/chatRepoCSV.csv";
-
-        messengerRepo.loadEntryMap(chatFilePath);
-    }
-
-    public static void saveEntry() {
-        try {
-            userRepo.saveEntryMap("src/main/java/org/theShire/persistence/userRepoCSV.csv");
-            caseRepo.saveEntryMap("src/main/java/org/theShire/persistence/caseRepoCSV.csv");
-            messengerRepo.saveEntryMap("src/main/java/org/theShire/persistence/chatRepoCSV.csv");
-        } catch (Exception e) {
-            throw new RuntimeException("error while saving entries: " + e.getMessage());
-        }
-    }
-
     public static void initData() {
 
          User user1;
