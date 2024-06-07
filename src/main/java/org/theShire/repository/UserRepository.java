@@ -77,17 +77,17 @@ public class UserRepository extends AbstractRepository<User> {
         Email email = new Email(parts[3]);
         Password password = new Password(parts[4]);
         int score = Integer.parseInt(parts[5]);
-        Set<UserRelationShip> contacts = parseContacts(parts[6]);
+        Set<Relation> contacts = parseContacts(parts[6]);
         Set<Chat> chats = parseChats(parts[7]);
         Set<Knowledges> specializations = parseSpecializations(parts[8]);
         Set<Case> ownedCases = parseCases(parts[9]);
         Set<Case> memberOfCase = parseCases(parts[10]);
-        Language language = new Language(parts[11]);
-        Location location = new Location(parts[12]);
-        Media profilePicture = parseMedia(parts[13]);
-        Name firstName = new Name(parts[14]);
-        Name lastName = new Name(parts[15]);
-        List<EducationalTitle> educationalTitles = parseEducationalTitles(parts[16]);
+        Name firstName = new Name(parts[11]);
+        Name lastName = new Name(parts[12]);
+        List<EducationalTitle> educationalTitles = parseEducationalTitles(parts[13]);
+        Media profilePicture = parseMedia(parts[14]);
+        Location location = new Location(parts[15]);
+        Language language = new Language(parts[16]);
 
         UserProfile profile = new UserProfile(language, location, profilePicture, firstName, lastName, educationalTitles);
         User user = new User(entityId, createdAt, updatedAt, email, password, profile, score, contacts, chats, ownedCases, memberOfCase, specializations);
@@ -95,7 +95,7 @@ public class UserRepository extends AbstractRepository<User> {
         return user;
     }
 
-    private Set<UserRelationShip> parseContacts(String value) {
+    private Set<Relation> parseContacts(String value) {
         return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
                 .filter(str -> !str.isEmpty())
                 .map(relStr -> {
@@ -111,7 +111,7 @@ public class UserRepository extends AbstractRepository<User> {
                         throw new MedicalDoctorException("sender and receiver cannot be null");
                     }
 
-                    return new UserRelationShip(user1, user2, type);
+                    return new Relation(user1, user2, type);
                 })
                 .collect(Collectors.toSet());
     }
@@ -124,6 +124,7 @@ public class UserRepository extends AbstractRepository<User> {
     }
 
     private Set<Knowledges> parseSpecializations(String value) {
+        System.out.println(value);
         return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
                 .filter(str -> !str.isEmpty())
                 .map(Knowledges::new)
@@ -146,11 +147,7 @@ public class UserRepository extends AbstractRepository<User> {
     }
 
     private Media parseMedia(String value) {
-        String[] parts = value.split(",");
-        int width = Integer.parseInt(parts[0]);
-        int height = Integer.parseInt(parts[1]);
-        String altText = parts[2];
-        String resolution = parts[3];
-        return new Media(width, height, altText, resolution);
+        String altText = value.substring(6);
+        return new Media(altText);
     }
 }

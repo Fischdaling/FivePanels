@@ -29,19 +29,18 @@ public class UniversalService {
         String chatFilePath = "src/main/java/org/theShire/persistence/chatRepoCSV.csv";
         String userFilePath = "src/main/java/org/theShire/persistence/userRepoCSV.csv";
 
-
-            caseRepo.loadEntryMap(caseFilePath);
-            messengerRepo.loadEntryMap(chatFilePath);
-            userRepo.loadEntryMap(userFilePath);
+        userRepo.loadEntryMap(userFilePath);
+        caseRepo.loadEntryMap(caseFilePath);
+        messengerRepo.loadEntryMap(chatFilePath);
             System.out.println("Entries loaded successfully.");
 
     }
 
     public static void saveEntry() {
         try {
+            userRepo.saveEntryMap("src/main/java/org/theShire/persistence/userRepoCSV.csv");
             caseRepo.saveEntryMap("src/main/java/org/theShire/persistence/caseRepoCSV.csv");
             messengerRepo.saveEntryMap("src/main/java/org/theShire/persistence/chatRepoCSV.csv");
-            userRepo.saveEntryMap("src/main/java/org/theShire/persistence/userRepoCSV.csv");
             System.out.println("Entries saved successfully.");
         } catch (Exception e) {
             throw new RuntimeException("error while saving entries: " + e.getMessage());

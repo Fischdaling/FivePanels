@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UniversalService.initData;
+import static org.theShire.service.UserService.sendRequest;
 import static org.theShire.service.UserService.userRepo;
 
 public class UniversalServiceTest {
@@ -36,31 +37,7 @@ public class UniversalServiceTest {
         initData();
     }
 
-    @Test
-    void saveAndLoadUser_ShouldWriteDownAllUsersInReposInCSVAndThenLoadThemIn_WhenCalled(){
-        UUID uuid = UUID.randomUUID();
-        //CREATE USER4-----------------------------------------------------------------
-        Set<String> knowledges4 = new HashSet<>();
-        knowledges4.add("pediatric emergency medicine");
-        knowledges4.add("hand surgery");
-        UserService.createUser(uuid,
-                new Name("Sauron"),
-                new Name("Morgoth"),
-                new Email("Sauron@Mordor.orc"),
-                new Password("WorldDomination!"),
-                new Language("Elbish"),
-                new Location("Mordor"),
-                "Sauron Profile pic",
-                knowledges4,
-                "Ring Smith",
-                "The Eye");
 
-        UniversalService.saveEntry();
-        userRepo.deleteAll();
-        UniversalService.loadEntry();
-
-        assertTrue(userRepo.existsById(uuid));
-    }
 
     @Test
     void saveAndLoadCase_ShouldWriteDownAllCasesInReposInCSVAndThenLoadThemIn_WhenCalled(){
@@ -72,7 +49,7 @@ public class UniversalServiceTest {
         contents.add(new Content(new ContentText("My First Text")));
         contents.add(new Content(new ContentText("My Second Text")));
         //add Media
-        contents.add(new Content(new Media(200, 100, "My First Media", "200x100")));
+        contents.add(new Content(new Media("MY FILE")));
 
         //Create a Case with user2&user3 as member and user1 as owner
         Set<String> knowledges4 = new HashSet<>();
@@ -133,5 +110,32 @@ public class UniversalServiceTest {
         UniversalService.loadEntry();
 
         assertTrue(messengerRepo.existsById(chat.getEntityId()));
+    }
+    @Test
+    void saveAndLoadUser_ShouldWriteDownAllUsersInReposInCSVAndThenLoadThemIn_WhenCalled(){
+        UUID uuid = UUID.randomUUID();
+        //CREATE USER4-----------------------------------------------------------------
+        Set<String> knowledges4 = new HashSet<>();
+        knowledges4.add("pediatric emergency medicine");
+        knowledges4.add("hand surgery");
+        User user = UserService.createUser(uuid,
+                new Name("Sauron"),
+                new Name("Morgoth"),
+                new Email("Sauron@Mordor.orc"),
+                new Password("WorldDomination!"),
+                new Language("Elbish"),
+                new Location("Mordor"),
+                "Sauron Profile pic",
+                knowledges4,
+                "Ring Smith",
+                "The Eye");
+        UserRelationShip.sendRequest(user, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
+        Chat chat = UserRelationShip.acceptRequest(user, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
+
+        UniversalService.saveEntry();
+        userRepo.deleteAll();
+        UniversalService.loadEntry();
+
+        assertTrue(userRepo.existsById(uuid));
     }
 }

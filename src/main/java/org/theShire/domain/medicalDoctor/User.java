@@ -27,7 +27,7 @@ public class User extends BaseEntity {
     // The Score of the User gets increased when sucessfully publishing cases and/or voting on cases and/or leaving comments
     private int score;
     //The Contact list of a user (What Friendship he has)
-    private Set<UserRelationShip> contacts;
+    private Set<Relation> contacts;
     //The Chats from a User (single and Group chats)
     private Set<Chat> chats;
     // all the cases owned and lead by the User
@@ -62,7 +62,7 @@ public class User extends BaseEntity {
         this.specialization = specialization;
     }
 
-    public User(UUID uuid, Instant createdAt, Instant updatedAt, Email email, Password password, UserProfile profile, int score, Set<UserRelationShip> contacts, Set<Chat> chats, Set<Case> ownedCases, Set<Case> memberOfCase, Set<Knowledges> specialization) {
+    public User(UUID uuid, Instant createdAt, Instant updatedAt, Email email, Password password, UserProfile profile, int score, Set<Relation> contacts, Set<Chat> chats, Set<Case> ownedCases, Set<Case> memberOfCase, Set<Knowledges> specialization) {
         super(uuid, createdAt, updatedAt);
         this.email = email;
         this.password = password;
@@ -95,10 +95,6 @@ public class User extends BaseEntity {
 
     public void setScore(int score) {
         this.score = score;
-    }
-
-    public Set<UserRelationShip> getContacts() {
-        return contacts;
     }
 
 
@@ -176,7 +172,7 @@ public class User extends BaseEntity {
         sb.append(email).append(";");
         sb.append(password).append(";");
         sb.append(score).append(";");
-        sb.append(contacts.stream().map(UserRelationShip::toString).collect(Collectors.joining(","))).append(";");
+        sb.append(contacts.stream().map(Relation::toCSVString).collect(Collectors.joining(","))).append(";");
         sb.append(chats.stream().map(Chat::getEntityId).map(UUID::toString).collect(Collectors.joining(","))).append(";");
         sb.append(specialization.stream().map(Knowledges::toString).collect(Collectors.joining(","))).append(";");
         sb.append(ownedCases.stream().map(Case::getEntityId).map(UUID::toString).collect(Collectors.joining(","))).append(";");
@@ -188,5 +184,9 @@ public class User extends BaseEntity {
 
     public Password getPassword() {
         return password;
+    }
+
+    public void addContacts(Relation relation) {
+        contacts.add(isNotInCollection(relation,contacts,"user",exTypeUser));
     }
 }

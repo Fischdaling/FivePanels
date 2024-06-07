@@ -67,7 +67,6 @@ public class MessengerRepository extends AbstractRepository<Chat>{
         List<Message> chatHistory = parseHistory(parts[4]);
 
         Chat chat = new Chat(entityId, createdAt, updatedAt, users);
-        System.out.println(chat);
         chat.addChatHistory(new Message(UUID.randomUUID(),new Content(new ContentText("Chat Restored"))));
         chatHistory.forEach(chat::addChatHistory);
         return chat;

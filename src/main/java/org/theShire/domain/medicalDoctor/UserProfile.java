@@ -99,7 +99,7 @@ public class UserProfile {
         sb.append(educationalTitles).append(";");
         sb.append(profilePicture).append(";");
         sb.append(location).append(";");
-        sb.append(language).append(";");
+        sb.append(language);
         return sb.toString();
     }
 }
