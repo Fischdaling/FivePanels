@@ -7,6 +7,7 @@ import org.theShire.domain.exception.MessengerException;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
 import org.theShire.domain.medicalDoctor.User;
+import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
@@ -20,6 +21,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;
 import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
 import static org.theShire.service.ChatService.messengerRepo;
 
@@ -80,4 +82,63 @@ class ChatServiceTest {
         testChat.sendMessage(message);
         assertTrue(testChat.getChatHistory().contains(message));
     }
+
+    @Test
+    void testSendRequest_ShouldCreateRelationShip_WhenRequestSent() {
+        ChatService.sendRequest(testUser, testUser2);
+
+        String keyOutgoing = UserRelationShip.createMapKey(testUser, testUser2);
+        String keyIncoming = UserRelationShip.createMapKey(testUser2, testUser);
+
+        assertTrue(relationShip.containsKey(keyOutgoing));
+        assertTrue(relationShip.containsKey(keyIncoming));
+        assertEquals(OUTGOING, relationShip.get(keyOutgoing).getType());
+        assertEquals(INCOMING, relationShip.get(keyIncoming).getType());
+    }
+
+    @Test
+    void testSendRequest_ShouldThrowException_WhenSenderOrReceiverIsNull() {
+        assertThrows(MedicalDoctorException.class, () -> {
+            ChatService.sendRequest(null, testUser2);
+        });
+        assertThrows(MedicalDoctorException.class, () -> {
+            ChatService.sendRequest(testUser, null);
+        });
+    }
+
+    @Test
+    void testAcceptRequest_ShouldCreateChat_WhenRequestAccepted() {
+        ChatService.sendRequest(testUser, testUser2);
+        Chat chat = ChatService.acceptRequest(testUser, testUser2);
+        assertNotNull(chat);
+        assertTrue(chat.getPeople().contains(testUser));
+        assertTrue(chat.getPeople().contains(testUser2));
+    }
+
+    @Test
+    void testAcceptRequest_ShouldEstablishRelation_WhenRequestAccepted() {
+        ChatService.sendRequest(testUser, testUser2);
+        ChatService.acceptRequest(testUser2, testUser);
+
+        String keyOutgoing = UserRelationShip.createMapKey(testUser, testUser2);
+        String keyIncoming = UserRelationShip.createMapKey(testUser2, testUser);
+
+        assertEquals(ESTABLISHED, relationShip.get(keyOutgoing).getType());
+        assertEquals(ESTABLISHED, relationShip.get(keyIncoming).getType());
+    }
+
+
+    @Test
+    void testDeclineRequest_ShouldRemoveRelation_WhenRequestDeclined() {
+        ChatService.sendRequest(testUser, testUser2);
+        ChatService.declineRequest(testUser, testUser2);
+
+        String keyOutgoing = UserRelationShip.createMapKey(testUser, testUser2);
+        String keyIncoming = UserRelationShip.createMapKey(testUser2, testUser);
+
+        assertFalse(UserRelationShip.relationShip.containsKey(keyOutgoing));
+        assertFalse(UserRelationShip.relationShip.containsKey(keyIncoming));
+    }
+
+
 }
