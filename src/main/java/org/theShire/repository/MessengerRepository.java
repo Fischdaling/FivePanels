@@ -37,7 +37,6 @@ public class MessengerRepository extends AbstractRepository<Chat>{
                             throw new UncheckedIOException(e);
                         }
                     });
-            System.out.println("Successfully saved " + filepath);
         } catch (IOException e) {
             throw new RuntimeException(String.format("File %s has a problem", filepath), e);
         }

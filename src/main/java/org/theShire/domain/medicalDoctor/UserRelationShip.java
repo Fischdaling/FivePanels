@@ -1,19 +1,11 @@
 package org.theShire.domain.medicalDoctor;
 
-import org.theShire.domain.messenger.Chat;
-import org.theShire.foundation.DomainAssertion;
-
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;
-import static org.theShire.service.ChatService.createChat;
-import static org.theShire.service.ChatService.messengerRepo;
-import static org.theShire.service.UserService.userRepo;
 
 public class UserRelationShip {
     //      KEY             VALUE
@@ -41,68 +33,6 @@ public class UserRelationShip {
     //important to know! The relation type always differs
     //from the direction of the relation. User1 and User2 have a different POVs
 
-    public static void sendRequest(User sender, User receiver) {
-        DomainAssertion.isNotEqual(sender, receiver, "sender and receiver", exTypeUser);
-        DomainAssertion.isInCollection(sender, userRepo.findAll(), "sender", exTypeUser);
-        DomainAssertion.isInCollection(receiver, userRepo.findAll(), "receiver", exTypeUser);
-
-        String keyOutgoing = createMapKey(sender, receiver);
-        String keyIncoming = createMapKey(receiver, sender);
-
-        DomainAssertion.isTrue(!relationShip.containsKey(keyIncoming) && !relationShip.containsKey(keyOutgoing),()->"Relation already Existing",exTypeUser);
-
-        Relation relationOutgoing = new Relation( sender, receiver, OUTGOING);
-        Relation relationIncoming = new Relation( receiver, sender, INCOMING);
-
-        relationShip.put(keyOutgoing, relationOutgoing);
-        relationShip.put(keyIncoming, relationIncoming);
-    }
-
-
-    public static Chat acceptRequest(User sender, User receiver) {
-        DomainAssertion.isNotNull(sender, "sender", exTypeUser);
-        DomainAssertion.isNotNull(receiver, "receiver", exTypeUser);
-
-        String keyIncoming = createMapKey(sender, receiver);
-        String keyOutgoing = createMapKey(receiver, sender);
-
-        Relation relationIncoming = relationShip.get(keyIncoming);
-        Relation relationOutgoing = relationShip.get(keyOutgoing);
-
-        if (relationIncoming != null && relationOutgoing != null) {
-            relationIncoming.setType(ESTABLISHED);
-            relationOutgoing.setType(ESTABLISHED);
-            relationShip.put(keyIncoming, relationIncoming);
-            relationShip.put(keyOutgoing, relationOutgoing);
-
-            if (messageable(sender, receiver)) {
-                return createChat(sender, receiver);
-            }
-            sender.addContacts(getRelation(sender,receiver));
-            receiver.addContacts(getRelation(sender, receiver));
-        }
-        return null;
-    }
-
-    public static void declineRequest(User sender, User receiver){
-        DomainAssertion.isNotNull(sender, "sender", exTypeUser);
-        DomainAssertion.isNotNull(receiver, "receiver", exTypeUser);
-
-        String keyIncoming = createMapKey(sender, receiver);
-        String keyOutgoing = createMapKey(receiver, sender);
-
-        Set<User> tmpSet = new HashSet<>();
-        tmpSet.add(sender);
-        tmpSet.add(receiver);
-        if (UserRelationShip.getRelation(sender,receiver)!= null) {
-            if (getRelation(sender, receiver).getType().equals(ESTABLISHED)) {
-                messengerRepo.deleteById(messengerRepo.findByMembers(tmpSet).getEntityId());
-            }
-        }
-        relationShip.remove(keyIncoming);
-        relationShip.remove(keyOutgoing);
-
-    }
 
     public static Relation.RelationType getRelationType(User user1, User user2) {
         return Optional.of(getRelation(user1, user2)).map(Relation::getType).orElse(null);

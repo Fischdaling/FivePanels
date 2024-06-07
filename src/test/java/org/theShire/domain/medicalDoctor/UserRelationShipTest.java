@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.richType.*;
+import org.theShire.service.ChatService;
 import org.theShire.service.UserService;
 
 import java.util.*;
@@ -42,7 +43,7 @@ public class UserRelationShipTest {
 
     @Test
     public void sendRequest_ShouldSendIncomingRequestToUser2andOutGoingRequestToUser1_WhenCalled() {
-        UserRelationShip.sendRequest(user1,user2);
+        ChatService.sendRequest(user1,user2);
 
         Set<User> request = UserRelationShip.getRequest(user2);
 
@@ -60,8 +61,8 @@ public class UserRelationShipTest {
 
     @Test
     public void acceptRequest_ShouldAcceptIncomingRequestFromUser1ToUser2_WhenCalled() {
-        UserRelationShip.sendRequest(user1,user2);
-        UserRelationShip.acceptRequest(user1,user2);
+        ChatService.sendRequest(user1,user2);
+        ChatService.acceptRequest(user1,user2);
         Set<User> request = UserRelationShip.getRequest(user2);
 
         assertEquals(0, request.size());
@@ -75,8 +76,8 @@ public class UserRelationShipTest {
 
     @Test
     public void acceptRequest_ShouldOpenChat_WhenAccepted() {
-        UserRelationShip.sendRequest(user1,user2);
-        UserRelationShip.acceptRequest(user1,user2);
+        ChatService.sendRequest(user1,user2);
+        ChatService.acceptRequest(user1,user2);
 
         Chat medChat = messengerRepo.findAll().stream().
                 filter(chat -> chat.getPeople().contains(user1) && chat.getPeople().contains(user2)).
@@ -87,7 +88,7 @@ public class UserRelationShipTest {
 
     @Test
     public void getRelationType_ShouldReturnRelationType_WhenCalled() {
-        UserRelationShip.sendRequest(user1,user2);
+        ChatService.sendRequest(user1,user2);
 
         assertEquals(OUTGOING,UserRelationShip.getRelationType(user1,user2));
         assertEquals(INCOMING,UserRelationShip.getRelationType(user2,user1));
@@ -95,36 +96,36 @@ public class UserRelationShipTest {
 
     @Test
     public void getRequests_ShouldReturnAllIncomingRequestsFromUser_WhenCalled(){
-        UserRelationShip.sendRequest(user1,user2);
+        ChatService.sendRequest(user1,user2);
 
         Set<User> users = new HashSet<>();
         users.add(user1);
 
         assertEquals(users,UserRelationShip.getRequest(user2));
 
-        UserRelationShip.acceptRequest(user1,user2);
+        ChatService.acceptRequest(user1,user2);
         users.remove(user1);
         assertEquals(users,UserRelationShip.getRequest(user2));
     }
 
     @Test
     public void getSend_ShouldReturnAllOutGoingRequestsFromUser_WhenCalled(){
-        UserRelationShip.sendRequest(user1,user2);
+        ChatService.sendRequest(user1,user2);
 
         Set<User> users = new HashSet<>();
         users.add(user2);
 
         assertEquals(users,UserRelationShip.getSent(user1));
 
-        UserRelationShip.acceptRequest(user1,user2);
+        ChatService.acceptRequest(user1,user2);
         users.remove(user2);
         assertEquals(users,UserRelationShip.getSent(user1));
     }
 
     @Test
     public void declineRequest_ShouldRemoveRequest_WhenDeclined() {
-        UserRelationShip.sendRequest(user1, user2);
-        UserRelationShip.declineRequest(user1, user2);
+        ChatService.sendRequest(user1, user2);
+        ChatService.declineRequest(user1, user2);
 
         assertTrue(UserRelationShip.getRequest(user2).isEmpty());
         assertNull(UserRelationShip.getRelation(user1, user2));
@@ -133,10 +134,10 @@ public class UserRelationShipTest {
 
     @Test
     public void declineRequest_ShouldRemoveRequestAndCloseChat_WhenDeclinedWithEstablishedRelation() {
-        UserRelationShip.sendRequest(user1, user2);
-        UserRelationShip.acceptRequest(user1, user2);
+        ChatService.sendRequest(user1, user2);
+        ChatService.acceptRequest(user1, user2);
 
-        UserRelationShip.declineRequest(user1, user2);
+        ChatService.declineRequest(user1, user2);
 
         assertTrue(UserRelationShip.getRequest(user2).isEmpty());
         assertNull(UserRelationShip.getRelation(user1, user2));
@@ -151,26 +152,26 @@ public class UserRelationShipTest {
 
     @Test
     public void messageable_ShouldReturnTrue_WhenRelationEstablished(){
-        UserRelationShip.sendRequest(user1,user2);
-        UserRelationShip.acceptRequest(user1,user2);
+        ChatService.sendRequest(user1,user2);
+        ChatService.acceptRequest(user1,user2);
 
         assertTrue(UserRelationShip.messageable(user1,user2));
     }
     @Test
     public void messageable_ShouldReturnFalse_WhenRelationNotEstablished() {
-        UserRelationShip.sendRequest(user1, user2);
+        ChatService.sendRequest(user1, user2);
         assertFalse(UserRelationShip.messageable(user1, user2));
     }
 
     @Test
     public void messageable_ShouldReturnFalse_WhenRelationOutgoing() {
-        UserRelationShip.sendRequest(user1, user2);
+        ChatService.sendRequest(user1, user2);
         assertFalse(UserRelationShip.messageable(user1, user2));
     }
 
     @Test
     public void messageable_ShouldReturnFalse_WhenRelationIncoming() {
-        UserRelationShip.sendRequest(user1, user2);
+        ChatService.sendRequest(user1, user2);
         assertFalse(UserRelationShip.messageable(user2, user1));
     }
 

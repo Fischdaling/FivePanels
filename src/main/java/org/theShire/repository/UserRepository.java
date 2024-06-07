@@ -48,7 +48,6 @@ public class UserRepository extends AbstractRepository<User> {
                             throw new UncheckedIOException(e);
                         }
                     });
-            System.out.println("Successfully saved " + filepath);
         } catch (IOException e) {
             throw new RuntimeException(String.format("File %s has a problem", filepath), e);
         }
@@ -124,7 +123,6 @@ public class UserRepository extends AbstractRepository<User> {
     }
 
     private Set<Knowledges> parseSpecializations(String value) {
-        System.out.println(value);
         return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
                 .filter(str -> !str.isEmpty())
                 .map(Knowledges::new)

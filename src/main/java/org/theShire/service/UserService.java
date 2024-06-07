@@ -15,10 +15,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
-import static org.theShire.domain.medicalDoctor.Relation.RelationType.ESTABLISHED;
 import static org.theShire.foundation.DomainAssertion.isNotNull;
 import static org.theShire.foundation.DomainAssertion.isTrue;
-import static org.theShire.service.ChatService.messengerRepo;
 
 public class UserService {
     public static final UserRepository userRepo = new UserRepository();
@@ -51,7 +49,7 @@ public class UserService {
         Set<User> users = new HashSet<>();
         users.add(sender);
         users.add(receiver);
-        UserRelationShip.declineRequest(sender,receiver);
+        ChatService.declineRequest(sender,receiver);
 //        if (UserRelationShip.getRelation(sender,receiver)!= null) {
 //            if (UserRelationShip.getRelation(sender, receiver).getType().equals(ESTABLISHED)) {
 //                messengerRepo.deleteById(messengerRepo.findByMembers(users).getEntityId());
@@ -61,14 +59,14 @@ public class UserService {
 
     public static void acceptRequest(User sender, User receiver) {
         isTrue(UserRelationShip.getRequest(sender).contains(receiver),()->"Receiver not found.", exTypeUser);
-        UserRelationShip.acceptRequest(sender, receiver);
+        ChatService.acceptRequest(sender, receiver);
         receiver.setUpdatedAt(Instant.now());
         sender.setUpdatedAt(Instant.now());
     }
 
     public static void sendRequest(User sender, User receiver) {
         isTrue(userRepo.getEntryMap().containsKey(receiver.getEntityId()),()->"Receiver not found.",exTypeUser);
-        UserRelationShip.sendRequest(sender, receiver);
+        ChatService.sendRequest(sender, receiver);
     }
 
     //TODO fails if cancel relation

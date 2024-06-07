@@ -39,7 +39,6 @@ public class CaseRepository extends AbstractRepository<Case> {
                             throw new MedicalCaseException(e.getMessage());
                         }
                     });
-            System.out.println("Successfully saved " + filepath);
         } catch (IOException e) {
             throw new MedicalCaseException(String.format("File %s has a problem", filepath)+ e.getMessage());
         }
@@ -118,7 +117,7 @@ public class CaseRepository extends AbstractRepository<Case> {
                 votes.computeIfAbsent(userKey.get(i),r->new HashSet<>()).add(vote);
 //                votes.put(userKey.get(i),new HashSet<>()).add(vote);
             }
-            }
+        }
 
 
         return votes;

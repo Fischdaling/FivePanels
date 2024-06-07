@@ -9,12 +9,11 @@ import org.theShire.domain.medicalCase.Answer;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalCase.CaseVote;
 import org.theShire.domain.medicalDoctor.User;
-import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
-import org.theShire.repository.UserRepository;
 import org.theShire.service.CaseService;
+import org.theShire.service.ChatService;
 import org.theShire.service.UniversalService;
 import org.theShire.service.UserService;
 
@@ -25,7 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UniversalService.initData;
-import static org.theShire.service.UserService.sendRequest;
 import static org.theShire.service.UserService.userRepo;
 
 public class UniversalServiceTest {
@@ -76,7 +74,9 @@ public class UniversalServiceTest {
 
         UniversalService.saveEntry();
         caseRepo.deleteAll();
-        UniversalService.loadEntry();
+        UniversalService.loadChat();
+        UniversalService.loadUser();
+        UniversalService.loadCase();
 
         assertTrue(caseRepo.existsById(case1.getEntityId()));
     }
@@ -100,14 +100,16 @@ public class UniversalServiceTest {
                 "Ring Smith",
                 "The Eye");
 
-        UserRelationShip.sendRequest(user4, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
-        Chat chat = UserRelationShip.acceptRequest(user4, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
+        ChatService.sendRequest(user4, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
+        Chat chat = ChatService.acceptRequest(user4, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
 
         chat.sendMessage(new Message(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"),new Content(new ContentText("I can't"))));
 
         UniversalService.saveEntry();
         messengerRepo.deleteAll();
-        UniversalService.loadEntry();
+        UniversalService.loadChat();
+        UniversalService.loadUser();
+        UniversalService.loadCase();
 
         assertTrue(messengerRepo.existsById(chat.getEntityId()));
     }
@@ -129,12 +131,15 @@ public class UniversalServiceTest {
                 knowledges4,
                 "Ring Smith",
                 "The Eye");
-        UserRelationShip.sendRequest(user, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
-        Chat chat = UserRelationShip.acceptRequest(user, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
+        ChatService.sendRequest(user, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
+        Chat chat = ChatService.acceptRequest(user, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
+        chat.sendMessage(new Message(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"),new Content(new ContentText("I can't"))));
 
         UniversalService.saveEntry();
         userRepo.deleteAll();
-        UniversalService.loadEntry();
+        UniversalService.loadChat();
+        UniversalService.loadUser();
+        UniversalService.loadCase();
 
         assertTrue(userRepo.existsById(uuid));
     }

@@ -7,7 +7,6 @@ import org.theShire.domain.medicalCase.Answer;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalCase.CaseVote;
 import org.theShire.domain.medicalDoctor.User;
-import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
@@ -24,16 +23,26 @@ import static org.theShire.service.UserService.userRepo;
 
 public class UniversalService {
 
-    public static void loadEntry() {
-        String caseFilePath = "src/main/java/org/theShire/persistence/caseRepoCSV.csv";
-        String chatFilePath = "src/main/java/org/theShire/persistence/chatRepoCSV.csv";
+    public static void loadEntry(){
+        loadChat();
+        loadUser();
+        loadCase();
+    }
+
+    public static void loadUser() {
         String userFilePath = "src/main/java/org/theShire/persistence/userRepoCSV.csv";
 
         userRepo.loadEntryMap(userFilePath);
-        caseRepo.loadEntryMap(caseFilePath);
-        messengerRepo.loadEntryMap(chatFilePath);
-            System.out.println("Entries loaded successfully.");
+    }
+    public static void loadCase() {
+        String caseFilePath = "src/main/java/org/theShire/persistence/caseRepoCSV.csv";
 
+        caseRepo.loadEntryMap(caseFilePath);
+    }
+    public static void loadChat() {
+        String chatFilePath = "src/main/java/org/theShire/persistence/chatRepoCSV.csv";
+
+        messengerRepo.loadEntryMap(chatFilePath);
     }
 
     public static void saveEntry() {
@@ -41,7 +50,6 @@ public class UniversalService {
             userRepo.saveEntryMap("src/main/java/org/theShire/persistence/userRepoCSV.csv");
             caseRepo.saveEntryMap("src/main/java/org/theShire/persistence/caseRepoCSV.csv");
             messengerRepo.saveEntryMap("src/main/java/org/theShire/persistence/chatRepoCSV.csv");
-            System.out.println("Entries saved successfully.");
         } catch (Exception e) {
             throw new RuntimeException("error while saving entries: " + e.getMessage());
         }
@@ -113,8 +121,8 @@ public class UniversalService {
 
         if (!relationShip.containsKey(createMapKey(user1,user2))){
             // Send a friend request
-            UserRelationShip.sendRequest(user1, user2);
-            Chat chat = UserRelationShip.acceptRequest(user1, user2);
+            ChatService.sendRequest(user1, user2);
+            Chat chat = ChatService.acceptRequest(user1, user2);
             chat.sendMessage(new Message(user1.getEntityId(),new Content(new ContentText("When can we eat something?"))));
             chat.sendMessage(new Message(user2.getEntityId(),new Content(new ContentText("We already had breakfast"))));
             chat.sendMessage(new Message(user1.getEntityId(),new Content(new ContentText("But whats with the second breakfast? :("))));
@@ -155,6 +163,7 @@ public class UniversalService {
         case1.getCaseVote().voting(user2.getEntityId(),a2,30);
         case1.getCaseVote().voting(user3.getEntityId(),a1,20);
         case1.getCaseVote().voting(user3.getEntityId(),a2,80);
+
 
     }
     public static void initUser(){

@@ -189,4 +189,5 @@ public class User extends BaseEntity {
     public void addContacts(Relation relation) {
         contacts.add(isNotInCollection(relation,contacts,"user",exTypeUser));
     }
+
 }

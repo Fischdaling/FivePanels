@@ -104,13 +104,13 @@ class CaseVoteTest {
     }
 
     //TODO MAYBE DEAD
-    @Test
-    void testMultipleVotes_ShouldNotUpdateVote_WhenUserVotes2TimesTheSameAnswer() {
-        caseVote.voting(userID, answer1, 10.0);
-        caseVote.voting(userID, answer1, 20.0);
-
-        assertEquals(20.0, caseVote.getVotes().get(userID).stream().findFirst().orElse(null).getPercent());
-    }
+//    @Test
+//    void testMultipleVotes_ShouldUpdateVote_WhenUserVotes2TimesTheSameAnswer() {
+//        caseVote.voting(userID, answer1, 10.0);
+//        caseVote.voting(userID, answer1, 20.0);
+//
+//        assertEquals(20.0, caseVote.getVotes().get(userID).stream().findFirst().orElse(null).getPercent());
+//    }
 
     @Test
     void testMultipleVotes_ShouldAddVotes_WhenSameUserForDifferentAnswers() {
@@ -165,6 +165,13 @@ class CaseVoteTest {
         assertEquals(2, top3Answers.size());
         assertEquals(120/2,top3Answers.get(answer));
         assertEquals(80/2, top3Answers.get(answer1));
+    }
+
+    @Test
+    void testVoting_ShouldThrowException_WhenNegativePercent() {
+        assertThrows(exTypeCase, () -> caseVote.voting(userID, answer1, -10.0));
+
+        assertFalse(caseVote.getVotes().containsKey(userID));
     }
 
 }

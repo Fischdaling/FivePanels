@@ -85,11 +85,11 @@ public class CaseTest {
         User owner = medCase.getOwner();
         int initialOwnerScore = owner.getScore();
         int initialUser2Score = user2.getScore();
-        medCase.getCaseVote().voting(user2.getEntityId(),a1,50);
+        medCase.getCaseVote().voting(user2.getEntityId(), a1, 50);
         medCase.declareCorrectAnswer(a1);
 
         assertEquals(initialOwnerScore + 5, owner.getScore());
-        assertEquals(initialUser2Score + 2*50/100+1, user2.getScore());
+        assertEquals(initialUser2Score + 2 * 50 / 100 + 1, user2.getScore());
     }
 
     @Test
@@ -98,4 +98,17 @@ public class CaseTest {
 
         assertThrows(exTypeCase, () -> medCase.declareCorrectAnswer(incorrectAnswer));
     }
+
+    @Test
+    public void testAddNullMember() {
+        assertThrows(exTypeCase, () -> medCase.addMember(null));
+    }
+
+    @Test
+    public void testRemoveNonMember() {
+        User nonMember = UserService.createUser(UUID.randomUUID(), new Name("Gollum"), new Name("Smeagol"), new Email("gollum@middleearth.orc"), new Password("MyPrecious123"), new Language("Gollumish"), new Location("Mount Doom"), "Gollum Profile", new HashSet<>(), "Stinker", "Twisted");
+        assertThrows(exTypeCase, () -> medCase.removeMember(nonMember));
+    }
+
+
 }

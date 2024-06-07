@@ -6,6 +6,7 @@ import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserProfile;
 import org.theShire.domain.richType.*;
 import org.theShire.foundation.Knowledges;
+import org.theShire.service.UniversalService;
 import org.theShire.service.UserService;
 
 import java.time.Instant;
@@ -141,6 +142,7 @@ public class UserPresentation {
     public static User init () {
         System.out.println("1. Login");
         System.out.println("2. Create new User");
+        System.out.println("3. Load Entry");
         System.out.println("0. Exit");
         int choice = scanner.nextInt();
         switch (choice) {
@@ -150,6 +152,8 @@ public class UserPresentation {
             case 2:
                 scanner.nextLine();
                 return addUser();
+            case 3:
+                UniversalService.loadEntry();
             case 0:
                 System.exit(0);
             default:
