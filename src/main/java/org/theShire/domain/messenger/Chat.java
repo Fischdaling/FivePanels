@@ -33,7 +33,7 @@ public class Chat extends BaseEntity {
     public Chat(UUID uuid, Instant createdAt, Instant updatedAt, Set<User> people) {
         super(uuid, createdAt, updatedAt);
         this.people = people;
-
+        chatHistory = new ArrayList<>();
     }
 
     private void addChatters(User... chatters) {
@@ -92,7 +92,7 @@ public class Chat extends BaseEntity {
     public String toCSVString() {
         final StringBuilder sb = new StringBuilder(super.toCSVString());
         sb.append(people.stream().map(User::getEntityId).map(UUID::toString).collect(Collectors.joining(","))).append(";");
-        sb.append(chatHistory.stream().map(Message::toCSVString).collect(Collectors.joining(","))).append(System.lineSeparator());
+        sb.append(chatHistory.stream().map(Message::toCSVString).collect(Collectors.joining("$"))).append(System.lineSeparator());
         return sb.toString();
     }
 

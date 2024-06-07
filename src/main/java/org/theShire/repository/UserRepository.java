@@ -6,6 +6,7 @@ import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserProfile;
 import org.theShire.domain.medicalDoctor.UserRelationShip;
+import org.theShire.domain.medicalDoctor.Relation;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.richType.*;
 import org.theShire.foundation.DomainAssertion;
@@ -19,8 +20,9 @@ import java.util.stream.Collectors;
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.ChatService.messengerRepo;
+import static org.theShire.service.UserService.userRepo;
 
-public class UserRepository extends AbstractRepository<User>{
+public class UserRepository extends AbstractRepository<User> {
 
     public Set<User> findByName(Name name) {
         return entryMap.values().stream()
@@ -89,19 +91,35 @@ public class UserRepository extends AbstractRepository<User>{
 
         UserProfile profile = new UserProfile(language, location, profilePicture, firstName, lastName, educationalTitles);
         User user = new User(entityId, createdAt, updatedAt, email, password, profile, score, contacts, chats, ownedCases, memberOfCase, specializations);
+        user.setScore(score);
         return user;
     }
 
     private Set<UserRelationShip> parseContacts(String value) {
-        //TODO
-        return new HashSet<>();
+        return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
+                .filter(str -> !str.isEmpty())
+                .map(relStr -> {
+                    String[] relParts = relStr.split(":");
+                    UUID userId1 = UUID.fromString(relParts[0]);
+                    UUID userId2 = UUID.fromString(relParts[1]);
+                    Relation.RelationType type = Relation.RelationType.valueOf(relParts[2]);
+
+                    User user1 = userRepo.findByID(userId1);
+                    User user2 = userRepo.findByID(userId2);
+
+                    if (user1 == null || user2 == null) {
+                        throw new MedicalDoctorException("sender and receiver cannot be null");
+                    }
+
+                    return new UserRelationShip(user1, user2, type);
+                })
+                .collect(Collectors.toSet());
     }
 
     private Set<Chat> parseChats(String value) {
         return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
                 .filter(str -> !str.isEmpty())
-                .map(UUID::fromString)
-                .map(messengerRepo::findByID)
+                .map(uuid -> messengerRepo.findByID(UUID.fromString(uuid)))
                 .collect(Collectors.toSet());
     }
 
@@ -115,14 +133,14 @@ public class UserRepository extends AbstractRepository<User>{
     private Set<Case> parseCases(String value) {
         return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
                 .filter(str -> !str.isEmpty())
-                .map(UUID::fromString)
-                .map(caseRepo::findByID)
+                .map(uuid -> caseRepo.findByID(UUID.fromString(uuid)))
                 .collect(Collectors.toSet());
     }
 
     private List<EducationalTitle> parseEducationalTitles(String value) {
         return Arrays.stream(value.replaceAll("[\\[\\]]", "").split(","))
                 .filter(str -> !str.isEmpty())
+                .map(String::trim)
                 .map(EducationalTitle::new)
                 .collect(Collectors.toList());
     }
@@ -135,6 +153,4 @@ public class UserRepository extends AbstractRepository<User>{
         String resolution = parts[3];
         return new Media(width, height, altText, resolution);
     }
-
-
 }

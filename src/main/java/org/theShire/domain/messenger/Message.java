@@ -81,10 +81,10 @@ public class Message extends BaseEntity {
     }
 
     public String toCSVString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append(/*DB.getUser(senderId)*/ senderId).append(";");
-        sb.append(stage).append(";");
-        sb.append(contents).append(";");
+        final StringBuilder sb = new StringBuilder(super.toCSVString().replaceAll(";","|"));
+        sb.append(senderId).append("|");
+        sb.append(stage).append("|");
+        sb.append(contents);
         return sb.toString();
     }
 

@@ -11,6 +11,7 @@ import org.theShire.domain.medicalCase.CaseVote;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.messenger.Chat;
+import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
 import org.theShire.repository.UserRepository;
 import org.theShire.service.CaseService;
@@ -21,9 +22,9 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.theShire.presentation.Main.initData;
 import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.ChatService.messengerRepo;
+import static org.theShire.service.UniversalService.initData;
 import static org.theShire.service.UserService.userRepo;
 
 public class UniversalServiceTest {
@@ -78,8 +79,10 @@ public class UniversalServiceTest {
         knowledges4.add("pediatric emergency medicine");
         knowledges4.add("critical care or pain medicine");
         LinkedHashSet<Answer> answers = new LinkedHashSet<>();
-        answers.add(new Answer("Cancer"));
-        answers.add(new Answer("Ebola"));
+        Answer a1 =new Answer("Cancer");
+        Answer a2 = new Answer("Ebola");
+        answers.add(a1);
+        answers.add(a2);
         Case case1 = CaseService.createCase(userRepo.findByID(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91")),
                 "my First Case",
                 knowledges4,
@@ -87,6 +90,12 @@ public class UniversalServiceTest {
                 new CaseVote(answers),
                 userRepo.findByID(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2")),
                 userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
+        case1.getCaseVote().voting(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"),a1,70);
+        case1.getCaseVote().voting(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"),a2,30);
+
+
+        case1.like(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"));
+        case1.getGroupchat().sendMessage(new Message(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"),new Content(new ContentText("I can't"))));
 
         UniversalService.saveEntry();
         caseRepo.deleteAll();
@@ -116,6 +125,8 @@ public class UniversalServiceTest {
 
         UserRelationShip.sendRequest(user4, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
         Chat chat = UserRelationShip.acceptRequest(user4, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
+
+        chat.sendMessage(new Message(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"),new Content(new ContentText("I can't"))));
 
         UniversalService.saveEntry();
         messengerRepo.deleteAll();

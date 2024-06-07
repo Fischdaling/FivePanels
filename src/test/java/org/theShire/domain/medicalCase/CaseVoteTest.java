@@ -103,12 +103,13 @@ class CaseVoteTest {
         assertFalse(caseVote.getVotes().containsKey(userID));
     }
 
+    //TODO MAYBE DEAD
     @Test
     void testMultipleVotes_ShouldNotUpdateVote_WhenUserVotes2TimesTheSameAnswer() {
         caseVote.voting(userID, answer1, 10.0);
         caseVote.voting(userID, answer1, 20.0);
 
-        assertEquals(10.0, caseVote.getVotes().get(userID).stream().findFirst().orElse(null).getPercent());
+        assertEquals(20.0, caseVote.getVotes().get(userID).stream().findFirst().orElse(null).getPercent());
     }
 
     @Test

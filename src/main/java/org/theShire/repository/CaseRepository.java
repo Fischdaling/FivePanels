@@ -15,9 +15,10 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
+import static org.theShire.foundation.DomainAssertion.isNotNull;
 import static org.theShire.presentation.UniversalPresentation.enterUUID;
 import static org.theShire.service.UserService.userRepo;
-
 
 public class CaseRepository extends AbstractRepository<Case> {
     public Set<Case> getCaseByOwner(UUID ownerId) {
@@ -35,12 +36,12 @@ public class CaseRepository extends AbstractRepository<Case> {
                         try {
                             bufferedWriter.write(csvFile);
                         } catch (IOException e) {
-                            throw new UncheckedIOException(e);
+                            throw new MedicalCaseException(e.getMessage());
                         }
                     });
             System.out.println("Successfully saved " + filepath);
         } catch (IOException e) {
-            throw new RuntimeException(String.format("File %s has a problem", filepath), e);
+            throw new MedicalCaseException(String.format("File %s has a problem", filepath)+ e.getMessage());
         }
     }
 
@@ -57,10 +58,6 @@ public class CaseRepository extends AbstractRepository<Case> {
 
     private Case parseCase(String line) {
         String[] parts = line.split(";");
-        if (parts.length != 12) {
-            throw new MedicalCaseException("Invalid CSV format");
-        }
-
         UUID entityId = UUID.fromString(parts[0]);
         Instant createdAt = Instant.parse(parts[1]);
         Instant updatedAt = Instant.parse(parts[2]);
@@ -77,37 +74,59 @@ public class CaseRepository extends AbstractRepository<Case> {
         return new Case(entityId, createdAt, updatedAt, title, content, viewCount, knowledges, owner, members, likeCount, usersLiked, caseVote);
     }
 
-
-    private User getOwnerID(String part) {
+    private static User getOwnerID(String part) {
         UUID ownerId = UUID.fromString(part);
         User owner = userRepo.findByID(ownerId);
-        if (owner == null) {
-            throw new MedicalCaseException("Owner not found");
-        }
-        return owner;
+        return isNotNull(owner,"owner",exTypeCase);
     }
 
     private List<Content> parseContent(String part) {
         return Arrays.stream(part.split(","))
-                .map(text -> new Content(new ContentText(text)))
+                .map(text -> new Content(new ContentText(text.trim())))
                 .collect(Collectors.toList());
     }
 
-    private CaseVote parseCaseVote(String part) {
-        String[] parts = part.split(",");
-        LinkedHashSet<Answer> answers = parseAnswers(parts[0]);
-        HashMap<UUID, Set<Vote>> votes = parseVotes(parts[1]);
-        return new CaseVote(answers, votes);
+    private Set<Knowledges> parseKnowledges(String part) {
+        return Arrays.stream(part.replaceAll("[\\[\\]]", "").split(","))
+                .filter(str -> !str.isEmpty())
+                .map(Knowledges::new)
+                .collect(Collectors.toSet());
     }
 
     private HashMap<UUID, Set<Vote>> parseVotes(String part) {
-        //TODO
-        return new HashMap<>();
+        HashMap<UUID, Set<Vote>> votes = new HashMap<>();
+        List<UUID> userKey = new ArrayList<>();
+        String entry = part.replaceAll("\\{}", "");
+
+            String[] voteParts = entry.split("=");
+
+            String[] mapKeys = voteParts[0].replaceAll("[\\[\\]]","").split(", ");
+            //[ba0a64e5-5fc9-4768-96d2-ad21df6e94c2, c3fc1109-be28-4bdc-8ca0-841e1fa4aee2]
+            for (String key : mapKeys){
+                userKey.add(UUID.fromString(key));
+            }
+            String[] valueParts =  voteParts[1].split(",");
+            //[[Cancer|70.0, Ebola|30.0], [Ebola|80.0, Cancer|20.0]]
+        for (String pair : valueParts){
+            String[] pairs = pair.split(",");
+
+            for (int i = 0; i < pairs.length;i++){
+                String[] votePair = pairs[i].replaceAll("[\\[\\]]","").split("\\|");
+                Answer answer = new Answer(votePair[0]);
+                double percent = Double.parseDouble(votePair[1]);
+                Vote vote = new Vote(answer, percent);
+                votes.computeIfAbsent(userKey.get(i),r->new HashSet<>()).add(vote);
+//                votes.put(userKey.get(i),new HashSet<>()).add(vote);
+            }
+            }
+
+
+        return votes;
     }
 
-
     private LinkedHashSet<Answer> parseAnswers(String part) {
-        return Arrays.stream(part.split(","))
+        return Arrays.stream(part.replaceAll("[\\[\\]]", "").split(","))
+                .filter(str -> !str.isEmpty())
                 .map(Answer::new)
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
@@ -119,18 +138,19 @@ public class CaseRepository extends AbstractRepository<Case> {
                 .collect(Collectors.toSet());
     }
 
-
-
     private Set<User> parseMembers(String part) {
         return Arrays.stream(part.replaceAll("[\\[\\]]", "").split(","))
+                .filter(str -> !str.isEmpty())
                 .map(UUID::fromString)
                 .map(userRepo::findByID)
                 .collect(Collectors.toSet());
     }
 
-    private Set<Knowledges> parseKnowledges(String part) {
-        return Arrays.stream(part.split(","))
-                .map(Knowledges::new)
-                .collect(Collectors.toSet());
+    private CaseVote parseCaseVote(String part) {
+        String[] parts = part.split("\\$");
+        LinkedHashSet<Answer> answers = parseAnswers(parts[0]);
+        HashMap<UUID, Set<Vote>> votes = parseVotes(parts[1]);
+
+        return new CaseVote(answers, votes);
     }
 }

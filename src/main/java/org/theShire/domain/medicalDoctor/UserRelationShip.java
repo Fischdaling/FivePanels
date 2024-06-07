@@ -28,6 +28,12 @@ public class UserRelationShip {
     public UserRelationShip() {
         relationShip = new HashMap<>();
     }
+    public UserRelationShip(User user1, User user2, Relation.RelationType type){
+        Relation relation = new Relation(user1, user2, type);
+        relationShip = new HashMap<>();
+        relationShip.put(createMapKey(user1,user2),relation);
+        relationShip.put(createMapKey(user2,user1),relation);
+    }
 
     public static String createMapKey(User user1, User user2) {
             return user1.getEntityId().toString() + user2.getEntityId().toString();

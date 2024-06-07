@@ -42,4 +42,11 @@ public class Vote {
         sb.append(percent);
         return sb.toString();
     }
+
+    public String ToCSVString(){
+        final StringBuffer sb = new StringBuffer();
+        sb.append(answer).append("|");
+        sb.append(percent);
+        return sb.toString();
+    }
 }

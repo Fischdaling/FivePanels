@@ -57,7 +57,7 @@ public class MessengerRepository extends AbstractRepository<Chat>{
     private Chat parseChat(String line) {
         String[] parts = line.split(";");
         if (parts.length != 5) {
-            throw new MessengerException("Invalid CSV format");
+            throw new MessengerException("Invalid CSV format ParseChat");
         }
 
         UUID entityId = UUID.fromString(parts[0]);
@@ -67,12 +67,14 @@ public class MessengerRepository extends AbstractRepository<Chat>{
         List<Message> chatHistory = parseHistory(parts[4]);
 
         Chat chat = new Chat(entityId, createdAt, updatedAt, users);
+        System.out.println(chat);
+        chat.addChatHistory(new Message(UUID.randomUUID(),new Content(new ContentText("Chat Restored"))));
         chatHistory.forEach(chat::addChatHistory);
         return chat;
     }
 
     private Set<User> parseUsers(String part) {
-        return Arrays.stream(part.replaceAll("[\\[\\]]", "").split(","))
+        return Arrays.stream(part.split(","))
                 .filter(str -> !str.isEmpty())
                 .map(UUID::fromString)
                 .map(userRepo::findByID)
@@ -80,17 +82,16 @@ public class MessengerRepository extends AbstractRepository<Chat>{
     }
 
     private List<Message> parseHistory(String part) {
-        return Arrays.stream(part.split(","))
+        return Arrays.stream(part.split("\\$"))
                 .map(this::parseMessage)
                 .collect(Collectors.toList());
     }
 
     private Message parseMessage(String messageStr) {
-        String[] parts = messageStr.split(";");
-//        if (parts.length != 6) {
-//            throw new MessengerException("Invalid Message CSV format");
-//        }
-
+        String[] parts = messageStr.split("\\|");
+        if (parts.length != 6) {
+            throw new MessengerException("Invalid Message CSV format");
+        }
         UUID entityId = UUID.fromString(parts[0]);
         Instant createdAt = Instant.parse(parts[1]);
         Instant updatedAt = Instant.parse(parts[2]);
@@ -104,6 +105,7 @@ public class MessengerRepository extends AbstractRepository<Chat>{
     }
 
     private Content parseContent(String contentStr) {
+        contentStr = contentStr.replaceAll("[\\[\\]]","");
         if (contentStr.startsWith("text:")) {
             String text = contentStr.substring(5);
             return new Content(new ContentText(text));
@@ -114,5 +116,6 @@ public class MessengerRepository extends AbstractRepository<Chat>{
             throw new MessengerException("Unknown content format: " + contentStr);
         }
     }
+
 
 }

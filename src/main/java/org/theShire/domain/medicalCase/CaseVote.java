@@ -94,8 +94,9 @@ public class CaseVote {
 
     public String toCSVString() {
         final StringBuffer sb = new StringBuffer();
-        sb.append(answers).append(",");
-        sb.append(votes);
+        sb.append(answers).append("$");
+        sb.append(votes.keySet()).append("=");
+        sb.append(votes.values().stream().map(votes1 -> votes1.stream().map(Vote::ToCSVString).collect(Collectors.toSet())).collect(Collectors.toSet()));
         return sb.toString();
     }
 }
