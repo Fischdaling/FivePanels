@@ -44,7 +44,7 @@ public class Chat extends BaseEntity {
         }
     }
 
-    private void addChatter(User chatter) {
+    public void addChatter(User chatter) {
         people.add(isNotInCollection(chatter, this.people, "chatter", exTypeMes));
         chatter.addChat(this);
     }
@@ -89,7 +89,13 @@ public class Chat extends BaseEntity {
         sb.append(chatHistory);
         return sb.toString();
     }
-
+    @Override
+    public String toCSVString() {
+        final StringBuilder sb = new StringBuilder(super.toCSVString());
+        sb.append(people.stream().map(User::getEntityId).map(UUID::toString).collect(Collectors.joining(","))).append(";");
+        sb.append(chatHistory.stream().map(Message::toCSVString).collect(Collectors.joining("|"))).append(System.lineSeparator());
+        return sb.toString();
+    }
     public static Chat fromCSVString(String csv) {
         String[] parts = csv.split(";");
         UUID entityId = UUID.fromString(parts[0]);

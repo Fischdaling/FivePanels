@@ -81,7 +81,7 @@ public class BaseEntity {
         return stringBuilder.toString();
     }
 
-    protected void setEntityId(UUID entityId) {
+    public void setEntityId(UUID entityId) {
         this.entityId = entityId;
     }
 }

@@ -219,6 +219,20 @@ public class Case extends BaseEntity {
         sb.append("Number 3 Answer: ").append(caseVote.getTop3Answer()).append(System.lineSeparator());
         return sb.toString();
     }
+    @Override
+    public String toCSVString() {
+        final StringBuilder sb = new StringBuilder(super.toCSVString());
+        sb.append(getOwner().getEntityId()).append(";");
+        sb.append(title).append(";");
+        sb.append(content.stream().map(Content::toString).collect(Collectors.joining(","))).append(";");
+        sb.append(knowledges.stream().map(Knowledges::toString).collect(Collectors.joining(","))).append(";");
+        sb.append(viewcount).append(";");
+        sb.append(members.stream().map(User::getEntityId).map(UUID::toString).collect(Collectors.joining(","))).append(";");
+        sb.append(likeCount).append(";");
+        sb.append(userLiked.stream().map(UUID::toString).collect(Collectors.joining(","))).append(";");
+        sb.append(caseVote.toCSVString()).append(System.lineSeparator());
+        return sb.toString();
+    }
 
 
     public static Case fromCSVString(String csv) {

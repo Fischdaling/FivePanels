@@ -250,5 +250,75 @@ public class CaseServiceTest {
             CaseService.vote(medCase.getEntityId(), answers, percentages);
         });
     }
+    @Test
+    public void testCreateCase_ShouldThrowException_WhenNoContentProvided() {
+        Set<String> knowledges = new HashSet<>();
+        knowledges.add("pediatric emergency medicine");
+        knowledges.add("critical care or pain medicine");
+        LinkedHashSet<Answer> answers = new LinkedHashSet<>();
+        answers.add(new Answer("Answer 1"));
+        answers.add(new Answer("Answer 2"));
+
+        assertThrows(exTypeCase, () -> {
+            CaseService.createCase(user1, "Case Title", knowledges, null, new CaseVote(answers), user2);
+        });
+    }
+
+    @Test
+    public void testCreateCase_ShouldThrowException_WhenNoOwnerProvided() {
+        Set<String> knowledges = new HashSet<>();
+        knowledges.add("pediatric emergency medicine");
+        knowledges.add("critical care or pain medicine");
+        LinkedHashSet<Answer> answers = new LinkedHashSet<>();
+        answers.add(new Answer("Answer 1"));
+        answers.add(new Answer("Answer 2"));
+
+        assertThrows(RuntimeException.class, () -> {
+            CaseService.createCase(null, "Case Title", knowledges, Collections.emptyList(), new CaseVote(answers), user2);
+        });
+    }
+    @Test
+    public void testVote_ShouldHandleLargeNumberOfAnswersAndPercentages() {
+        userLoggedIn = user2;
+        List<Answer> answers = new ArrayList<>();
+        List<Double> percentages = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            medCase.getCaseVote().addAnswer(new Answer("Answer "+i));
+            answers.add(new Answer("Answer " + i));
+            percentages.add(100.0/1000);
+        }
+
+        CaseService.vote(medCase.getEntityId(), answers, percentages);
+
+    }
+
+    @Test
+    public void testVote_ShouldHandleCaseWithNoAnswers() {
+        List<Answer> answers = Collections.emptyList();
+        List<Double> percentages = Collections.emptyList();
+
+        assertThrows(exTypeCase,()->CaseService.vote(medCase.getEntityId(), answers, percentages)) ;
+
+    }
+    @Test
+    public void testVote_ShouldThrowException_WhenCaseNotFound() {
+        List<Answer> answers = Arrays.asList(a1, a2);
+        List<Double> percentages = Arrays.asList(50.0, 50.0);
+
+        assertThrows(RuntimeException.class, () -> {
+            CaseService.vote(UUID.randomUUID(), answers, percentages);
+        });
+    }
+
+    @Test
+    public void testVote_ShouldThrowException_WhenUserNotMember() {
+        UUID userId = UUID.randomUUID();
+        List<Answer> answers = Arrays.asList(a1, a2);
+        List<Double> percentages = Arrays.asList(50.0, 50.0);
+
+        assertThrows(RuntimeException.class, () -> {
+            CaseService.vote(userId, answers, percentages);
+        });
+    }
 
 }

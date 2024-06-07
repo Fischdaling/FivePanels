@@ -51,8 +51,12 @@ public class CaseVote {
     }
 
     public void addAnswers(LinkedHashSet<Answer> answers) {
-        isNotNull(answers, "answers", exTypeCase);
-        this.answers.addAll(answers);
+        for (Answer answer : answers) {
+            addAnswer(answer);
+        }
+    }
+    public void addAnswer(Answer answer) {
+        this.answers.add(isNotNull(answer, "answers", exTypeCase));
     }
 
     public HashMap<UUID, Set<Vote>> getVotes() {

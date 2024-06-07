@@ -1,6 +1,7 @@
 package org.theShire.domain.messenger;
 
 import org.theShire.domain.BaseEntity;
+import org.theShire.domain.exception.MessengerException;
 import org.theShire.domain.media.Content;
 
 import java.time.Instant;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.theShire.domain.messenger.Message.Stage.SENT;
+import static org.theShire.foundation.DomainAssertion.isNotNull;
 import static org.theShire.service.UserService.userRepo;
 
 public class Message extends BaseEntity {
@@ -66,8 +68,7 @@ public class Message extends BaseEntity {
     }
 
     public void addContent(Content content){
-        //TODO ASSERTIONS
-        this.contents.add(content);
+        this.contents.add(isNotNull(content, "content", MessengerException.exTypeMes));
     }
 
 

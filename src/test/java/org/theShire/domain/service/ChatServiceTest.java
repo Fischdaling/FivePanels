@@ -4,8 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.theShire.domain.exception.MedicalDoctorException;
 import org.theShire.domain.exception.MessengerException;
+import org.theShire.domain.media.Content;
+import org.theShire.domain.media.ContentText;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
+import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
 import org.theShire.repository.MessengerRepository;
 import org.theShire.service.ChatService;
@@ -69,5 +72,12 @@ class ChatServiceTest {
         assertThrows(MessengerException.class, () -> {
             ChatService.createChat(testUser, null);
         });
+    }
+
+    @Test
+    public void testSendMessage_ShouldSendMessage_WhenCalled() {
+        Message message = new Message(UUID.randomUUID(), new Content(new ContentText("Hello, world!")));
+        testChat.sendMessage(message);
+        assertTrue(testChat.getChatHistory().contains(message));
     }
 }

@@ -67,7 +67,6 @@ public class UserTest {
     public void addOwnedCase_ShouldAddCase_WhenCalled() {
         user1.addOwnedCase(case1);
 
-        // Assert
         assertTrue(user1.getOwnedCases().contains(case1));
     }
 
@@ -84,7 +83,6 @@ public class UserTest {
     public void addMemberOfCase_ShouldAddCase_WhenCalled() {
         user1.addMemberOfCase(case1);
 
-        // Assert
         assertTrue(user1.isMemberOfCases().contains(case1));
     }
 

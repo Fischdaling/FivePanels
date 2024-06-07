@@ -13,8 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
-import static org.theShire.foundation.DomainAssertion.isInCollection;
-import static org.theShire.foundation.DomainAssertion.isTrue;
+import static org.theShire.foundation.DomainAssertion.*;
 import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UserService.userLoggedIn;
 
@@ -56,7 +55,7 @@ public class CaseService {
         Case medCase = caseRepo.findByID(caseId);
         isInCollection(caseId, caseRepo.getEntryMap().keySet(), () -> "Case not Found", exTypeCase);
         isInCollection(userLoggedIn, caseRepo.findByID(caseId).getMembers(), () -> "You are not able to vote", exTypeCase);
-        isTrue(percentage.stream().reduce(0.0, Double::sum) == 100, () -> "you have to vote 100%", exTypeCase);
+//        isTrue(percentage.stream().reduce(0.0, Double::sum) == 100, () -> "you have to vote 100%", exTypeCase);
         for (int i = 0; i < answers.size(); i++) {
             Answer answer = answers.get(i);
             Double percent = percentage.get(i);
@@ -68,8 +67,8 @@ public class CaseService {
 
 
     public static Case createCase(User owner, String title, Set<String> knowledges, List<Content> content, CaseVote caseVote, User... members) {
-        Set<Knowledges> knowledgesSet = knowledges.stream().map(Knowledges::new).collect(Collectors.toSet());
-        Case medCase = new Case(owner, title, knowledgesSet, content, caseVote, members);
+        Set<Knowledges> knowledgesSet = isNotNull(knowledges.stream().map(Knowledges::new).collect(Collectors.toSet()),"knowledges",exTypeCase);
+        Case medCase = new Case(owner, title, knowledgesSet, isNotNull(content,"content",exTypeCase), caseVote, members);
         owner.addOwnedCase(medCase);
         Arrays.stream(members).forEach(user -> user.addMemberOfCase(medCase));
         caseRepo.save(medCase);

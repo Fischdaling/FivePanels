@@ -13,11 +13,11 @@ public class Content extends BaseEntity {
     private Media media;
 
     public Content(Media media) {
-        this.media = media;
+        setMedia(media);
     }
 
     public Content(ContentText text) {
-        this.text = text;
+        setContentText(text);
     }
 
     public ContentText getContentText() {

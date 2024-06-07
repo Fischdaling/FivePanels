@@ -150,7 +150,13 @@ public class User extends BaseEntity {
     public Set<Knowledges> getSpecialization() {
         return specialization;
     }
+    public Password getPassword() {
+        return password;
+    }
 
+    public void addContacts(Relation relation) {
+        contacts.add(isNotInCollection(relation,contacts,"user",exTypeUser));
+    }
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder().append(System.lineSeparator());
@@ -167,14 +173,20 @@ public class User extends BaseEntity {
         return sb.toString();
     }
 
-
-
-    public Password getPassword() {
-        return password;
-    }
-
-    public void addContacts(Relation relation) {
-        contacts.add(isNotInCollection(relation,contacts,"user",exTypeUser));
+    @Override
+    public String toCSVString() {
+        final StringBuilder sb = new StringBuilder(super.toCSVString());
+        sb.append(email).append(";");
+        sb.append(password).append(";");
+        sb.append(score).append(";");
+        sb.append(contacts.stream().map(Relation::toString).collect(Collectors.toSet())).append(";");
+        sb.append(chats.stream().map(Chat::getEntityId).collect(Collectors.toSet())).append(";");
+        sb.append(specialization).append(";");
+        sb.append(ownedCases.stream().map(Case::getEntityId).findAny().orElse(null)).append(";");
+        sb.append(memberOfCase.stream().map(Case::getEntityId).findAny().orElse(null)).append(";");
+        sb.append(profile.toCSVString());
+        sb.append(System.lineSeparator());
+        return sb.toString();
     }
 
 
