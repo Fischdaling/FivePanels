@@ -22,7 +22,7 @@ public class Message extends BaseEntity {
     //The Content of the message (Text or Media)
     private List<Content> contents;
 
-    public Message(UUID senderId, Content...contents) {
+    public Message(UUID senderId, Content... contents) {
         super();
         this.contents = new ArrayList<>();
         this.senderId = senderId;
@@ -37,7 +37,7 @@ public class Message extends BaseEntity {
         this.stage = stage;
     }
 
-    private void addContents(Content...contents) {
+    private void addContents(Content... contents) {
         for (Content content : contents) {
             addContent(content);
         }
@@ -67,7 +67,7 @@ public class Message extends BaseEntity {
         this.contents = contents;
     }
 
-    public void addContent(Content content){
+    public void addContent(Content content) {
         this.contents.add(isNotNull(content, "content", MessengerException.exTypeMes));
     }
 
@@ -82,7 +82,7 @@ public class Message extends BaseEntity {
     }
 
     public String toCSVString() {
-        final StringBuilder sb = new StringBuilder(super.toCSVString().replaceAll(";","|"));
+        final StringBuilder sb = new StringBuilder(super.toCSVString().replaceAll(";", "|"));
         sb.append(senderId).append("|");
         sb.append(stage).append("|");
         sb.append(contents);
@@ -90,7 +90,7 @@ public class Message extends BaseEntity {
     }
 
 
-    public enum Stage{
+    public enum Stage {
         SENT,
         ARRIVED,
         READ

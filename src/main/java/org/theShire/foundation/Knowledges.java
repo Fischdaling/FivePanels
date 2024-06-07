@@ -10,6 +10,7 @@ import java.util.Set;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.isInCollection;
+
 public class Knowledges {
     // list of legal knowledges that are good and confirmed
     protected static Set<String> legalKnowledges;
@@ -31,7 +32,7 @@ public class Knowledges {
     }
 
     public void setKnowledge(String knowledge) {
-        this.knowledge = isInCollection(knowledge, legalKnowledges,"knowledge",exTypeUser);
+        this.knowledge = isInCollection(knowledge, legalKnowledges, "knowledge", exTypeUser);
     }
 
     public void readKnowledges() {

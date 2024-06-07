@@ -62,9 +62,9 @@ public class Case extends BaseEntity {
         this.content = content;
         this.viewcount = viewcount;
         this.knowledges = knowledges;
-        this.members = members!=null?members : new HashSet<>();
+        this.members = members != null ? members : new HashSet<>();
         this.likeCount = likeCount;
-        this.userLiked = userLiked != null ? userLiked: new HashSet<>();
+        this.userLiked = userLiked != null ? userLiked : new HashSet<>();
         this.caseVote = caseVote;
     }
 
@@ -219,6 +219,7 @@ public class Case extends BaseEntity {
         sb.append("Number 3 Answer: ").append(caseVote.getTop3Answer()).append(System.lineSeparator());
         return sb.toString();
     }
+
     @Override
     public String toCSVString() {
         final StringBuilder sb = new StringBuilder(super.toCSVString());

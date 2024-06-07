@@ -3,7 +3,8 @@ package org.theShire.repository;
 
 import org.theShire.domain.medicalCase.Case;
 
-import java.util.*;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 

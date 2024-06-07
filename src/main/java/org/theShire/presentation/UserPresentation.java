@@ -6,11 +6,13 @@ import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserProfile;
 import org.theShire.domain.richType.*;
 import org.theShire.foundation.Knowledges;
-import org.theShire.service.UniversalService;
 import org.theShire.service.UserService;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.isEqual;
@@ -21,24 +23,25 @@ import static org.theShire.service.UserService.userLoggedIn;
 import static org.theShire.service.UserService.userRepo;
 
 public class UserPresentation {
-    public static void findAllUser(){
+    public static void findAllUser() {
         userRepo.findAll().forEach(System.out::println);
     }
-    public static void deleteUserById () {
+
+    public static void deleteUserById() {
         UUID userId = enterUUID("Enter User Id", User.class);
         UserService.deleteUserById(userId);
     }
 
-    public static void findByName () {
+    public static void findByName() {
         System.out.println("Enter name");
         String name = scanner.nextLine();
         System.out.println(UserService.findByName(name));
     }
 
-    public static void relationCommands () {
+    public static void relationCommands() {
         User sender = userLoggedIn;
         User receiver;
-        isTrue(userRepo.getEntryMap().containsKey(sender.getEntityId()),()->"Sender not found.",exTypeUser);
+        isTrue(userRepo.getEntryMap().containsKey(sender.getEntityId()), () -> "Sender not found.", exTypeUser);
 
         System.out.println("1. See Incoming");
         System.out.println("2. send request");
@@ -52,7 +55,7 @@ public class UserPresentation {
                 break;
 
             case 2:
-                receiver = userRepo.findByID(enterUUID("Enter target's id",User.class));
+                receiver = userRepo.findByID(enterUUID("Enter target's id", User.class));
                 UserService.sendRequest(sender, receiver);
                 System.out.println("Request sent from " + sender.getProfile().getFirstName() + " to " + receiver.getProfile().getFirstName());
                 break;
@@ -64,7 +67,7 @@ public class UserPresentation {
 
                 break;
             case 4:
-                receiver = userRepo.findByID(enterUUID("Enter target's id",User.class));
+                receiver = userRepo.findByID(enterUUID("Enter target's id", User.class));
                 UserService.cancelFriendship(sender, receiver);
                 break;
             default:
@@ -74,7 +77,7 @@ public class UserPresentation {
     }
 
 
-    public static User addUser () {
+    public static User addUser() {
 
         System.out.println("Enter Email");
         String inEmail = scanner.nextLine();
@@ -99,10 +102,10 @@ public class UserPresentation {
             specialty.add(value);
         }
         String[] titles = profile.getEducationalTitles().stream().map(EducationalTitle::toString).toArray(String[]::new);
-        return UserService.createUser(null, profile.getFirstName(), profile.getFirstName(), email, password, profile.getLanguage(), profile.getLocation(), profile.getProfilePicture().getAltText(), specialty,titles );
+        return UserService.createUser(null, profile.getFirstName(), profile.getFirstName(), email, password, profile.getLanguage(), profile.getLocation(), profile.getProfilePicture().getAltText(), specialty, titles);
     }
 
-    public static void changeProfile () {
+    public static void changeProfile() {
         User user = userLoggedIn;
         System.out.println(user.getProfile().toString());
         UserProfile profile = enterUserProfile();
@@ -138,8 +141,7 @@ public class UserPresentation {
     }
 
 
-
-    public static User init () {
+    public static User init() {
         System.out.println("1. Login");
         System.out.println("2. Create new User");
         System.out.println("0. Exit");
@@ -159,12 +161,12 @@ public class UserPresentation {
         throw new MedicalDoctorException("Unexpected Error");
     }
 
-    public static User login () {
+    public static User login() {
         System.out.println("Enter Email: ");
         String email = scanner.nextLine();
         System.out.println("Enter Password: ");
         String password = scanner.nextLine();
-        return UserService.login(email,password);
+        return UserService.login(email, password);
     }
 
 }

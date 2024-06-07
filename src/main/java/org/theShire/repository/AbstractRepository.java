@@ -31,6 +31,7 @@ public abstract class AbstractRepository<T extends BaseEntity> implements IRepos
     public void deleteById(UUID id) {
         entryMap.remove(id);
     }
+
     public HashMap<UUID, T> getEntryMap() {
         return entryMap;
     }

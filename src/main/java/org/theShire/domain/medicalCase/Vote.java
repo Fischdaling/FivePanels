@@ -23,7 +23,7 @@ public class Vote {
     }
 
     public void setAnswer(Answer answer) {
-        this.answer = isNotNull(answer,"answer", exTypeCase);
+        this.answer = isNotNull(answer, "answer", exTypeCase);
     }
 
     public double getPercent() {
@@ -31,7 +31,7 @@ public class Vote {
     }
 
     public void setPercent(double percent) {
-        greaterEqualsZero(percent, "percent",exTypeCase);
+        greaterEqualsZero(percent, "percent", exTypeCase);
         this.percent = percent;
     }
 
@@ -43,7 +43,7 @@ public class Vote {
         return sb.toString();
     }
 
-    public String ToCSVString(){
+    public String ToCSVString() {
         final StringBuffer sb = new StringBuffer();
         sb.append(answer).append("|");
         sb.append(percent);

@@ -67,8 +67,8 @@ public class CaseService {
 
 
     public static Case createCase(User owner, String title, Set<String> knowledges, List<Content> content, CaseVote caseVote, User... members) {
-        Set<Knowledges> knowledgesSet = isNotNull(knowledges.stream().map(Knowledges::new).collect(Collectors.toSet()),"knowledges",exTypeCase);
-        Case medCase = new Case(owner, title, knowledgesSet, isNotNull(content,"content",exTypeCase), caseVote, members);
+        Set<Knowledges> knowledgesSet = isNotNull(knowledges.stream().map(Knowledges::new).collect(Collectors.toSet()), "knowledges", exTypeCase);
+        Case medCase = new Case(owner, title, knowledgesSet, isNotNull(content, "content", exTypeCase), caseVote, members);
         owner.addOwnedCase(medCase);
         Arrays.stream(members).forEach(user -> user.addMemberOfCase(medCase));
         caseRepo.save(medCase);

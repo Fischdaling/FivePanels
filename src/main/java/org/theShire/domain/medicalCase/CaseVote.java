@@ -1,8 +1,6 @@
 package org.theShire.domain.medicalCase;
 
 
-import org.theShire.foundation.DomainAssertion;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,7 +14,6 @@ public class CaseVote {
     private HashMap<UUID, Set<Vote>> votes = new HashMap<>();
 
 
-
     public CaseVote(LinkedHashSet<Answer> answers) {
         addAnswers(answers);
     }
@@ -25,7 +22,6 @@ public class CaseVote {
         addAnswers(answers);
         this.votes = votes;
     }
-
 
 
     public void voting(UUID voter, Answer answerChosen, double percent) {
@@ -44,7 +40,6 @@ public class CaseVote {
     }
 
 
-
     // getter & setter-----------------------------------
     public LinkedHashSet<Answer> getAnswers() {
         return answers;
@@ -55,6 +50,7 @@ public class CaseVote {
             addAnswer(answer);
         }
     }
+
     public void addAnswer(Answer answer) {
         this.answers.add(isNotNull(answer, "answers", exTypeCase));
     }
@@ -84,7 +80,6 @@ public class CaseVote {
                 .limit(3)
                 .collect(Collectors.toMap(Map.Entry::getKey, map -> map.getValue() / totalVoters));
     }
-
 
 
     @Override

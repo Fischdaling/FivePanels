@@ -13,7 +13,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
-import static org.theShire.foundation.DomainAssertion.*;
+import static org.theShire.foundation.DomainAssertion.isNotInCollection;
+import static org.theShire.foundation.DomainAssertion.isNotNull;
 import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UserService.userRepo;
@@ -38,7 +39,6 @@ public class User extends BaseEntity {
     private Set<Knowledges> specialization;
 
 
-
     public User(Password password, Email email, UserProfile profile, Set<Knowledges> specialization) {
         super();
         contacts = new HashSet<>();
@@ -50,8 +50,9 @@ public class User extends BaseEntity {
         this.profile = profile;
         this.specialization = specialization;
     }
+
     //Test
-    public User(UUID uuid,Password password, Email email, UserProfile profile, Set<Knowledges> specialization) {
+    public User(UUID uuid, Password password, Email email, UserProfile profile, Set<Knowledges> specialization) {
         super(uuid);
         contacts = new HashSet<>();
         chats = new HashSet<>();
@@ -71,11 +72,11 @@ public class User extends BaseEntity {
         this.score = score;
         this.contacts = contacts;
         this.chats = chats;
-        if (ownedCases == null){
+        if (ownedCases == null) {
             ownedCases = new HashSet<>();
         }
         this.ownedCases = ownedCases;
-        if (memberOfCase == null){
+        if (memberOfCase == null) {
             memberOfCase = new HashSet<>();
         }
         this.memberOfCase = memberOfCase;
@@ -112,7 +113,7 @@ public class User extends BaseEntity {
         return email;
     }
 
-    public Set<Chat> getChats(){
+    public Set<Chat> getChats() {
         return chats;
     }
 
@@ -123,12 +124,12 @@ public class User extends BaseEntity {
         this.chats.add(isNotInCollection(chat, chats, "Chat already in Set", exTypeUser));
     }
 
-    public void addOwnedCase(Case medCase){
-        this.ownedCases.add(isNotNull(medCase,"medCase",exTypeUser));
+    public void addOwnedCase(Case medCase) {
+        this.ownedCases.add(isNotNull(medCase, "medCase", exTypeUser));
     }
 
-    public void addMemberOfCase(Case medCase){
-        this.memberOfCase.add(isNotInCollection(medCase,memberOfCase,"memberOfCase",exTypeUser));
+    public void addMemberOfCase(Case medCase) {
+        this.memberOfCase.add(isNotInCollection(medCase, memberOfCase, "memberOfCase", exTypeUser));
     }
 
 
@@ -150,13 +151,15 @@ public class User extends BaseEntity {
     public Set<Knowledges> getSpecialization() {
         return specialization;
     }
+
     public Password getPassword() {
         return password;
     }
 
     public void addContacts(Relation relation) {
-        contacts.add(isNotInCollection(relation,contacts,"user",exTypeUser));
+        contacts.add(isNotInCollection(relation, contacts, "user", exTypeUser));
     }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder().append(System.lineSeparator());

@@ -8,9 +8,6 @@ import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.foundation.DomainAssertion;
-import org.theShire.service.CaseService;
-import org.theShire.service.ChatService;
-import org.theShire.service.UserService;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +21,7 @@ import static org.theShire.service.UserService.userRepo;
 public class UniversalPresentation {
     public static List<Content> contentUtil(List<Content> content) {
 
-        while(true) {
+        while (true) {
             System.out.println("Do you want to add Content true/false");
             boolean addContent = scanner.nextBoolean();
             if (!addContent) {
@@ -58,7 +55,7 @@ public class UniversalPresentation {
         System.out.println("2. Case");
         System.out.println("3. Chat");
         int entityId = scanner.nextInt();
-        switch (entityId){
+        switch (entityId) {
             case 1:
                 UserPresentation.findAllUser();
                 break;
@@ -75,8 +72,8 @@ public class UniversalPresentation {
     }
 
 
-    public static<T extends BaseEntity> UUID enterUUID(String enterMessage, Class<T> clazz){
-        DomainAssertion.isNotNull(clazz,"entity", RuntimeException.class);
+    public static <T extends BaseEntity> UUID enterUUID(String enterMessage, Class<T> clazz) {
+        DomainAssertion.isNotNull(clazz, "entity", RuntimeException.class);
         StringBuilder str = new StringBuilder();
         if (clazz == User.class) {
             str.append("User").repeat('-', 20).append(System.lineSeparator());
@@ -84,7 +81,7 @@ public class UniversalPresentation {
                 str.append(user.getProfile().getFirstName()).append(" ").append(user.getProfile().getLastName()).append(System.lineSeparator());
                 str.append(user.getEntityId()).append(System.lineSeparator());
             }
-        }else if (clazz == Case.class) {
+        } else if (clazz == Case.class) {
             str.append("Cases").repeat('-', 20).append(System.lineSeparator());
             for (Case medCase : caseRepo.findAll()) {
                 str.append(medCase.getTitle()).append(System.lineSeparator());

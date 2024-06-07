@@ -23,25 +23,25 @@ public class UserService {
     public static UserRelationShip relations = new UserRelationShip(); // Important or Error
     public static User userLoggedIn = null;
 
-    public static List<User> findAllUser(){
-       return userRepo.findAll();
+    public static List<User> findAllUser() {
+        return userRepo.findAll();
 
     }
 
-    public static void deleteUserById (UUID userId) {
+    public static void deleteUserById(UUID userId) {
         User user = userRepo.findByID(userId);
-        isTrue(userRepo.existsById(userId),()->"User not found",exTypeUser);
+        isTrue(userRepo.existsById(userId), () -> "User not found", exTypeUser);
         userRepo.deleteById(userId);
         Set<Case> medCase = user.isMemberOfCases();
         medCase.forEach(mCase -> mCase.removeMember(user));
-        if (userLoggedIn.getEntityId().equals(userId));
-            //throw user out
+        if (userLoggedIn.getEntityId().equals(userId)) ;
+        //throw user out
         user.isMemberOfCases().forEach(aCase -> aCase.setUpdatedAt(Instant.now()));
     }
 
-    public static Set<User> findByName (String name) {
+    public static Set<User> findByName(String name) {
         Set<User> user = userRepo.findByName(new Name(name));
-        return isNotNull(user,"user",exTypeUser);
+        return isNotNull(user, "user", exTypeUser);
     }
 
 
@@ -49,7 +49,7 @@ public class UserService {
         Set<User> users = new HashSet<>();
         users.add(sender);
         users.add(receiver);
-        ChatService.declineRequest(sender,receiver);
+        ChatService.declineRequest(sender, receiver);
 //        if (UserRelationShip.getRelation(sender,receiver)!= null) {
 //            if (UserRelationShip.getRelation(sender, receiver).getType().equals(ESTABLISHED)) {
 //                messengerRepo.deleteById(messengerRepo.findByMembers(users).getEntityId());
@@ -58,23 +58,23 @@ public class UserService {
     }
 
     public static void acceptRequest(User sender, User receiver) {
-        isTrue(UserRelationShip.getRequest(sender).contains(receiver),()->"Receiver not found.", exTypeUser);
+        isTrue(UserRelationShip.getRequest(sender).contains(receiver), () -> "Receiver not found.", exTypeUser);
         ChatService.acceptRequest(sender, receiver);
         receiver.setUpdatedAt(Instant.now());
         sender.setUpdatedAt(Instant.now());
     }
 
     public static void sendRequest(User sender, User receiver) {
-        isTrue(userRepo.getEntryMap().containsKey(receiver.getEntityId()),()->"Receiver not found.",exTypeUser);
+        isTrue(userRepo.getEntryMap().containsKey(receiver.getEntityId()), () -> "Receiver not found.", exTypeUser);
         ChatService.sendRequest(sender, receiver);
     }
 
     //TODO fails if cancel relation
     public static Set<User> seeIncoming(User sender) {
         Set<User> incomingRequests = UserRelationShip.getRequest(sender);
-        if (incomingRequests.isEmpty()){
+        if (incomingRequests.isEmpty()) {
             return null;
-        }else
+        } else
             return incomingRequests;
     }
 
@@ -84,8 +84,8 @@ public class UserService {
     }
 
 
-    public static User createUser (UUID uuid, Name firstname, Name lastname, Email email, Password
-        password, Language language, Location location, String picture, Set <String> specialization, String... educationalTitle){
+    public static User createUser(UUID uuid, Name firstname, Name lastname, Email email, Password
+            password, Language language, Location location, String picture, Set<String> specialization, String... educationalTitle) {
         if (uuid == null) {
             uuid = UUID.randomUUID();
         }
@@ -105,15 +105,15 @@ public class UserService {
     }
 
 
-        public static User login (String email, String password) {
-            Optional<User> userOpt = userRepo.findByEmail(new Email(email));
+    public static User login(String email, String password) {
+        Optional<User> userOpt = userRepo.findByEmail(new Email(email));
 
-            isTrue(userOpt.isPresent(),()->"User not found.", exTypeUser);
-                User user = userOpt.get();
-                                                            //The Password entered //The Password from the User
-            BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword().value());
-            isTrue(result.verified,()->"Invalid password.",exTypeUser);
-            return user;
+        isTrue(userOpt.isPresent(), () -> "User not found.", exTypeUser);
+        User user = userOpt.get();
+        //The Password entered //The Password from the User
+        BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword().value());
+        isTrue(result.verified, () -> "Invalid password.", exTypeUser);
+        return user;
 
     }
 

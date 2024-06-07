@@ -34,21 +34,21 @@ public class CasePresentation {
     }
 
     public static void likeCase() {
-        UUID medCase = enterUUID("Enter Case Id",Case.class);
+        UUID medCase = enterUUID("Enter Case Id", Case.class);
         CaseService.likeCase(medCase);
     }
 
     public static void findCaseById() {
-        UUID medicCase =  enterUUID("Enter Case Id",Case.class);
+        UUID medicCase = enterUUID("Enter Case Id", Case.class);
         CaseService.findCaseById(medicCase);
     }
 
     public static void vote() {
         List<Answer> answers = new ArrayList<>();
         List<Double> percentages = new ArrayList<>();
-        UUID caseId = enterUUID("Enter Case ID to Vote for",Case.class);
-        isInCollection(caseId,caseRepo.getEntryMap().keySet(),()->"Case not Found",exTypeCase);
-        isInCollection(userLoggedIn,caseRepo.findByID(caseId).getMembers(),()->"You are not able to vote",exTypeCase);
+        UUID caseId = enterUUID("Enter Case ID to Vote for", Case.class);
+        isInCollection(caseId, caseRepo.getEntryMap().keySet(), () -> "Case not Found", exTypeCase);
+        isInCollection(userLoggedIn, caseRepo.findByID(caseId).getMembers(), () -> "You are not able to vote", exTypeCase);
         Case medCase = caseRepo.findByID(caseId);
         for (Answer answer : medCase.getCaseVote().getAnswers()) {
             System.out.println(answer.getName());
@@ -61,7 +61,7 @@ public class CasePresentation {
             String str = scanner.nextLine();
             Name userAnswer = new Name(str);
             Optional<Answer> answer = medCase.getCaseVote().getAnswers().stream().filter(answer1 -> answer1.getName().equals(userAnswer)).findFirst();
-            isTrue(answer.isPresent(), ()->"Answer not found",exTypeCase);
+            isTrue(answer.isPresent(), () -> "Answer not found", exTypeCase);
             answers.add(answer.get());
 
             System.out.println("Enter the percent you want to vote this answer with");
@@ -100,8 +100,8 @@ public class CasePresentation {
         User[] members = new User[doctors];
         scanner.nextLine();
         for (int i = 0; i < doctors; i++) {
-            UUID uuid = enterUUID("Enter Member id",User.class);
-            isNotEqual(uuid,ownerId,"Id",exTypeCase);
+            UUID uuid = enterUUID("Enter Member id", User.class);
+            isNotEqual(uuid, ownerId, "Id", exTypeCase);
             members[i] = userRepo.findByID(uuid);
 
         }
@@ -127,7 +127,7 @@ public class CasePresentation {
     }
 
     public static void correctAnswer() {
-        UUID caseId = enterUUID("Enter Case ID",Case.class);
+        UUID caseId = enterUUID("Enter Case ID", Case.class);
         if (!caseRepo.findByID(caseId).isCaseDone()) {
             isTrue(caseRepo.findByID(caseId).getOwner().equals(userLoggedIn), () -> "You must be the owner of the case", exTypeCase);
             System.out.println(caseRepo.findByID(caseId).getCaseVote().getAnswers() + "\n");
@@ -139,8 +139,8 @@ public class CasePresentation {
         }
     }
 
-    public static User removeMember(){
-        UUID medCaseId = enterUUID("Enter Case Id",Case.class);
+    public static User removeMember() {
+        UUID medCaseId = enterUUID("Enter Case Id", Case.class);
         UUID memberId = enterUUID("Enter Member Id", User.class);
         User member = userRepo.findByID(memberId);
         CaseService.removeMember(medCaseId, member);
@@ -148,9 +148,9 @@ public class CasePresentation {
         return member;
     }
 
-    public static User addMember(){
-        UUID medCaseId = enterUUID("Enter Case Id",Case.class);
-        UUID memberId = enterUUID("Enter Member Id",User.class);
+    public static User addMember() {
+        UUID medCaseId = enterUUID("Enter Case Id", Case.class);
+        UUID memberId = enterUUID("Enter Member Id", User.class);
         User member = userRepo.findByID(memberId);
         CaseService.addMember(medCaseId, member);
         return member;

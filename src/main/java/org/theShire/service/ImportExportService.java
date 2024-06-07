@@ -25,7 +25,7 @@ public class ImportExportService {
                     writer.write(user.toCSVString());
                     writer.newLine();
                 }
-            }catch (IOException e){
+            } catch (IOException e) {
                 throw new MedicalDoctorException(e.getMessage());
             }
             // Export cases
@@ -35,7 +35,7 @@ public class ImportExportService {
                     writer.write(medCase.toCSVString());
                     writer.newLine();
                 }
-            }catch (IOException e){
+            } catch (IOException e) {
                 throw new MedicalCaseException(e.getMessage());
             }
             // Export chats
@@ -46,11 +46,11 @@ public class ImportExportService {
                     writer.write(chat.toCSVString());
                     writer.newLine();
                 }
-            }catch (IOException e){
+            } catch (IOException e) {
                 throw new MessengerException(e.getMessage());
             }
             System.out.println("Data exported to " + filepath);
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -80,7 +80,7 @@ public class ImportExportService {
                     }
                 }
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new RemoteException(e.getMessage());
         }
     }

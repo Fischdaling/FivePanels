@@ -27,7 +27,7 @@ public class Chat extends BaseEntity {
         super();
         people = new HashSet<>();
         chatHistory = new ArrayList<>();
-        chatHistory.add(new Message(UUID.randomUUID(),new Content(new ContentText("Chat Established"))));
+        chatHistory.add(new Message(UUID.randomUUID(), new Content(new ContentText("Chat Established"))));
 
         addChatters(chatters);
     }
@@ -89,6 +89,7 @@ public class Chat extends BaseEntity {
         sb.append(chatHistory);
         return sb.toString();
     }
+
     @Override
     public String toCSVString() {
         final StringBuilder sb = new StringBuilder(super.toCSVString());
@@ -96,6 +97,7 @@ public class Chat extends BaseEntity {
         sb.append(chatHistory.stream().map(Message::toCSVString).collect(Collectors.joining("|"))).append(System.lineSeparator());
         return sb.toString();
     }
+
     public static Chat fromCSVString(String csv) {
         String[] parts = csv.split(";");
         UUID entityId = UUID.fromString(parts[0]);

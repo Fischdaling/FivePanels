@@ -1,13 +1,7 @@
 package org.theShire.domain.media;
 
 
-import org.theShire.domain.exception.MediaException;
-import org.theShire.domain.exception.MedicalDoctorException;
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 import static org.theShire.domain.exception.MediaException.exTypeMedia;
 import static org.theShire.foundation.DomainAssertion.greaterZero;
@@ -31,7 +25,7 @@ public class Media {
         setResolution(resolution);
     }
 
-    public Media(String filename){
+    public Media(String filename) {
 
         setHeight(500);
         setWidth(500);
@@ -54,7 +48,7 @@ public class Media {
     }
 
     public void setWidth(int width) {
-        this.width = greaterZero(width,"width",exTypeMedia);
+        this.width = greaterZero(width, "width", exTypeMedia);
     }
 
     public int getHeight() {
@@ -62,7 +56,7 @@ public class Media {
     }
 
     public void setHeight(int height) {
-        this.height = greaterZero(height,"height",exTypeMedia);
+        this.height = greaterZero(height, "height", exTypeMedia);
     }
 
     public String getAltText() {
@@ -70,7 +64,7 @@ public class Media {
     }
 
     public void setAltText(String altText) {
-        this.altText = isNotBlank(altText,"altText", exTypeMedia);
+        this.altText = isNotBlank(altText, "altText", exTypeMedia);
     }
 
     public String getResolution() {
@@ -78,7 +72,7 @@ public class Media {
     }
 
     public void setResolution(String resolution) { //TODO calc from height and width
-        this.resolution = isNotBlank(resolution,"resolution", exTypeMedia);
+        this.resolution = isNotBlank(resolution, "resolution", exTypeMedia);
     }
 
     @Override

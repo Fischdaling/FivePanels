@@ -17,7 +17,6 @@ import java.util.*;
 import static org.theShire.domain.medicalDoctor.UserRelationShip.createMapKey;
 import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
 import static org.theShire.service.CaseService.caseRepo;
-import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UserService.userLoggedIn;
 import static org.theShire.service.UserService.userRepo;
 
@@ -25,13 +24,13 @@ public class UniversalService {
 
     public static void initData() {
 
-         User user1;
-         User user2;
-         User user3;
-         Case case1 = null;
+        User user1;
+        User user2;
+        User user3;
+        Case case1 = null;
 
         //CREATE USER1 -----------------------------------------------------------------------
-        if (userRepo.existsById(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"))){
+        if (userRepo.existsById(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"))) {
             userRepo.deleteById(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"));
         }
         Set<String> knowledges1 = new HashSet<>();
@@ -50,7 +49,7 @@ public class UniversalService {
                 "Meister Dieb");
 
         //CREATE USER2-----------------------------------------------------------------
-        if (userRepo.existsById(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"))){
+        if (userRepo.existsById(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"))) {
             userRepo.deleteById(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"));
         }
         Set<String> knowledges2 = new HashSet<>();
@@ -69,7 +68,7 @@ public class UniversalService {
                 "König von Gondor");
 
         //CREATE USER3-----------------------------------------------------------------
-        if (userRepo.existsById(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"))){
+        if (userRepo.existsById(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"))) {
             userRepo.deleteById(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"));
         }
         Set<String> knowledges3 = new HashSet<>();
@@ -87,13 +86,13 @@ public class UniversalService {
                 "The Gray",
                 "The White", "Ainur");
 
-        if (!relationShip.containsKey(createMapKey(user1,user2))){
+        if (!relationShip.containsKey(createMapKey(user1, user2))) {
             // Send a friend request
             ChatService.sendRequest(user1, user2);
             Chat chat = ChatService.acceptRequest(user1, user2);
-            chat.sendMessage(new Message(user1.getEntityId(),new Content(new ContentText("When can we eat something?"))));
-            chat.sendMessage(new Message(user2.getEntityId(),new Content(new ContentText("We already had breakfast"))));
-            chat.sendMessage(new Message(user1.getEntityId(),new Content(new ContentText("But whats with the second breakfast? :("))));
+            chat.sendMessage(new Message(user1.getEntityId(), new Content(new ContentText("When can we eat something?"))));
+            chat.sendMessage(new Message(user2.getEntityId(), new Content(new ContentText("We already had breakfast"))));
+            chat.sendMessage(new Message(user1.getEntityId(), new Content(new ContentText("But whats with the second breakfast? :("))));
         }
 
 
@@ -127,14 +126,15 @@ public class UniversalService {
                 user3);
 
         case1.like(user2.getEntityId());
-        case1.getCaseVote().voting(user2.getEntityId(),a1,70);
-        case1.getCaseVote().voting(user2.getEntityId(),a2,30);
-        case1.getCaseVote().voting(user3.getEntityId(),a1,20);
-        case1.getCaseVote().voting(user3.getEntityId(),a2,80);
+        case1.getCaseVote().voting(user2.getEntityId(), a1, 70);
+        case1.getCaseVote().voting(user2.getEntityId(), a2, 30);
+        case1.getCaseVote().voting(user3.getEntityId(), a1, 20);
+        case1.getCaseVote().voting(user3.getEntityId(), a2, 80);
 
 
     }
-    public static void initUser(){
+
+    public static void initUser() {
         userLoggedIn = UserPresentation.init();
     }
 

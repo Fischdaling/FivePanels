@@ -20,13 +20,14 @@ public class BaseEntity {
         createdAt = Instant.now();
         updatedAt = Instant.now();
     }
+
     public BaseEntity(UUID uuid) {
         entityId = uuid;
         createdAt = Instant.now();
         updatedAt = Instant.now();
     }
 
-    public BaseEntity(UUID uuid,Instant createdAt, Instant updatedAt) {
+    public BaseEntity(UUID uuid, Instant createdAt, Instant updatedAt) {
         this.entityId = uuid;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -46,7 +47,7 @@ public class BaseEntity {
     }
 
     public void setUpdatedAt(Instant updatedAt) {
-        isAfterTime(updatedAt,createdAt,"updatedAt", RuntimeException.class);
+        isAfterTime(updatedAt, createdAt, "updatedAt", RuntimeException.class);
         this.updatedAt = updatedAt;
     }
 
@@ -72,7 +73,8 @@ public class BaseEntity {
                 append("updatedAt").append(updatedAt).append(System.lineSeparator());
         return stringBuilder.toString();
     }
-    public String toCSVString(){
+
+    public String toCSVString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.
                 append(entityId).append(";").

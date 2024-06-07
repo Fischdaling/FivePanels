@@ -6,7 +6,6 @@ import static org.theShire.domain.exception.MediaException.exTypeMedia;
 import static org.theShire.foundation.DomainAssertion.isNotNull;
 
 
-
 public class Content extends BaseEntity {
     private ContentText text;
     //wields metadata of the Media class
@@ -39,10 +38,10 @@ public class Content extends BaseEntity {
     @Override
     public String toString() {
         final StringBuffer sb = new StringBuffer();
-        if (text != null){
+        if (text != null) {
             sb.append(text);
         }
-        if (media != null){
+        if (media != null) {
             sb.append(media);
         }
         return sb.toString();

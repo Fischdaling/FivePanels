@@ -5,7 +5,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;
+import static org.theShire.domain.medicalDoctor.Relation.RelationType.ESTABLISHED;
+import static org.theShire.domain.medicalDoctor.Relation.RelationType.OUTGOING;
 
 public class UserRelationShip {
     //      KEY             VALUE
@@ -22,7 +23,7 @@ public class UserRelationShip {
     }
 
     public static String createMapKey(User user1, User user2) {
-            return user1.getEntityId().toString() + user2.getEntityId().toString();
+        return user1.getEntityId().toString() + user2.getEntityId().toString();
     }
 
     public static Relation getRelation(User user1, User user2) {

@@ -14,12 +14,12 @@ import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UserService.userLoggedIn;
 
 public class ChatPresentation {
-    public static void findAllChat(){
+    public static void findAllChat() {
         messengerRepo.findAll().forEach(System.out::println);
     }
 
     public static void openChat() {
-        UUID uuid = enterUUID("Enter chat uuid",Chat.class);
+        UUID uuid = enterUUID("Enter chat uuid", Chat.class);
         Chat chat = messengerRepo.findByID(uuid);
         if (messengerRepo.getEntryMap().containsKey(uuid) && messengerRepo.getEntryMap().get(uuid).getPeople().contains(userLoggedIn)) {
             System.out.print("chat with ");
@@ -30,8 +30,8 @@ public class ChatPresentation {
             List<Content> contents = new ArrayList<>();
 
             UniversalPresentation.contentUtil(contents);
-            ChatService.sendMessage(chat,new Message(userLoggedIn.getEntityId(), contents.toArray(new Content[0])));
-        }else {
+            ChatService.sendMessage(chat, new Message(userLoggedIn.getEntityId(), contents.toArray(new Content[0])));
+        } else {
             System.out.println("Chat not found");
         }
     }

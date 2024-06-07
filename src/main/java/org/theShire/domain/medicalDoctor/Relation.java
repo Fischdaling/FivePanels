@@ -21,6 +21,7 @@ public class Relation extends BaseEntity {
     private void setUser1(User user) {
         this.user1 = isNotNull(user, "user", exTypeUser);
     }
+
     private void setUser2(User user) {
         this.user2 = isNotNull(user, "user", exTypeUser);
     }

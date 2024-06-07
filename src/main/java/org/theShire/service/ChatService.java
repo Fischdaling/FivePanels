@@ -21,15 +21,15 @@ public class ChatService {
     public static final MessengerRepository messengerRepo = new MessengerRepository();
 
 
-    public static List<Chat> findAllChat(){
+    public static List<Chat> findAllChat() {
         return messengerRepo.findAll();
     }
 
-    public static Chat createChat(User...users){
+    public static Chat createChat(User... users) {
         return messengerRepo.save(new Chat(users));
     }
 
-    public static void sendMessage(Chat chat, Message message){
+    public static void sendMessage(Chat chat, Message message) {
         chat.sendMessage(message);
         chat.setUpdatedAt(Instant.now());
     }
@@ -42,10 +42,10 @@ public class ChatService {
         String keyOutgoing = UserRelationShip.createMapKey(sender, receiver);
         String keyIncoming = UserRelationShip.createMapKey(receiver, sender);
 
-        DomainAssertion.isTrue(!UserRelationShip.relationShip.containsKey(keyIncoming) && !UserRelationShip.relationShip.containsKey(keyOutgoing),()->"Relation already Existing",exTypeUser);
+        DomainAssertion.isTrue(!UserRelationShip.relationShip.containsKey(keyIncoming) && !UserRelationShip.relationShip.containsKey(keyOutgoing), () -> "Relation already Existing", exTypeUser);
 
-        Relation relationOutgoing = new Relation( sender, receiver, OUTGOING);
-        Relation relationIncoming = new Relation( receiver, sender, INCOMING);
+        Relation relationOutgoing = new Relation(sender, receiver, OUTGOING);
+        Relation relationIncoming = new Relation(receiver, sender, INCOMING);
 
         UserRelationShip.relationShip.put(keyOutgoing, relationOutgoing);
         UserRelationShip.relationShip.put(keyIncoming, relationIncoming);
@@ -70,13 +70,13 @@ public class ChatService {
             if (UserRelationShip.messageable(sender, receiver)) {
                 return createChat(sender, receiver);
             }
-            sender.addContacts(UserRelationShip.getRelation(sender,receiver));
+            sender.addContacts(UserRelationShip.getRelation(sender, receiver));
             receiver.addContacts(UserRelationShip.getRelation(sender, receiver));
         }
         return null;
     }
 
-    public static void declineRequest(User sender, User receiver){
+    public static void declineRequest(User sender, User receiver) {
         DomainAssertion.isNotNull(sender, "sender", exTypeUser);
         DomainAssertion.isNotNull(receiver, "receiver", exTypeUser);
 
@@ -86,7 +86,7 @@ public class ChatService {
         Set<User> tmpSet = new HashSet<>();
         tmpSet.add(sender);
         tmpSet.add(receiver);
-        if (UserRelationShip.getRelation(sender,receiver)!= null) {
+        if (UserRelationShip.getRelation(sender, receiver) != null) {
             if (UserRelationShip.getRelation(sender, receiver).getType().equals(ESTABLISHED)) {
                 messengerRepo.deleteById(messengerRepo.findByMembers(tmpSet).getEntityId());
             }

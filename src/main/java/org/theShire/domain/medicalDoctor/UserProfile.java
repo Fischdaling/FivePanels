@@ -23,7 +23,7 @@ public class UserProfile {
     private Language language;
 
 
-    public UserProfile(Language language, Location location, Media profilePicture, Name firstName, Name lastName, EducationalTitle...educationalTitle) {
+    public UserProfile(Language language, Location location, Media profilePicture, Name firstName, Name lastName, EducationalTitle... educationalTitle) {
         this.language = language;
         this.location = location;
         this.profilePicture = profilePicture;
@@ -52,7 +52,6 @@ public class UserProfile {
     }
 
 
-
     public Media getProfilePicture() {
         return profilePicture;
     }
@@ -69,9 +68,10 @@ public class UserProfile {
 
 
     public void addEducationalTitle(EducationalTitle educationalTitle) {
-        this.educationalTitles.add(isInCollection(educationalTitle, educationalTitles,"educationalTitle", exTypeUser));
+        this.educationalTitles.add(isInCollection(educationalTitle, educationalTitles, "educationalTitle", exTypeUser));
     }
-    public void addEducationalTitles(EducationalTitle...educationalTitle) {
+
+    public void addEducationalTitles(EducationalTitle... educationalTitle) {
         for (EducationalTitle title : educationalTitle) {
             addEducationalTitle(title);
         }
@@ -92,7 +92,7 @@ public class UserProfile {
         return sb.toString();
     }
 
-    public String toCSVString(){
+    public String toCSVString() {
         final StringBuilder sb = new StringBuilder();
         sb.append(firstName).append(";");
         sb.append(lastName).append(";");

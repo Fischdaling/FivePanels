@@ -1,10 +1,11 @@
 package org.theShire.repository;
 
 import org.theShire.domain.medicalDoctor.User;
+import org.theShire.domain.richType.Email;
+import org.theShire.domain.richType.Name;
 
-import org.theShire.domain.richType.*;
-
-import java.util.*;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserRepository extends AbstractRepository<User> {
