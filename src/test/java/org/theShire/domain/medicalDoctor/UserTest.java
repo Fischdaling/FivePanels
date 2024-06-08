@@ -49,7 +49,7 @@ public class UserTest {
         LinkedHashSet<Answer> answers = new LinkedHashSet<>();
         answers.add(new Answer("Answer 1"));
         answers.add(new Answer("Answer 2"));
-        case1 = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
+        case1 = CaseService.createCase(UUID.fromString("5a563273-bed3-4e8c-9c68-6a0229c11ce7"),user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
 
          set = new HashSet<>();
     }

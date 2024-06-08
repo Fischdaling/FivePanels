@@ -52,7 +52,7 @@ public class CaseTest {
         answers.add(a1);
         a2 = new Answer("Answer 2");
         answers.add(a2);
-        medCase = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
+        medCase = CaseService.createCase(UUID.fromString("5a563273-bed3-4e8c-9c68-6a0229c11ce7") ,user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
 
     }
 

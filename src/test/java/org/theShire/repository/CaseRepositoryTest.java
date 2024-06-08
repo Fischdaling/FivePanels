@@ -47,8 +47,8 @@ class CaseRepositoryTest {
         answers.add(a1);
         Answer a2 = new Answer("Answer 2");
         answers.add(a2);
-        Case medCase = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
-        Case medCase1 = CaseService.createCase(user2, "my Second Case", knowledges4, contents, new CaseVote(answers), user1);
+        Case medCase = CaseService.createCase(UUID.fromString("5a563273-bed3-4e8c-9c68-6a0229c11ce7"),user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
+        Case medCase1 = CaseService.createCase(null,user2, "my Second Case", knowledges4, contents, new CaseVote(answers), user1);
 
         CaseRepository caseRepository = new CaseRepository();
         caseRepository.save(medCase);

@@ -58,4 +58,6 @@ public abstract class AbstractRepository<T extends BaseEntity> implements IRepos
         }
     }
 
+    public abstract void saveEntryMap(String filepath);
+    public abstract void loadEntryMap(String filepath);
 }

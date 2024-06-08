@@ -122,7 +122,7 @@ public class CasePresentation {
             System.out.println("Enter Knowledge:");
             knowledgesSet.add(scanner.nextLine());
         }
-        CaseService.createCase(userRepo.findByID(ownerId), title, knowledgesSet, caseContents, caseVote, members);
+        CaseService.createCase(null,userRepo.findByID(ownerId), title, knowledgesSet, caseContents, caseVote, members);
 
     }
 

@@ -31,10 +31,10 @@ public class Chat extends BaseEntity {
         addChatters(chatters);
     }
 
-    public Chat(UUID uuid, Instant createdAt, Instant updatedAt, Set<User> people, List<Message> chatHistory) {
+    public Chat(UUID uuid, Instant createdAt, Instant updatedAt, Set<User> people) {
         super(uuid, createdAt, updatedAt);
         this.people = people;
-        this.chatHistory = chatHistory;
+        this.chatHistory = new ArrayList<>();
     }
 
     private void addChatters(User... chatters) {
@@ -95,57 +95,6 @@ public class Chat extends BaseEntity {
         sb.append(people.stream().map(User::getEntityId).map(UUID::toString).collect(Collectors.joining(","))).append(";");
         sb.append(chatHistory.stream().map(Message::toCSVString).collect(Collectors.joining("|"))).append(System.lineSeparator());
         return sb.toString();
-    }
-
-    public static Chat fromCSVString(String csv) {
-        String[] parts = csv.split(";");
-        UUID entityId = UUID.fromString(parts[0]);
-        Instant createdAt = Instant.parse(parts[1]);
-        Instant updatedAt = Instant.parse(parts[2]);
-        Set<User> users = parseUsers(parts[3]);
-        List<Message> chatHistory = parseHistory(parts[4]);
-        return new Chat(entityId, createdAt, updatedAt, users, chatHistory);
-    }
-
-
-    private static Set<User> parseUsers(String part) {
-        return Arrays.stream(part.split(","))
-                .map(uuid -> userRepo.findByID(UUID.fromString(uuid)))
-                .collect(Collectors.toSet());
-    }
-
-    private static List<Message> parseHistory(String part) {
-        return Arrays.stream(part.split(","))
-                .map(Chat::parseMessage)
-                .collect(Collectors.toList());
-    }
-
-    private static Message parseMessage(String messageStr) {
-        String[] parts = messageStr.split(";");
-        UUID entityId = UUID.fromString(parts[0]);
-        Instant createdAt = Instant.parse(parts[1]);
-        Instant updatedAt = Instant.parse(parts[2]);
-
-        UUID senderId = UUID.fromString(parts[3]);
-        Message.Stage stage = Message.Stage.valueOf(parts[4]);
-
-        List<Content> contents = Arrays.stream(parts[5].split(","))
-                .map(Chat::parseContent)
-                .collect(Collectors.toList());
-
-        return new Message(entityId, createdAt, updatedAt, senderId, contents, stage);
-    }
-
-    private static Content parseContent(String contentStr) {
-        if (contentStr.startsWith("text:")) {
-            String text = contentStr.substring(5);
-            return new Content(new ContentText(text));
-        } else if (contentStr.startsWith("media:")) {
-            String media = contentStr.substring(6);
-            return new Content(new Media(media));
-        } else {
-            throw new MessengerException("Unknown content format: " + contentStr);
-        }
     }
 
 

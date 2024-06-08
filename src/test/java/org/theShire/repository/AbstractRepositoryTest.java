@@ -18,7 +18,15 @@ class AbstractRepositoryTest<T extends BaseEntity> {
     T entity2;
     @BeforeEach
     void setUp() {
-        repository = new AbstractRepository<T>() {};
+        repository = new AbstractRepository<T>() {
+            @Override
+            public void saveEntryMap(String filepath) {
+            }
+
+            @Override
+            public void loadEntryMap(String filepath) {
+            }
+        };
         entity1 = (T)new BaseEntity();
         entity2 = (T)new BaseEntity();
     }

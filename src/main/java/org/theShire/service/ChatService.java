@@ -1,5 +1,7 @@
 package org.theShire.service;
 
+import org.theShire.domain.media.Content;
+import org.theShire.domain.media.ContentText;
 import org.theShire.domain.medicalDoctor.Relation;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserRelationShip;
@@ -12,9 +14,11 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;
+import static org.theShire.service.UserService.userLoggedIn;
 import static org.theShire.service.UserService.userRepo;
 
 public class ChatService {
@@ -26,7 +30,9 @@ public class ChatService {
     }
 
     public static Chat createChat(User... users) {
-        return messengerRepo.save(new Chat(users));
+        Chat chat = new Chat(users);
+        chat.addChatHistory(new Message(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"),new Content(new ContentText("Chat Created"))));
+        return messengerRepo.save(chat);
     }
 
     public static void sendMessage(Chat chat, Message message) {

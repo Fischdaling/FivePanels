@@ -1,6 +1,6 @@
 package org.theShire.presentation;
 
-import org.theShire.service.ImportExportService;
+import org.theShire.service.UniversalService;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -95,10 +95,10 @@ public class Main {
                 CasePresentation.likeCase();
                 break;
             case 12:
-                ImportExportService.exportDataToCSV("service");
+                UniversalService.saveEntry();
                 break;
             case 13:
-                ImportExportService.importDataFromCSV("service");
+                UniversalService.loadEntry();
                 break;
             case 14:
                 UserPresentation.changeProfile();

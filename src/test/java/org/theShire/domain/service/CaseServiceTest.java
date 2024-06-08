@@ -11,6 +11,7 @@ import org.theShire.domain.medicalCase.CaseVote;
 import org.theShire.domain.medicalCase.Vote;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.richType.*;
+import org.theShire.repository.CaseRepository;
 import org.theShire.service.CaseService;
 import org.theShire.service.UserService;
 
@@ -18,6 +19,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
+
 import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.UserService.userLoggedIn;
 import static org.theShire.service.UserService.userRepo;
@@ -57,7 +59,7 @@ public class CaseServiceTest {
         answers.add(a1);
         a2 = new Answer("Answer 2");
         answers.add(a2);
-        medCase = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
+        medCase = CaseService.createCase(UUID.fromString("5a563273-bed3-4e8c-9c68-6a0229c11ce7"),user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
 
         userLoggedIn = user1;
 
@@ -66,7 +68,8 @@ public class CaseServiceTest {
 
 
     @Test
-    public void testCreateCase_ShouldAddUserToRepo_WhenCreated() {
+    public void testCreateCase_ShouldAddCaseToRepo_WhenCreated() {
+        caseRepo.deleteAll();
 
         List<Content> contents = new ArrayList<>();
         //add texts
@@ -81,7 +84,7 @@ public class CaseServiceTest {
         LinkedHashSet<Answer> answers = new LinkedHashSet<>();
         answers.add(new Answer("Answer 1"));
         answers.add(new Answer("Answer 2"));
-        Case testCase = CaseService.createCase(user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
+        Case testCase = CaseService.createCase(null,user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
 
         assertEquals(caseRepo.findByID(testCase.getEntityId()), testCase);
     }
@@ -260,7 +263,7 @@ public class CaseServiceTest {
         answers.add(new Answer("Answer 2"));
 
         assertThrows(exTypeCase, () -> {
-            CaseService.createCase(user1, "Case Title", knowledges, null, new CaseVote(answers), user2);
+            CaseService.createCase(UUID.fromString("5a563273-bed3-4e8c-9c68-6a0229c11ce7"),user1, "Case Title", knowledges, null, new CaseVote(answers), user2);
         });
     }
 
@@ -274,7 +277,7 @@ public class CaseServiceTest {
         answers.add(new Answer("Answer 2"));
 
         assertThrows(RuntimeException.class, () -> {
-            CaseService.createCase(null, "Case Title", knowledges, Collections.emptyList(), new CaseVote(answers), user2);
+            CaseService.createCase(UUID.fromString("5a563273-bed3-4e8c-9c68-6a0229c11ce7"),null, "Case Title", knowledges, Collections.emptyList(), new CaseVote(answers), user2);
         });
     }
     @Test
