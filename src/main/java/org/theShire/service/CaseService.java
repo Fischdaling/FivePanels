@@ -66,9 +66,12 @@ public class CaseService {
     }
 
 
-    public static Case createCase(User owner, String title, Set<String> knowledges, List<Content> content, CaseVote caseVote, User... members) {
+    public static Case createCase(UUID caseID, User owner, String title, Set<String> knowledges, List<Content> content, CaseVote caseVote, User... members) {
+        if (caseID == null){
+            caseID = UUID.randomUUID();
+        }
         Set<Knowledges> knowledgesSet = isNotNull(knowledges.stream().map(Knowledges::new).collect(Collectors.toSet()), "knowledges", exTypeCase);
-        Case medCase = new Case(owner, title, knowledgesSet, isNotNull(content, "content", exTypeCase), caseVote, members);
+        Case medCase = new Case(caseID, owner, title, knowledgesSet, isNotNull(content, "content", exTypeCase), caseVote, members);
         owner.addOwnedCase(medCase);
         Arrays.stream(members).forEach(user -> user.addMemberOfCase(medCase));
         caseRepo.save(medCase);

@@ -27,7 +27,7 @@ public class UniversalService {
         User user1;
         User user2;
         User user3;
-        Case case1 = null;
+        Case case1;
 
         //CREATE USER1 -----------------------------------------------------------------------
 
@@ -127,7 +127,7 @@ public class UniversalService {
             Answer a2 = new Answer("Ebola");
             answers.add(a1);
             answers.add(a2);
-            case1 = CaseService.createCase(user1,
+            case1 = CaseService.createCase(caseId,user1,
                     "my First Case",
                     knowledges4,
                     contents,

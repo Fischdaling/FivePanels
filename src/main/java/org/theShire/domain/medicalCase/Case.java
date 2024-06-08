@@ -55,7 +55,7 @@ public class Case extends BaseEntity {
         this.caseVote = caseVote;
         caseChat.addPerson(owner);
     }
-    public Case(UUID uuid,User owner, String title, Set<Knowledges> knowledges, List<Content> content, CaseVote caseVote, User... members) {
+    public Case(UUID uuid, User owner, String title, Set<Knowledges> knowledges, List<Content> content, CaseVote caseVote, User... members) {
             super(uuid);
             caseDone = false;
             this.userLiked = new HashSet<>();
