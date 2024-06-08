@@ -169,7 +169,7 @@ public class User extends BaseEntity {
         sb.append("email: ").append(email).append(System.lineSeparator());
         sb.append("password: ").append(password).append(System.lineSeparator());
         sb.append("score: ").append(getScore()).append(System.lineSeparator());
-        sb.append("chats: ").append(chats).append(System.lineSeparator());
+        sb.append("chats: ").append(System.lineSeparator()).append(chats).append(System.lineSeparator());
         sb.append("specializations: ").append(specialization).append(System.lineSeparator());
         sb.append("ownedCases: ").append(ownedCases.stream().map(Case::getTitle).findAny().orElse(null)).append(System.lineSeparator());
         sb.append("memberOfCase: ").append(memberOfCase.stream().map(Case::getTitle).findAny().orElse(null)).append(System.lineSeparator());

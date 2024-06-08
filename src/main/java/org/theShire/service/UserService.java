@@ -89,17 +89,12 @@ public class UserService {
         if (uuid == null) {
             uuid = UUID.randomUUID();
         }
-        Name firstName = firstname;
-        Name lastName = lastname;
-        Email emayl = email;
-        Password passwort = password;
-        Language lang = language;
-        Location loc = location;
+
         List<EducationalTitle> titles = Arrays.stream(educationalTitle).map(EducationalTitle::new).toList();
         Media media = new Media(500, 400, picture, "500x400");
         Set<Knowledges> knowledges = specialization.stream().map(Knowledges::new).collect(Collectors.toSet());
-        UserProfile profile = updateProfile(lang, loc, media, firstName, lastName, titles);
-        User user = new User(uuid, passwort, emayl, profile, knowledges);
+        UserProfile profile = updateProfile(language, location, media, firstname, lastname, titles);
+        User user = new User(uuid, password, email, profile, knowledges);
         userRepo.save(user);
         return user;
     }

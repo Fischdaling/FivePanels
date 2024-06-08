@@ -112,6 +112,22 @@ class CaseVoteTest {
 //        assertEquals(20.0, caseVote.getVotes().get(userID).stream().findFirst().orElse(null).getPercent());
 //    }
 
+
+    @Test
+    void testVoting_ShouldNotAddVote_WhenPercentIsNegative() {
+        assertThrows(exTypeCase, () -> caseVote.voting(userID, answer, -10.0));
+
+        assertFalse(caseVote.getVotes().containsKey(userID));
+    }
+
+    @Test
+    void testVoting_ShouldNotAddVote_WhenPercentIsMoreThan100() {
+
+        assertThrows(exTypeCase, () -> caseVote.voting(userID, answer, 101.0));
+
+        assertFalse(caseVote.getVotes().containsKey(userID));
+    }
+
     @Test
     void testMultipleVotes_ShouldAddVotes_WhenSameUserForDifferentAnswers() {
         caseVote.voting(userID, answer, 30.0);

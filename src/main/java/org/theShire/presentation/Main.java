@@ -3,6 +3,7 @@ package org.theShire.presentation;
 import org.theShire.service.ImportExportService;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import static org.theShire.service.UniversalService.initData;
@@ -29,7 +30,7 @@ public class Main {
             try {
                 inputHandler();
             } catch (Throwable e) {
-                System.err.println(e.getMessage());//swallow catch them all
+                System.err.println(Arrays.toString(e.getStackTrace()) + e.getMessage());//swallow catch them all
                 main(arguments);
             }
         }

@@ -27,7 +27,6 @@ public class Chat extends BaseEntity {
         super();
         people = new HashSet<>();
         chatHistory = new ArrayList<>();
-        chatHistory.add(new Message(UUID.randomUUID(), new Content(new ContentText("Chat Established"))));
 
         addChatters(chatters);
     }

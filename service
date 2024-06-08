@@ -1,9 +1,23 @@
 Users
-bf3f660c-0c7f-48f2-bd5d-553d6eff5a91;2024-06-07T19:33:57.186400400Z;2024-06-07T19:33:57.186400400Z;
-ba0a64e5-5fc9-4768-96d2-ad21df6e94c2;2024-06-07T19:33:57.474044500Z;2024-06-07T19:33:57.474044500Z;
-c3fc1109-be28-4bdc-8ca0-841e1fa4aee2;2024-06-07T19:33:57.751950800Z;2024-06-07T19:33:57.751950800Z;
+bf3f660c-0c7f-48f2-bd5d-553d6eff5a91;2024-06-07T23:40:00.896398Z;2024-06-07T23:40:00.896398Z;Bilbo@hobbit.orc;$2a$12$PkDBxbbSqJEZ91UvcoowLuH1R5jUsd78Q.7vLvPmrK0uUL6Aq9t7m;0;[];[e8797c98-003c-4f57-93fd-79e28b8732a1, f21d8f74-5e6a-4c90-bab0-11d1a21f4218, 6d5a6bb2-ae89-4499-8d6b-c54a57f8b6b7, b20788c4-815b-4f4d-9f52-9c2429f91436];[adult cardiothoracic anesthesiology, Test];37231f93-348a-46c8-be61-6b6a00b2b948;9cdd286e-a1ee-4dd1-99ad-a04963f6bf79;Bilbo;Beutlin;[Fassreiter, Meister Dieb];media:Bilbo Profile;Auenland;Hobbitisch
+
+ba0a64e5-5fc9-4768-96d2-ad21df6e94c2;2024-06-07T23:40:01.180645200Z;2024-06-07T23:40:01.180645200Z;Aragorn@gondor.orc;$2a$12$C5xwgKsFfyujvL5k81IxNeE4CbjhSMJRLMFvujfWlgxJUX1qBAMCi;0;[];[e8797c98-003c-4f57-93fd-79e28b8732a1, f21d8f74-5e6a-4c90-bab0-11d1a21f4218, 6d5a6bb2-ae89-4499-8d6b-c54a57f8b6b7, 89e8e83a-b072-42a9-9c59-86b697fbd3ca, b20788c4-815b-4f4d-9f52-9c2429f91436, a8fb3d30-7a8c-47b1-9f18-0899aef5e40d];[critical care or pain medicine, pediatric anesthesiology];null;37231f93-348a-46c8-be61-6b6a00b2b948;Aragorn;Arathorn;[Arathorns Sohn, König von Gondor];media:Aragorn Profile;Gondor;Gondorisch
+
+7d0d5446-5ca2-4bf8-a54d-157121914858;2024-06-07T23:42:24.719174900Z;2024-06-07T23:42:24.719174900Z;Sauron@mordor.orc;$2a$12$NsfQvwRSy/ZtybH4HTMhaOUgNMlW0oFy7k7WJB925tSMN3KIdyn7S;0;[];[e8797c98-003c-4f57-93fd-79e28b8732a1];[hospice and palliative medicine, pediatric emergency medicine, critical care or pain medicine];9cdd286e-a1ee-4dd1-99ad-a04963f6bf79;null;Sauron;Sauron;[Ring Smith, The Eye, Ruler of mordor];media:Verry niccee pic;Mordor;Elbish
+
+c3fc1109-be28-4bdc-8ca0-841e1fa4aee2;2024-06-07T23:40:01.458257700Z;2024-06-07T23:40:01.458257700Z;Gandalf@Wizardo.beard;$2a$12$f28xDJ0w1gehyN/iyoLth.x/1jYtwfXs1iRMC8LUCobIWCKDSOxSW;0;[];[89e8e83a-b072-42a9-9c59-86b697fbd3ca, b20788c4-815b-4f4d-9f52-9c2429f91436, a8fb3d30-7a8c-47b1-9f18-0899aef5e40d];[pediatric emergency medicine, hand surgery];null;37231f93-348a-46c8-be61-6b6a00b2b948;Gandalf;Wizardo;[The Gray, The White, Ainur];media:Gandalf Profile;world;all
+
 Cases
-3759aa08-6814-46ad-a6e6-84d41c3e733e;2024-06-07T19:33:57.779094300Z;2024-06-07T19:33:57.779094300Z;
+37231f93-348a-46c8-be61-6b6a00b2b948;2024-06-07T23:40:01.483132900Z;2024-06-07T23:40:01.483132900Z;bf3f660c-0c7f-48f2-bd5d-553d6eff5a91;my First Case;text:My First Text,text:My Second Text,media:My First Media;critical care or pain medicine,pediatric emergency medicine;0;ba0a64e5-5fc9-4768-96d2-ad21df6e94c2,c3fc1109-be28-4bdc-8ca0-841e1fa4aee2;1;ba0a64e5-5fc9-4768-96d2-ad21df6e94c2;[Cancer, Ebola]$[ba0a64e5-5fc9-4768-96d2-ad21df6e94c2, c3fc1109-be28-4bdc-8ca0-841e1fa4aee2]=[[Cancer|70.0, Ebola|30.0], [Ebola|80.0, Cancer|20.0]]
+
+9cdd286e-a1ee-4dd1-99ad-a04963f6bf79;2024-06-07T23:45:13.395135Z;2024-06-07T23:45:13.395135Z;7d0d5446-5ca2-4bf8-a54d-157121914858;How to kill Sauron;text:I want to kill myself,media:Yeah thats me;pediatric anesthesiology,hospice and palliative medicine,clinical cardiac electrophysiology;0;bf3f660c-0c7f-48f2-bd5d-553d6eff5a91,ba0a64e5-5fc9-4768-96d2-ad21df6e94c2;0;;[Chop off Ringfinger, Chop off Head, Take the Ring for yourself, throw ring into fire, throw Ring into Vulcano, I am a Ring]$[]=[]
+
+8dbf405d-91e0-4dc2-838f-ffb46b0c7f28;2024-06-07T23:40:42.712911500Z;2024-06-07T23:40:42.712911500Z;bf3f660c-0c7f-48f2-bd5d-553d6eff5a91;my First Case;text:My First Text,text:My Second Text,media:My First Media;critical care or pain medicine,pediatric emergency medicine;0;ba0a64e5-5fc9-4768-96d2-ad21df6e94c2,c3fc1109-be28-4bdc-8ca0-841e1fa4aee2;1;ba0a64e5-5fc9-4768-96d2-ad21df6e94c2;[Cancer, Ebola]$[ba0a64e5-5fc9-4768-96d2-ad21df6e94c2, c3fc1109-be28-4bdc-8ca0-841e1fa4aee2]=[[Cancer|70.0, Ebola|30.0], [Ebola|80.0, Cancer|20.0]]
+
 Chats
-ebe63f87-6f56-4278-9616-597ade2452ea;2024-06-07T19:33:57.757212300Z;2024-06-07T19:33:57.757212300Z;
-90f9c5f9-b3ed-4c0a-9958-ad36e8acc888;2024-06-07T19:33:57.781605900Z;2024-06-07T19:33:57.781605900Z;
+e8797c98-003c-4f57-93fd-79e28b8732a1;2024-06-07T23:45:13.395135Z;2024-06-07T23:46:18.037974200Z;bf3f660c-0c7f-48f2-bd5d-553d6eff5a91,ba0a64e5-5fc9-4768-96d2-ad21df6e94c2,7d0d5446-5ca2-4bf8-a54d-157121914858;cc1cb85f-3d17-4b45-9099-987109d2e618|2024-06-07T23:46:18.037974200Z|2024-06-07T23:46:18.037974200Z|7d0d5446-5ca2-4bf8-a54d-157121914858|SENT|[text:Welcome to this Chat I am waiting for your answers]
+
+6d5a6bb2-ae89-4499-8d6b-c54a57f8b6b7;2024-06-07T23:40:01.461792800Z;2024-06-07T23:40:01.461792800Z;bf3f660c-0c7f-48f2-bd5d-553d6eff5a91,ba0a64e5-5fc9-4768-96d2-ad21df6e94c2;71c313a9-5ef3-4a70-8b97-24183fd57cb0|2024-06-07T23:40:01.462787300Z|2024-06-07T23:40:01.462787300Z|bf3f660c-0c7f-48f2-bd5d-553d6eff5a91|SENT|[text:When can we eat something?]|3b58c2ea-87ab-4688-8869-373e1ffc40c6|2024-06-07T23:40:01.462787300Z|2024-06-07T23:40:01.462787300Z|ba0a64e5-5fc9-4768-96d2-ad21df6e94c2|SENT|[text:We already had breakfast]|1e67ca6d-caae-472c-847e-ca00914a1fa9|2024-06-07T23:40:01.462787300Z|2024-06-07T23:40:01.462787300Z|bf3f660c-0c7f-48f2-bd5d-553d6eff5a91|SENT|[text:But whats with the second breakfast? :(]
+
+b20788c4-815b-4f4d-9f52-9c2429f91436;2024-06-07T23:40:01.485133300Z;2024-06-07T23:40:01.485133300Z;bf3f660c-0c7f-48f2-bd5d-553d6eff5a91,ba0a64e5-5fc9-4768-96d2-ad21df6e94c2,c3fc1109-be28-4bdc-8ca0-841e1fa4aee2;
+

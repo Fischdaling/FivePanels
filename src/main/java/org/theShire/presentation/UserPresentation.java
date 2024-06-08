@@ -24,7 +24,7 @@ import static org.theShire.service.UserService.userRepo;
 
 public class UserPresentation {
     public static void findAllUser() {
-        userRepo.findAll().forEach(System.out::println);
+        UserService.findAllUser().forEach(System.out::println);
     }
 
     public static void deleteUserById() {
