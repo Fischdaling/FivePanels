@@ -24,9 +24,10 @@ import static org.theShire.service.UserService.userRepo;
 public class UniversalService {
 
     public static void loadEntry(){
-        loadChat();
-        loadUser();
-        loadCase();
+//        loadChat();
+//        loadUser();
+//        loadCase();
+        System.out.println("Buy Premium to unlock this feature$$$");
     }
 
     public static void loadUser() {
