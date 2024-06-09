@@ -153,6 +153,17 @@ public class CaseServiceTest {
         medCase.declareCorrectAnswer(a1);
         assertEquals(oldScore + (2 * 50 / 100 + 1), user2.getScore());
     }
+@Test
+    public void testCorrectAnswer_ShouldChangeScoreOfUser_WhenUserVotedAnswer() {
+        int oldScore = user2.getScore();
+        System.out.println(medCase.getCaseVote().getAnswers());
+
+        medCase.getCaseVote().voting(user2.getEntityId(), a1, 25);
+        medCase.getCaseVote().voting(user2.getEntityId(), a1, 25);
+        medCase.getCaseVote().voting(user2.getEntityId(), a2, 50);
+        medCase.declareCorrectAnswer(a1);
+        assertNotEquals(oldScore, user2.getScore());
+    }
 
     @Test
     public void correctAnswer_ShouldThrow_WhenUserVotedMoreThan100percent() {
