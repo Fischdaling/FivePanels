@@ -44,11 +44,11 @@ public class CaseService {
         medCase.setUpdatedAt(Instant.now());
     }
 
-    public static void findCaseById(UUID caseID) {
+    public static Case findCaseById(UUID caseID) {
         Case medicCase = caseRepo.findByID(caseID);
         isTrue(caseRepo.getEntryMap().containsValue(medicCase), () -> "Case not found", exTypeCase);
         medicCase.setViewcount(medicCase.getViewcount() + 1);
-        System.out.println(medicCase);
+        return medicCase;
     }
 
     public static void vote(UUID caseId, List<Answer> answers, List<Double> percentage) {
