@@ -185,6 +185,26 @@ public class Case extends BaseEntity {
     }
 
     //------------------
+
+
+    public void addContent(Content content) {
+        this.content.add(isNotNull(content, "content", exTypeCase));
+    }
+
+    public void addContentList(List<Content> contentList) {
+        this.content.addAll(isNotNull(contentList, "contentList", exTypeCase));
+    }
+
+    public void addKnowledge(Knowledges knowledges) {
+        this.knowledges.add(isNotNull(knowledges, "knowledges", exTypeCase));
+    }
+
+    // service?
+    public void like(UUID userLiked) {
+        this.userLiked.add(isNotInCollection(userLiked, this.userLiked, "userLiked", exTypeCase));
+        likeCount++;
+    }
+
     public void addMember(User member) {
         this.members.add(
                 isNotInCollection(member, this.members, "members", exTypeCase)
@@ -199,23 +219,6 @@ public class Case extends BaseEntity {
 
     public void removeMember(User member) {
         this.members.remove(isInCollection(member, this.members, "member", exTypeCase));
-    }
-
-    public void addContent(Content content) {
-        this.content.add(isNotNull(content, "content", exTypeCase));
-    }
-
-    public void addContentList(List<Content> contentList) {
-        this.content.addAll(isNotNull(contentList, "contentList", exTypeCase));
-    }
-
-    public void addKnowledge(Knowledges knowledges) {
-        this.knowledges.add(isNotNull(knowledges, "knowledges", exTypeCase));
-    }
-
-    public void like(UUID userLiked) {
-        this.userLiked.add(isNotInCollection(userLiked, this.userLiked, "userLiked", exTypeCase));
-        likeCount++;
     }
 
     @Override

@@ -40,7 +40,7 @@ public class CasePresentation {
 
     public static void findCaseById() {
         UUID medicCase = enterUUID("Enter Case Id", Case.class);
-        CaseService.findCaseById(medicCase);
+        System.out.println(CaseService.findCaseById(medicCase));
     }
 
     public static void vote() {
