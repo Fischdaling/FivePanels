@@ -7,14 +7,17 @@ import org.theShire.domain.media.ContentText;
 import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.richType.*;
+import org.theShire.foundation.Knowledges;
 import org.theShire.service.CaseService;
 import org.theShire.service.UserService;
 
 import java.util.*;
 
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
+import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.service.UserService.userLoggedIn;
 
 public class CaseTest {
@@ -23,9 +26,11 @@ public class CaseTest {
     User user2;
     Answer a1;
     Answer a2;
+    List<Content> contents;
+    Set<Knowledges> knowledges;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         Set<String> knowledges1 = new HashSet<>();
         knowledges1.add("Test");
         knowledges1.add("adult cardiothoracic anesthesiology");
@@ -34,9 +39,9 @@ public class CaseTest {
         Set<String> knowledges2 = new HashSet<>();
         knowledges2.add("critical care or pain medicine");
         knowledges2.add("pediatric anesthesiology");
-        user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"),  new Name("Aragorn"), new Name("Arathorn"), new Email("Aragorn@gondor.orc"), new Password("EvenSaver1234"), new Language("Gondorisch"), new Location("Gondor"), "Aragorn Profile", knowledges2, "Arathorns Sohn", "König von Gondor");
+        user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"), new Name("Aragorn"), new Name("Arathorn"), new Email("Aragorn@gondor.orc"), new Password("EvenSaver1234"), new Language("Gondorisch"), new Location("Gondor"), "Aragorn Profile", knowledges2, "Arathorns Sohn", "König von Gondor");
         //init Content
-        List<Content> contents = new ArrayList<>();
+        contents = new ArrayList<>();
         //add texts
         contents.add(new Content(new ContentText("My First Text")));
         contents.add(new Content(new ContentText("My Second Text")));
@@ -52,7 +57,7 @@ public class CaseTest {
         answers.add(a1);
         a2 = new Answer("Answer 2");
         answers.add(a2);
-        medCase = CaseService.createCase(UUID.fromString("5a563273-bed3-4e8c-9c68-6a0229c11ce7") ,user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
+        medCase = CaseService.createCase(UUID.fromString("5a563273-bed3-4e8c-9c68-6a0229c11ce7"), user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
 
     }
 
@@ -110,5 +115,10 @@ public class CaseTest {
         assertThrows(exTypeCase, () -> medCase.removeMember(nonMember));
     }
 
-
+    @Test
+    void testAddContentList_ShouldAddNewValue_WhenCalled() {
+        contents.add(new Content(new ContentText("test")));
+        medCase.addContentList(contents);
+        assertNotEquals(medCase.getContent(), contents);
+    }
 }
