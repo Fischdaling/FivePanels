@@ -20,7 +20,7 @@ import static org.theShire.foundation.DomainAssertion.isTrue;
 import static org.theShire.presentation.Main.scanner;
 import static org.theShire.presentation.UniversalPresentation.enterUUID;
 import static org.theShire.service.UserService.userLoggedIn;
-import static org.theShire.service.UserService.userRepo;
+
 
 public class UserPresentation {
     public static void findAllUser() {
@@ -41,7 +41,6 @@ public class UserPresentation {
     public static void relationCommands() {
         User sender = userLoggedIn;
         User receiver;
-        isTrue(userRepo.getEntryMap().containsKey(sender.getEntityId()), () -> "Sender not found.", exTypeUser);
 
         System.out.println("1. See Incoming");
         System.out.println("2. send request");
@@ -55,19 +54,19 @@ public class UserPresentation {
                 break;
 
             case 2:
-                receiver = UserService.findByID(enterUUID("Enter target's id", User.class));
+                receiver = UserService.findById(enterUUID("Enter target's id", User.class));
                 UserService.sendRequest(sender, receiver);
                 System.out.println("Request sent from " + sender.getProfile().getFirstName() + " to " + receiver.getProfile().getFirstName());
                 break;
 
             case 3:
-                receiver = UserService.findByID(enterUUID("Enter target's id", User.class));
+                receiver = UserService.findById(enterUUID("Enter target's id", User.class));
                 UserService.acceptRequest(sender, receiver);
                 System.out.println("Request from " + sender.getProfile().getFirstName() + " " + sender.getEntityId() + " to " + receiver.getProfile().getFirstName() + " accepted.");
 
                 break;
             case 4:
-                receiver = UserService.findByID(enterUUID("Enter target's id", User.class));
+                receiver = UserService.findById(enterUUID("Enter target's id", User.class));
                 UserService.cancelFriendship(sender, receiver);
                 break;
             default:

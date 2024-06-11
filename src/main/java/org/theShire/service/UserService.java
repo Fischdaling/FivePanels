@@ -20,7 +20,7 @@ import static org.theShire.foundation.DomainAssertion.isTrue;
 
 public class UserService {
     public static final UserRepository userRepo = new UserRepository();
-    public static UserRelationShip relations = new UserRelationShip(); // Important or Error
+    public static UserRelationShip relations = new UserRelationShip(); // Don't touch
     public static User userLoggedIn = null;
 
     public static List<User> findAllUser() {
@@ -51,6 +51,9 @@ public class UserService {
 
 
     public static void cancelFriendship(User sender, User receiver) {
+        isTrue(userRepo.getEntryMap().containsKey(sender.getEntityId()), () -> "Sender not found.", exTypeUser);
+        isTrue(userRepo.getEntryMap().containsKey(receiver.getEntityId()), () -> "receiver not found.", exTypeUser);
+
         Set<User> users = new HashSet<>();
         users.add(sender);
         users.add(receiver);
@@ -70,6 +73,7 @@ public class UserService {
     }
 
     public static void sendRequest(User sender, User receiver) {
+        isTrue(userRepo.getEntryMap().containsKey(sender.getEntityId()), () -> "Sender not found.", exTypeUser);
         isTrue(userRepo.getEntryMap().containsKey(receiver.getEntityId()), () -> "Receiver not found.", exTypeUser);
         ChatService.sendRequest(sender, receiver);
     }

@@ -78,6 +78,15 @@ public class UniversalPresentation {
     public static <T extends BaseEntity> UUID enterUUID(String enterMessage, Class<T> clazz) {
         DomainAssertion.isNotNull(clazz, "entity", RuntimeException.class);
         StringBuilder str = new StringBuilder();
+        printEntities(clazz, str);
+        System.out.println(str);
+
+        System.out.println(enterMessage);
+        return UUID.fromString(scanner.nextLine());
+
+    }
+
+    private static <T extends BaseEntity> void printEntities(Class<T> clazz, StringBuilder str) {
         if (clazz == User.class) {
             str.append("User").repeat('-', 20).append(System.lineSeparator());
             for (User user : UserService.findAllUser()) {
@@ -97,10 +106,5 @@ public class UniversalPresentation {
                 str.append(chat.getEntityId()).append(System.lineSeparator());
             }
         }
-        System.out.println(str);
-
-        System.out.println(enterMessage);
-        return UUID.fromString(scanner.nextLine());
-
     }
 }
