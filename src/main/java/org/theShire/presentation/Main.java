@@ -30,7 +30,7 @@ public class Main {
             try {
                 inputHandler();
             } catch (Throwable e) {
-                System.err.println(Arrays.toString(e.getStackTrace()) + e.getMessage());//swallow catch them all
+                System.err.println(e.getMessage());//swallow catch them all
                 main(arguments);
             }
         }

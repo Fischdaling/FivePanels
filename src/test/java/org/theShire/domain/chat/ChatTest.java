@@ -5,15 +5,15 @@ import org.junit.jupiter.api.Test;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;
 import org.theShire.domain.medicalDoctor.User;
-import org.theShire.domain.medicalDoctor.UserProfile;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
-import org.theShire.foundation.DomainAssertion;
 import org.theShire.service.UserService;
 
-import java.time.Instant;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;

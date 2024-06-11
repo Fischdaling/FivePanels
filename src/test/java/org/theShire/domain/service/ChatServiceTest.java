@@ -11,7 +11,6 @@ import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
-import org.theShire.repository.MessengerRepository;
 import org.theShire.service.ChatService;
 import org.theShire.service.UserService;
 

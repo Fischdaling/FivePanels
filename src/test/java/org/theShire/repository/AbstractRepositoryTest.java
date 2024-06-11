@@ -3,7 +3,6 @@ package org.theShire.repository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.theShire.domain.BaseEntity;
-import org.theShire.repository.AbstractRepository;
 
 import java.util.ArrayList;
 import java.util.List;

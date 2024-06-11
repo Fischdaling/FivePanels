@@ -8,17 +8,14 @@
     import org.theShire.domain.richType.*;
     import org.theShire.service.UserService;
 
-    import java.io.ByteArrayInputStream;
-    import java.io.InputStream;
-    import java.util.*;
+    import java.util.HashSet;
+    import java.util.Set;
+    import java.util.UUID;
 
-    import static java.lang.System.in;
     import static org.junit.jupiter.api.Assertions.*;
     import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
     import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
-    import static org.theShire.presentation.Main.scanner;
     import static org.theShire.service.CaseService.caseRepo;
-    import static org.theShire.service.ChatService.messengerRepo;
     import static org.theShire.service.UserService.*;
 
     public class UserServiceTest {

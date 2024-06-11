@@ -7,7 +7,10 @@ import org.theShire.domain.richType.*;
 import org.theShire.service.ChatService;
 import org.theShire.service.UserService;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;

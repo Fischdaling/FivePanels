@@ -17,8 +17,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
-import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
-import static org.theShire.service.UserService.userLoggedIn;
 
 public class CaseTest {
     Case medCase;

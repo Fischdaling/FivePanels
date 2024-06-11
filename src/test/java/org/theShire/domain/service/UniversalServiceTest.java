@@ -12,12 +12,13 @@ import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
-import org.theShire.service.*;
+import org.theShire.service.CaseService;
+import org.theShire.service.ChatService;
+import org.theShire.service.UniversalService;
+import org.theShire.service.UserService;
 
-import java.io.IOException;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.ChatService.messengerRepo;

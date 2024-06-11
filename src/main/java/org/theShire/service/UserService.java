@@ -25,18 +25,18 @@ public class UserService {
 
     public static List<User> findAllUser() {
         return userRepo.findAll();
-
     }
 
     public static void deleteUserById(UUID userId) {
         User user = userRepo.findByID(userId);
         isTrue(userRepo.existsById(userId), () -> "User not found", exTypeUser);
-        userRepo.deleteById(userId);
         Set<Case> medCase = user.isMemberOfCases();
         medCase.forEach(mCase -> mCase.removeMember(user));
         if (userLoggedIn.getEntityId().equals(userId)) ;
         //throw user out
         user.isMemberOfCases().forEach(aCase -> aCase.setUpdatedAt(Instant.now()));
+
+        userRepo.deleteById(userId);
     }
 
     public static Set<User> findByName(String name) {

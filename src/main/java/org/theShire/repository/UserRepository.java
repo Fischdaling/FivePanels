@@ -3,13 +3,11 @@ package org.theShire.repository;
 import org.theShire.domain.exception.MedicalDoctorException;
 import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalCase.Case;
+import org.theShire.domain.medicalDoctor.Relation;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserProfile;
-import org.theShire.domain.medicalDoctor.UserRelationShip;
-import org.theShire.domain.medicalDoctor.Relation;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.richType.*;
-import org.theShire.foundation.DomainAssertion;
 import org.theShire.foundation.Knowledges;
 
 import java.io.*;
@@ -17,7 +15,6 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UserService.userRepo;

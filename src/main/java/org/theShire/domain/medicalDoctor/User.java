@@ -2,22 +2,21 @@ package org.theShire.domain.medicalDoctor;
 
 import org.theShire.domain.BaseEntity;
 import org.theShire.domain.exception.MedicalDoctorException;
-import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.messenger.Chat;
-import org.theShire.domain.richType.*;
+import org.theShire.domain.richType.Email;
+import org.theShire.domain.richType.Password;
 import org.theShire.foundation.Knowledges;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.isNotInCollection;
 import static org.theShire.foundation.DomainAssertion.isNotNull;
-import static org.theShire.service.CaseService.caseRepo;
-import static org.theShire.service.ChatService.messengerRepo;
-import static org.theShire.service.UserService.userRepo;
 
 public class User extends BaseEntity {
     //The Email must contain @ and . cannot be empty and has a max length

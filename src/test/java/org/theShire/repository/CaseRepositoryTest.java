@@ -1,6 +1,5 @@
 package org.theShire.repository;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.theShire.domain.media.Content;
 import org.theShire.domain.media.ContentText;

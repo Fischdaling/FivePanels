@@ -1,9 +1,7 @@
 package org.theShire.domain.medicalCase;
 
 import org.theShire.domain.BaseEntity;
-import org.theShire.domain.exception.MedicalCaseException;
 import org.theShire.domain.media.Content;
-import org.theShire.domain.media.ContentText;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.foundation.Knowledges;
@@ -234,7 +232,7 @@ public class Case extends BaseEntity {
         sb.append("likeCount: ").append(likeCount).append(System.lineSeparator());
         sb.append("userLiked: ").append(userLiked).append(System.lineSeparator());
         sb.append("caseVote: ").append(caseVote).append(System.lineSeparator());
-        sb.append("Number 3 Answer: ").append(caseVote.getTop3Answer()).append(System.lineSeparator());
+        sb.append("Top 3 Answer: ").append(caseVote.getTop3Answer()).append(System.lineSeparator());
         return sb.toString();
     }
 

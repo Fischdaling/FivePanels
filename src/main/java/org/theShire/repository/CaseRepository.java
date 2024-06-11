@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.isNotNull;
-import static org.theShire.presentation.UniversalPresentation.enterUUID;
 import static org.theShire.service.UserService.userRepo;
 
 public class CaseRepository extends AbstractRepository<Case> {

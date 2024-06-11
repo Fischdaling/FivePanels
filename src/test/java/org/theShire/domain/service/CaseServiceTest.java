@@ -11,7 +11,6 @@ import org.theShire.domain.medicalCase.CaseVote;
 import org.theShire.domain.medicalCase.Vote;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.richType.*;
-import org.theShire.repository.CaseRepository;
 import org.theShire.service.CaseService;
 import org.theShire.service.UserService;
 
@@ -19,7 +18,6 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
-
 import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.UserService.userLoggedIn;
 import static org.theShire.service.UserService.userRepo;

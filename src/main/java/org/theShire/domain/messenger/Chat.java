@@ -1,10 +1,6 @@
 package org.theShire.domain.messenger;
 
 import org.theShire.domain.BaseEntity;
-import org.theShire.domain.exception.MessengerException;
-import org.theShire.domain.media.Content;
-import org.theShire.domain.media.ContentText;
-import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.medicalDoctor.UserProfile;
 
