@@ -8,6 +8,9 @@ import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.foundation.DomainAssertion;
+import org.theShire.service.CaseService;
+import org.theShire.service.ChatService;
+import org.theShire.service.UserService;
 
 import java.util.List;
 import java.util.UUID;
@@ -77,19 +80,19 @@ public class UniversalPresentation {
         StringBuilder str = new StringBuilder();
         if (clazz == User.class) {
             str.append("User").repeat('-', 20).append(System.lineSeparator());
-            for (User user : userRepo.findAll()) {
+            for (User user : UserService.findAllUser()) {
                 str.append(user.getProfile().getFirstName()).append(" ").append(user.getProfile().getLastName()).append(System.lineSeparator());
                 str.append(user.getEntityId()).append(System.lineSeparator());
             }
         } else if (clazz == Case.class) {
             str.append("Cases").repeat('-', 20).append(System.lineSeparator());
-            for (Case medCase : caseRepo.findAll()) {
+            for (Case medCase : CaseService.findAllCase()) {
                 str.append(medCase.getTitle()).append(System.lineSeparator());
                 str.append(medCase.getEntityId()).append(System.lineSeparator());
             }
         } else if (clazz == Chat.class) {
             str.append("Chat").repeat('-', 20).append(System.lineSeparator());
-            for (Chat chat : messengerRepo.findAll()) {
+            for (Chat chat : ChatService.findAllChat()) {
                 str.append(chat.getPeople().stream().map(aChat -> aChat.getProfile().getFirstName()).collect(Collectors.toSet()));
                 str.append(chat.getEntityId()).append(System.lineSeparator());
             }

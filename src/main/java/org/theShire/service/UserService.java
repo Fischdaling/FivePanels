@@ -44,6 +44,11 @@ public class UserService {
         return isNotNull(user, "user", exTypeUser);
     }
 
+    public static User findById(UUID uuid) {
+        User user = userRepo.findByID(uuid);
+        return isNotNull(user, "user", exTypeUser);
+    }
+
 
     public static void cancelFriendship(User sender, User receiver) {
         Set<User> users = new HashSet<>();

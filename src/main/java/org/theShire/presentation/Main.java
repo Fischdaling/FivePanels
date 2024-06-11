@@ -89,6 +89,7 @@ public class Main {
                 UserPresentation.relationCommands();
                 break;
             case 10:
+                //TODO MODERN SWWITCH SYNTAX
                 CasePresentation.vote();
                 break;
             case 11:
