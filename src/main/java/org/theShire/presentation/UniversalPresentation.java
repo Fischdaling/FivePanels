@@ -17,9 +17,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.theShire.presentation.Main.scanner;
-import static org.theShire.service.CaseService.caseRepo;
-import static org.theShire.service.ChatService.messengerRepo;
-import static org.theShire.service.UserService.userRepo;
+
 
 public class UniversalPresentation {
     public static List<Content> contentUtil(List<Content> content) {

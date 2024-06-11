@@ -17,9 +17,8 @@ import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
 import static org.theShire.presentation.Main.scanner;
 import static org.theShire.presentation.UniversalPresentation.enterUUID;
-import static org.theShire.service.CaseService.caseRepo;
 import static org.theShire.service.UserService.userLoggedIn;
-import static org.theShire.service.UserService.userRepo;
+
 
 public class CasePresentation {
 

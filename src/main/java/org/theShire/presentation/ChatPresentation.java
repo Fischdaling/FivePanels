@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.theShire.presentation.UniversalPresentation.enterUUID;
-import static org.theShire.service.ChatService.messengerRepo;
 import static org.theShire.service.UserService.userLoggedIn;
 
 public class ChatPresentation {
