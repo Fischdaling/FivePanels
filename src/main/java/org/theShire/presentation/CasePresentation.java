@@ -9,6 +9,7 @@ import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.richType.Name;
 import org.theShire.foundation.Knowledges;
 import org.theShire.service.CaseService;
+import org.theShire.service.UserService;
 
 import java.util.*;
 
@@ -23,8 +24,7 @@ import static org.theShire.service.UserService.userRepo;
 public class CasePresentation {
 
     public static void findAllCase() {
-        CaseService.findAllCase();
-        caseRepo.findAll().forEach(System.out::println);
+        CaseService.findAllCase().forEach(System.out::println);
     }
 
     public static void deleteCaseById() {
@@ -47,9 +47,7 @@ public class CasePresentation {
         List<Answer> answers = new ArrayList<>();
         List<Double> percentages = new ArrayList<>();
         UUID caseId = enterUUID("Enter Case ID to Vote for", Case.class);
-        isInCollection(caseId, caseRepo.getEntryMap().keySet(), () -> "Case not Found", exTypeCase);
-        isInCollection(userLoggedIn, caseRepo.findByID(caseId).getMembers(), () -> "You are not able to vote", exTypeCase);
-        Case medCase = caseRepo.findByID(caseId);
+        Case medCase = CaseService.findCaseById(caseId);
         for (Answer answer : medCase.getCaseVote().getAnswers()) {
             System.out.println(answer.getName());
         }
@@ -102,7 +100,7 @@ public class CasePresentation {
         for (int i = 0; i < doctors; i++) {
             UUID uuid = enterUUID("Enter Member id", User.class);
             isNotEqual(uuid, ownerId, "Id", exTypeCase);
-            members[i] = userRepo.findByID(uuid);
+            members[i] = UserService.findById(uuid);
 
         }
 
@@ -122,27 +120,27 @@ public class CasePresentation {
             System.out.println("Enter Knowledge:");
             knowledgesSet.add(scanner.nextLine());
         }
-        CaseService.createCase(null,userRepo.findByID(ownerId), title, knowledgesSet, caseContents, caseVote, members);
+        CaseService.createCase(null,UserService.findById(ownerId), title, knowledgesSet, caseContents, caseVote, members);
 
     }
 
     public static void correctAnswer() {
         UUID caseId = enterUUID("Enter Case ID", Case.class);
-        if (!caseRepo.findByID(caseId).isCaseDone()) {
-            isTrue(caseRepo.findByID(caseId).getOwner().equals(userLoggedIn), () -> "You must be the owner of the case", exTypeCase);
-            System.out.println(caseRepo.findByID(caseId).getCaseVote().getAnswers() + "\n");
+        if (!CaseService.findCaseById(caseId).isCaseDone()) {
+            isTrue(CaseService.findCaseById(caseId).getOwner().equals(userLoggedIn), () -> "You must be the owner of the case", exTypeCase);
+            System.out.println(CaseService.findCaseById(caseId).getCaseVote().getAnswers() + "\n");
             System.out.println("Enter Correct Answer");
             String answer = scanner.nextLine();
             CaseService.correctAnswer(caseId, answer);
             System.out.println(answer + " Was declared as the right Answer. Doctors that made this assumption will earn points.");
-            System.out.println("Answer Voted the most was " + caseRepo.findByID(caseId).getCaseVote().getTop3Answer());
+            System.out.println("Answer Voted the most was " + CaseService.findCaseById(caseId).getCaseVote().getTop3Answer());
         }
     }
 
     public static User removeMember() {
         UUID medCaseId = enterUUID("Enter Case Id", Case.class);
         UUID memberId = enterUUID("Enter Member Id", User.class);
-        User member = userRepo.findByID(memberId);
+        User member = UserService.findById(memberId);
         CaseService.removeMember(medCaseId, member);
         System.out.println("Member was successfully removed");
         return member;
@@ -151,7 +149,7 @@ public class CasePresentation {
     public static User addMember() {
         UUID medCaseId = enterUUID("Enter Case Id", Case.class);
         UUID memberId = enterUUID("Enter Member Id", User.class);
-        User member = userRepo.findByID(memberId);
+        User member = UserService.findById(memberId);
         CaseService.addMember(medCaseId, member);
         return member;
     }

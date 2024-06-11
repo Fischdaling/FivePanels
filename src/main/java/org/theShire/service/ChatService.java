@@ -28,6 +28,10 @@ public class ChatService {
         return messengerRepo.findAll();
     }
 
+    public static Chat findById(UUID id) {
+       return messengerRepo.findByID(id);
+    }
+
     public static Chat createChat(User... users) {
         Chat chat = new Chat(users);
         chat.addChatHistory(new Message(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"),new Content(new ContentText("Chat Created"))));
