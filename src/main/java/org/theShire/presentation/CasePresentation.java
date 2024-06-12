@@ -16,7 +16,8 @@ import java.util.*;
 import static org.theShire.domain.exception.MedicalCaseException.exTypeCase;
 import static org.theShire.foundation.DomainAssertion.*;
 import static org.theShire.presentation.Main.scanner;
-import static org.theShire.presentation.UniversalPresentation.enterUUID;
+import static org.theShire.presentation.ScannerUtil.enterUUID;
+import static org.theShire.presentation.ScannerUtil.scan;
 import static org.theShire.service.UserService.userLoggedIn;
 
 
@@ -52,17 +53,12 @@ public class CasePresentation {
         }
         double percentTrack = 0.0;
         while (percentTrack < 100.0) {
-            System.out.println("Enter Answer to vote for");
-            if (percentTrack != 0.0)
-                scanner.nextLine();
-            String str = scanner.nextLine();
-            Name userAnswer = new Name(str);
-            Optional<Answer> answer = medCase.getCaseVote().getAnswers().stream().filter(answer1 -> answer1.getName().equals(userAnswer)).findFirst();
+            Answer inAnswer = scan("Enter Answer to vote for", Answer::new);
+            Optional<Answer> answer = medCase.getCaseVote().getAnswers().stream().filter(answer1 -> answer1.equals(inAnswer)).findFirst();
             isTrue(answer.isPresent(), () -> "Answer not found", exTypeCase);
             answers.add(answer.get());
 
-            System.out.println("Enter the percent you want to vote this answer with");
-            double percentage = scanner.nextDouble();
+            double percentage = scan("Enter the percent you want to vote this answer with",Double::parseDouble);
             lesserThan(percentage, 101.0, "percentage", exTypeCase);
             percentages.add(percentage);
             percentTrack += percentage;
@@ -73,27 +69,19 @@ public class CasePresentation {
     }
 
     public static void addCase() {
-        System.out.println("How many possible Answers does the Case have");
-        int ansCount = scanner.nextInt();
-        String[] answers = new String[ansCount];
+        int ansCount = scan("How many possible Answers does the Case have", Integer::parseInt);
         LinkedHashSet<Answer> answer = new LinkedHashSet<>();
-        scanner.nextLine();
         for (int i = 0; i < ansCount; i++) {
-            System.out.println("Enter Answer to the Case");
-
-            answers[i] = scanner.nextLine();
+            answer.add(scan("Enter Answer to the Case", Answer::new));
         }
 
-
-        System.out.println("Enter Case Title");
-        String title = scanner.nextLine();
+        String title = scan("Enter Case Title", String::new);
         UUID ownerId = userLoggedIn.getEntityId();
         List<Content> caseContents = new ArrayList<>();
 
-        UniversalPresentation.contentUtil(caseContents);
+        ScannerUtil.contentUtil(caseContents);
 
-        System.out.println("How many Doctors do you want to add?");
-        int doctors = scanner.nextInt();
+        int doctors = scan("How many Doctors do you want to add?", Integer::parseInt);
         User[] members = new User[doctors];
         scanner.nextLine();
         for (int i = 0; i < doctors; i++) {
@@ -103,13 +91,8 @@ public class CasePresentation {
 
         }
 
-        for (int i = 0; i < ansCount; i++) {
-            answer.add(new Answer(answers[i]));
-        }
         CaseVote caseVote = new CaseVote(answer);
-        System.out.println("How many Knowledges do you want to add?");
-        int knowledges = scanner.nextInt();
-        greaterEqualsZero(knowledges, () -> "Case must have Knowledges", exTypeCase);
+        int knowledges = scan("How many Knowledges do you want to add?", Integer::parseInt);
 
         Set<String> knowledgesSet = new HashSet<>();
         Knowledges.getLegalKnowledges().forEach(System.out::println);

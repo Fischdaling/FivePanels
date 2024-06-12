@@ -70,6 +70,8 @@ public class CaseService {
         if (caseID == null){
             caseID = UUID.randomUUID();
         }
+        greaterEqualsZero(knowledges.size(), () -> "Case must have Knowledges", exTypeCase);
+
         Set<Knowledges> knowledgesSet = isNotNull(knowledges.stream().map(Knowledges::new).collect(Collectors.toSet()), "knowledges", exTypeCase);
         Case medCase = new Case(caseID, owner, title, knowledgesSet, isNotNull(content, "content", exTypeCase), caseVote, members);
         owner.addOwnedCase(medCase);

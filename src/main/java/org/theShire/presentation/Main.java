@@ -3,7 +3,6 @@ package org.theShire.presentation;
 import org.theShire.service.UniversalService;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import static org.theShire.service.UniversalService.initData;
@@ -71,7 +70,7 @@ public class Main {
                 ChatPresentation.openChat();
                 break;
             case 4:
-                UniversalPresentation.findAll();
+                ScannerUtil.findAll();
                 break;
             case 5:
                 UserPresentation.findByName();

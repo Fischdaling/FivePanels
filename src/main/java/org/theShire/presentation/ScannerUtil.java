@@ -13,34 +13,55 @@ import org.theShire.service.ChatService;
 import org.theShire.service.UserService;
 
 import java.util.List;
+import java.util.Scanner;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.theShire.presentation.Main.scanner;
 
+public class ScannerUtil {
 
-public class UniversalPresentation {
+    public static final Scanner scanner = new Scanner(System.in);
+
+    public static <T> T scan(String message, Function<String, T> convert) {
+        T value = null;
+        boolean valid = false;
+        while (!valid) {
+            try {
+                System.out.println(message);
+                String input = scanner.nextLine();
+                value = convert.apply(input);
+                valid = true;
+            } catch (Exception e) {
+                System.err.println("Error: " + e.getMessage());
+                System.err.println("Please enter a valid value.");
+            }
+        }
+        return value;
+    }
+
     public static List<Content> contentUtil(List<Content> content) {
 
         while (true) {
             System.out.println("Do you want to add Content true/false");
-            boolean addContent = scanner.nextBoolean();
+            boolean addContent = Main.scanner.nextBoolean();
             if (!addContent) {
                 break;
             }
             System.out.println("1. Media Content");
             System.out.println("2. Text Content");
-            int choice = scanner.nextInt();
+            int choice = Main.scanner.nextInt();
             switch (choice) {
                 case 1:
                     System.out.println("Enter Filepath");
-                    scanner.nextLine();
-                    content.add(new Content(new Media(scanner.nextLine())));
+                    Main.scanner.nextLine();
+                    content.add(new Content(new Media(Main.scanner.nextLine())));
                     break;
                 case 2:
                     System.out.println("Enter Text");
-                    scanner.nextLine();
-                    content.add(new Content(new ContentText(scanner.nextLine())));
+                    Main.scanner.nextLine();
+                    content.add(new Content(new ContentText(Main.scanner.nextLine())));
                     break;
                 default:
                     System.out.println("Invalid choice");
@@ -55,7 +76,7 @@ public class UniversalPresentation {
         System.out.println("1. Doctor");
         System.out.println("2. Case");
         System.out.println("3. Chat");
-        int entityId = scanner.nextInt();
+        int entityId = Main.scanner.nextInt();
         switch (entityId) {
             case 1:
                 UserPresentation.findAllUser();
@@ -72,7 +93,6 @@ public class UniversalPresentation {
 
     }
 
-
     public static <T extends BaseEntity> UUID enterUUID(String enterMessage, Class<T> clazz) {
         DomainAssertion.isNotNull(clazz, "entity", RuntimeException.class);
         StringBuilder str = new StringBuilder();
@@ -80,7 +100,7 @@ public class UniversalPresentation {
         System.out.println(str);
 
         System.out.println(enterMessage);
-        return UUID.fromString(scanner.nextLine());
+        return UUID.fromString(Main.scanner.nextLine());
 
     }
 
@@ -106,3 +126,4 @@ public class UniversalPresentation {
         }
     }
 }
+

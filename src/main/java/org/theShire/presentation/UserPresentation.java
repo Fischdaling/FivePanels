@@ -16,9 +16,8 @@ import java.util.UUID;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.isEqual;
-import static org.theShire.foundation.DomainAssertion.isTrue;
 import static org.theShire.presentation.Main.scanner;
-import static org.theShire.presentation.UniversalPresentation.enterUUID;
+import static org.theShire.presentation.ScannerUtil.enterUUID;
 import static org.theShire.service.UserService.userLoggedIn;
 
 

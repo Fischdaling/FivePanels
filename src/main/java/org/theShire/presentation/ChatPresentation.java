@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.theShire.presentation.UniversalPresentation.enterUUID;
+import static org.theShire.presentation.ScannerUtil.enterUUID;
 import static org.theShire.service.UserService.userLoggedIn;
 
 public class ChatPresentation {
@@ -27,7 +27,7 @@ public class ChatPresentation {
         System.out.println(chat.getChatHistory());
         List<Content> contents = new ArrayList<>();
 
-        UniversalPresentation.contentUtil(contents);
+        ScannerUtil.contentUtil(contents);
         ChatService.sendMessage(chat, new Message(userLoggedIn.getEntityId(), contents.toArray(new Content[0])));
     }
 }
