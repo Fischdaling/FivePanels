@@ -18,8 +18,6 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.theShire.presentation.Main.scanner;
-
 public class ScannerUtil {
 
     public static final Scanner scanner = new Scanner(System.in);
@@ -53,18 +51,17 @@ public class ScannerUtil {
             System.out.println("2. Text Content");
             int choice = Main.scanner.nextInt();
             switch (choice) {
-                case 1:
+                case 1 -> {
                     System.out.println("Enter Filepath");
                     Main.scanner.nextLine();
                     content.add(new Content(new Media(Main.scanner.nextLine())));
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     System.out.println("Enter Text");
                     Main.scanner.nextLine();
                     content.add(new Content(new ContentText(Main.scanner.nextLine())));
-                    break;
-                default:
-                    System.out.println("Invalid choice");
+                }
+                default -> System.out.println("Invalid choice");
             }
 
         }
@@ -78,17 +75,10 @@ public class ScannerUtil {
         System.out.println("3. Chat");
         int entityId = Main.scanner.nextInt();
         switch (entityId) {
-            case 1:
-                UserPresentation.findAllUser();
-                break;
-            case 2:
-                CasePresentation.findAllCase();
-                break;
-            case 3:
-                ChatPresentation.findAllChat();
-                break;
-            default:
-                System.out.println("invalid command");
+            case 1 -> UserPresentation.findAllUser();
+            case 2 -> CasePresentation.findAllCase();
+            case 3 -> ChatPresentation.findAllChat();
+            default -> System.out.println("invalid command");
         }
 
     }

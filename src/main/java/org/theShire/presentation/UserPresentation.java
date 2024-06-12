@@ -13,7 +13,6 @@ import java.time.Instant;
 import java.util.*;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
-import static org.theShire.foundation.DomainAssertion.isEqual;
 import static org.theShire.foundation.DomainAssertion.isTrue;
 import static org.theShire.presentation.Main.scanner;
 import static org.theShire.presentation.ScannerUtil.enterUUID;
@@ -48,29 +47,23 @@ public class UserPresentation {
         int answer = scanner.nextInt();
         scanner.nextLine();
         switch (answer) {
-            case 1:
-                UserService.seeIncoming(sender).forEach((aSender) -> System.out.println("Request from: " + aSender.getProfile().getFirstName()));
-                break;
-
-            case 2:
+            case 1 ->
+                    UserService.seeIncoming(sender).forEach((aSender) -> System.out.println("Request from: " + aSender.getProfile().getFirstName()));
+            case 2 -> {
                 receiver = UserService.findById(enterUUID("Enter target's id", User.class));
                 UserService.sendRequest(sender, receiver);
                 System.out.println("Request sent from " + sender.getProfile().getFirstName() + " to " + receiver.getProfile().getFirstName());
-                break;
-
-            case 3:
+            }
+            case 3 -> {
                 receiver = UserService.findById(enterUUID("Enter target's id", User.class));
                 UserService.acceptRequest(sender, receiver);
                 System.out.println("Request from " + sender.getProfile().getFirstName() + " " + sender.getEntityId() + " to " + receiver.getProfile().getFirstName() + " accepted.");
-
-                break;
-            case 4:
+            }
+            case 4 -> {
                 receiver = UserService.findById(enterUUID("Enter target's id", User.class));
                 UserService.cancelFriendship(sender, receiver);
-                break;
-            default:
-                System.out.println("Invalid option.");
-                break;
+            }
+            default -> System.out.println("Invalid option.");
         }
     }
 
@@ -80,8 +73,8 @@ public class UserPresentation {
         Email email = scan("Enter Email", Email::new);
         Password password = scan("Enter Password", Password::new);
         String inConfirmPassword = scan("Enter Password", String::new);
-        BCrypt.Result verify = BCrypt.verifyer().verify(inConfirmPassword.toCharArray(),password.value());
-        isTrue(verify.verified,()-> "passwords", exTypeUser);
+        BCrypt.Result verify = BCrypt.verifyer().verify(inConfirmPassword.toCharArray(), password.value());
+        isTrue(verify.verified, () -> "passwords", exTypeUser);
         UserProfile profile = enterUserProfile();
         int i = scan("How many specialties do you want to add?", Integer::parseInt);
         Knowledges.getLegalKnowledges().forEach(System.out::println);
@@ -89,7 +82,7 @@ public class UserPresentation {
         for (int j = 0; j < i; j++) {
             specialty.add(scan("Enter Specialty:", Knowledges::new));
         }
-              return UserService.createUser(null, profile.getFirstName(), profile.getFirstName(), email, password, profile.getLanguage(), profile.getLocation(), profile.getProfilePicture().getAltText(), specialty,  profile.getEducationalTitles());
+        return UserService.createUser(null, profile.getFirstName(), profile.getFirstName(), email, password, profile.getLanguage(), profile.getLocation(), profile.getProfilePicture().getAltText(), specialty, profile.getEducationalTitles());
     }
 
     public static void changeProfile() {
@@ -101,11 +94,11 @@ public class UserPresentation {
     }
 
     private static UserProfile enterUserProfile() {
-        Name firstname = scan("Enter Firstname:",Name::new);
-        Name lastname = scan("Enter Lastname:",Name::new);
-        Language language = scan("Enter Language:",Language::new);
-        Location location = scan("Enter Location:",Location::new);
-        Media profilePic = scan("Enter Picture path:",Media::new);
+        Name firstname = scan("Enter Firstname:", Name::new);
+        Name lastname = scan("Enter Lastname:", Name::new);
+        Language language = scan("Enter Language:", Language::new);
+        Location location = scan("Enter Location:", Location::new);
+        Media profilePic = scan("Enter Picture path:", Media::new);
         System.out.println("How many educational titles do you want to add?");
         int i = scanner.nextInt();
         scanner.nextLine();
@@ -123,14 +116,14 @@ public class UserPresentation {
         System.out.println("0. Exit");
         int choice = scanner.nextInt();
         switch (choice) {
-            case 1:
+            case 1 -> {
                 return login();
-            case 2:
+            }
+            case 2 -> {
                 return addUser();
-            case 0:
-                System.exit(0);
-            default:
-                System.out.println("Invalid option.");
+            }
+            case 0 -> System.exit(0);
+            default -> System.out.println("Invalid option.");
         }
         throw new MedicalDoctorException("Unexpected Error");
     }
