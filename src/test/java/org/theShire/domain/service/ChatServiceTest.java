@@ -11,43 +11,68 @@ import org.theShire.domain.medicalDoctor.UserRelationShip;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
+import org.theShire.foundation.Knowledges;
 import org.theShire.service.ChatService;
 import org.theShire.service.UserService;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.domain.medicalDoctor.Relation.RelationType.*;
 import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
 import static org.theShire.service.ChatService.messengerRepo;
+import static org.theShire.service.UserService.userRepo;
 
 class ChatServiceTest {
 
     Chat testChat;
     User testUser;
     User testUser2;
-    Set<String> knowledges1;
-    Set<String> knowledges2;
 
     @BeforeEach
     public void init() {
         relationShip = new HashMap<>();
         testChat = new Chat();
 
-        knowledges1 = new HashSet<>();
-        knowledges1.add("Test");
-        knowledges1.add("adult cardiothoracic anesthesiology");
+        //CREATE USER1 -----------------------------------------------------------------------
 
-        knowledges2 = new HashSet<>();
-        knowledges2.add("critical care or pain medicine");
-        knowledges2.add("pediatric anesthesiology");
+        UUID user1Id = UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91");
+            Set<Knowledges> knowledges1 = new HashSet<>();
+            knowledges1.add(new Knowledges("Test"));
+            knowledges1.add(new Knowledges("adult cardiothoracic anesthesiology"));
+            List<EducationalTitle> educationalTitles = new ArrayList<>();
+            educationalTitles.add(new EducationalTitle("Fassreiter"));
+            educationalTitles.add(new EducationalTitle("Meister Dieb"));
+            testUser = UserService.createUser(user1Id,
+                    new Name("Bilbo"),
+                    new Name("Beutlin"),
+                    new Email("Bilbo@hobbit.orc"),
+                    new Password("VerySafe123"),
+                    new Language("Hobbitisch"),
+                    new Location("Auenland"),
+                    "Bilbo Profile",
+                    knowledges1,educationalTitles);
 
-        testUser = UserService.createUser(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"), new Name("Bilbo"), new Name("Beutlin"), new Email("Bilbo@hobbit.orc"), new Password("VerySafe123"), new Language("Hobbitish"), new Location("Auenland"), "Bilbo Profile", knowledges1, "Fassreiter", "Meister Dieb");
-        testUser2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"), new Name("Aragorn"), new Name("Arathorn"), new Email("Aragorn@gondor.orc"), new Password("EvenSaver1234"), new Language("Gondorisch"), new Location("Gondor"), "Aragorn Profile", knowledges2, "Arathorns Sohn", "König von Gondor");
 
+        //CREATE USER2-----------------------------------------------------------------
+
+        UUID user2Id = UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2");
+            Set<Knowledges> knowledges2 = new HashSet<>();
+            knowledges2.add(new Knowledges("critical care or pain medicine"));
+            knowledges2.add(new Knowledges("pediatric anesthesiology"));
+            List<EducationalTitle> educationalTitles2 = new ArrayList<>();
+            educationalTitles2.add(new EducationalTitle("Arathorns Sohn"));
+            educationalTitles2.add(new EducationalTitle("König von Gondor"));
+            testUser2 = UserService.createUser(user2Id,
+                    new Name("Aragorn"),
+                    new Name("Arathorn"),
+                    new Email("Aragorn@gondor.orc"),
+                    new Password("EvenSaver1234"),
+                    new Language("Gondorisch"),
+                    new Location("Gondor"),
+                    "Aragorn Profile",
+                    knowledges2,
+                    educationalTitles2);
     }
 
 

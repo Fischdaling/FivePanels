@@ -8,12 +8,10 @@ import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
+import org.theShire.foundation.Knowledges;
 import org.theShire.service.UserService;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
@@ -27,14 +25,20 @@ public class ChatTest {
     @BeforeEach
     public void setUp() {
         relationShip = new HashMap<>();
-        Set<String> knowledges1 = new HashSet<>();
-        Set<String> knowledges2 = new HashSet<>();
-        knowledges1.add("Test");
-        knowledges1.add("adult cardiothoracic anesthesiology");
-        knowledges2.add("Test");
-        knowledges2.add("adult cardiothoracic anesthesiology");
-        user1 = UserService.createUser(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"), new Name("Bilbo"), new Name("Beutlin"), new Email("Bilbo@hobbit.orc"), new Password("VerySafe123"), new Language("Hobbitish"), new Location("Auenland"), "Bilbo Profile", knowledges1, "Fassreiter", "Meister Dieb");
-        user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"),  new Name("Aragorn"), new Name("Arathorn"), new Email("Aragorn@gondor.orc"), new Password("EvenSaver1234"), new Language("Gondorisch"), new Location("Gondor"), "Aragorn Profile", knowledges2, "Arathorns Sohn", "König von Gondor");
+        Set<Knowledges> knowledges1 = new HashSet<>();
+        knowledges1.add(new Knowledges("Test"));
+        knowledges1.add(new Knowledges("adult cardiothoracic anesthesiology"));
+        List<EducationalTitle> educationalTitles = new ArrayList<>();
+        educationalTitles.add(new EducationalTitle("Fassreiter"));
+        educationalTitles.add(new EducationalTitle("Meister Dieb"));
+        user1 = UserService.createUser(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"), new Name("Bilbo"), new Name("Beutlin"), new Email("Bilbo@hobbit.orc"), new Password("VerySafe123"), new Language("Hobbitish"), new Location("Auenland"), "Bilbo Profile", knowledges1, educationalTitles);
+        Set<Knowledges> knowledges2 = new HashSet<>();
+        knowledges2.add(new Knowledges("critical care or pain medicine"));
+        knowledges2.add(new Knowledges("pediatric anesthesiology"));
+        List<EducationalTitle> educationalTitles2 = new ArrayList<>();
+        educationalTitles2.add(new EducationalTitle("Arathorns Sohn"));
+        educationalTitles2.add(new EducationalTitle("König von Gondor"));
+        user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"),  new Name("Aragorn"), new Name("Arathorn"), new Email("Aragorn@gondor.orc"), new Password("EvenSaver1234"), new Language("Gondorisch"), new Location("Gondor"), "Aragorn Profile", knowledges2, educationalTitles2);
         chat = new Chat(user1, user2);
     }
 
@@ -47,10 +51,14 @@ public class ChatTest {
     @Test
     public void testAddChatter_ShouldAddChatter_WhenCalled() {
         UUID uuid = UUID.randomUUID();
-        Set<String> knowledges3 = new HashSet<>();
-        knowledges3.add("pediatric emergency medicine");
-        knowledges3.add("hand surgery");
-        User user3 = UserService.createUser(uuid, new Name("Gandalf"), new Name("Wizardo"), new Email("Gandalf@Wizardo.beard"), new Password("ICastFireBall!"), new Language("all"), new Location("world"), "Gandalf Profile", knowledges3, "The Gray", "The White", "Ainur");
+        Set<Knowledges> knowledges3 = new HashSet<>();
+        knowledges3.add(new Knowledges("pediatric emergency medicine"));
+        knowledges3.add(new Knowledges("hand surgery"));
+        List<EducationalTitle> educationalTitles = new ArrayList<>();
+        educationalTitles.add(new EducationalTitle("The Gray"));
+        educationalTitles.add(new EducationalTitle("The White"));
+        educationalTitles.add(new EducationalTitle("Ainur"));
+        User user3 = UserService.createUser(uuid, new Name("Gandalf"), new Name("Wizardo"), new Email("Gandalf@Wizardo.beard"), new Password("ICastFireBall!"), new Language("all"), new Location("world"), "Gandalf Profile", knowledges3, educationalTitles);
         chat.addChatter(user3);
         assertEquals(3, chat.getPeople().size());
     }
@@ -73,10 +81,14 @@ public class ChatTest {
     @Test
     public void testAddPerson_ShouldAddPerson_WhenCalled() {
         UUID uuid = UUID.randomUUID();
-        Set<String> knowledges3 = new HashSet<>();
-        knowledges3.add("pediatric emergency medicine");
-        knowledges3.add("hand surgery");
-        User user3 = UserService.createUser(uuid, new Name("Gandalf"), new Name("Wizardo"), new Email("Gandalf@Wizardo.beard"), new Password("ICastFireBall!"), new Language("all"), new Location("world"), "Gandalf Profile", knowledges3, "The Gray", "The White", "Ainur");
+        Set<Knowledges> knowledges3 = new HashSet<>();
+        knowledges3.add(new Knowledges("pediatric emergency medicine"));
+        knowledges3.add(new Knowledges("hand surgery"));
+        List<EducationalTitle> educationalTitles3 = new ArrayList<>();
+        educationalTitles3.add(new EducationalTitle("The Gray"));
+        educationalTitles3.add(new EducationalTitle("The White"));
+        educationalTitles3.add(new EducationalTitle("Ainur"));
+        User user3 = UserService.createUser(uuid, new Name("Gandalf"), new Name("Wizardo"), new Email("Gandalf@Wizardo.beard"), new Password("ICastFireBall!"), new Language("all"), new Location("world"), "Gandalf Profile", knowledges3, educationalTitles3);
         chat.addPerson(user3);
         assertTrue(chat.getPeople().contains(user3));
     }

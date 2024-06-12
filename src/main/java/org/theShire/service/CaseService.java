@@ -66,13 +66,13 @@ public class CaseService {
     }
 
 
-    public static Case createCase(UUID caseID, User owner, String title, Set<String> knowledges, List<Content> content, CaseVote caseVote, User... members) {
+    public static Case createCase(UUID caseID, User owner, String title, Set<Knowledges> knowledges, List<Content> content, CaseVote caseVote, User... members) {
         if (caseID == null){
             caseID = UUID.randomUUID();
         }
         greaterEqualsZero(knowledges.size(), () -> "Case must have Knowledges", exTypeCase);
 
-        Set<Knowledges> knowledgesSet = isNotNull(knowledges.stream().map(Knowledges::new).collect(Collectors.toSet()), "knowledges", exTypeCase);
+        Set<Knowledges> knowledgesSet = isNotNull(knowledges, "knowledges", exTypeCase);
         Case medCase = new Case(caseID, owner, title, knowledgesSet, isNotNull(content, "content", exTypeCase), caseVote, members);
         owner.addOwnedCase(medCase);
         Arrays.stream(members).forEach(user -> user.addMemberOfCase(medCase));
@@ -85,9 +85,9 @@ public class CaseService {
         return medCase;
     }
 
-    public static void correctAnswer(UUID caseId, String answer) {
+    public static void correctAnswer(UUID caseId, Answer answer) {
         isTrue(caseRepo.findByID(caseId).getOwner().equals(userLoggedIn), () -> "You must be the owner of the case", exTypeCase);
-        caseRepo.findByID(caseId).declareCorrectAnswer(new Answer(answer));
+        caseRepo.findByID(caseId).declareCorrectAnswer(answer);
         caseRepo.findByID(caseId).setCaseDone(true);
         caseRepo.findByID(caseId).setUpdatedAt(Instant.now());
 

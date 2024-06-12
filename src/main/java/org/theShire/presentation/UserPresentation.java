@@ -1,5 +1,6 @@
 package org.theShire.presentation;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.theShire.domain.exception.MedicalDoctorException;
 import org.theShire.domain.media.Media;
 import org.theShire.domain.medicalDoctor.User;
@@ -9,15 +10,14 @@ import org.theShire.foundation.Knowledges;
 import org.theShire.service.UserService;
 
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
 import static org.theShire.foundation.DomainAssertion.isEqual;
+import static org.theShire.foundation.DomainAssertion.isTrue;
 import static org.theShire.presentation.Main.scanner;
 import static org.theShire.presentation.ScannerUtil.enterUUID;
+import static org.theShire.presentation.ScannerUtil.scan;
 import static org.theShire.service.UserService.userLoggedIn;
 
 
@@ -77,30 +77,19 @@ public class UserPresentation {
 
     public static User addUser() {
 
-        System.out.println("Enter Email");
-        String inEmail = scanner.nextLine();
-        Email email = new Email(inEmail);
-        System.out.println("Enter Password");
-        String inPassword = scanner.nextLine();
-        Password password = new Password(inPassword);
-        System.out.println("Confirm Password");
-        String inConfirmPassword = scanner.nextLine();
-        isEqual(inConfirmPassword, inPassword, "passwords", exTypeUser);
+        Email email = scan("Enter Email", Email::new);
+        Password password = scan("Enter Password", Password::new);
+        String inConfirmPassword = scan("Enter Password", String::new);
+        BCrypt.Result verify = BCrypt.verifyer().verify(inConfirmPassword.toCharArray(),password.value());
+        isTrue(verify.verified,()-> "passwords", exTypeUser);
         UserProfile profile = enterUserProfile();
-        int i;
-        System.out.println("How many specialties do you want to add?");
-        i = scanner.nextInt();
+        int i = scan("How many specialties do you want to add?", Integer::parseInt);
         Knowledges.getLegalKnowledges().forEach(System.out::println);
-        System.out.println();
-        scanner.nextLine();
-        Set<String> specialty = new HashSet<>();
+        Set<Knowledges> specialty = new HashSet<>();
         for (int j = 0; j < i; j++) {
-            System.out.println("Enter Specialty:");
-            String value = scanner.nextLine();
-            specialty.add(value);
+            specialty.add(scan("Enter Specialty:", Knowledges::new));
         }
-        String[] titles = profile.getEducationalTitles().stream().map(EducationalTitle::toString).toArray(String[]::new);
-        return UserService.createUser(null, profile.getFirstName(), profile.getFirstName(), email, password, profile.getLanguage(), profile.getLocation(), profile.getProfilePicture().getAltText(), specialty, titles);
+              return UserService.createUser(null, profile.getFirstName(), profile.getFirstName(), email, password, profile.getLanguage(), profile.getLocation(), profile.getProfilePicture().getAltText(), specialty,  profile.getEducationalTitles());
     }
 
     public static void changeProfile() {
@@ -112,30 +101,19 @@ public class UserPresentation {
     }
 
     private static UserProfile enterUserProfile() {
-        System.out.println("Enter Firstname");
-        String inFirstName = scanner.nextLine();
-        Name firstname = new Name(inFirstName);
-        System.out.println("Enter Lastname");
-        String inLastName = scanner.nextLine();
-        Name lastname = new Name(inLastName);
-        System.out.println("Enter Language");
-        String inLanguage = scanner.nextLine();
-        Language language = new Language(inLanguage);
-        System.out.println("Enter Location");
-        String inLocation = scanner.nextLine();
-        Location location = new Location(inLocation);
-        System.out.println("Enter Picture path");
-        String profilePic = scanner.nextLine();
+        Name firstname = scan("Enter Firstname:",Name::new);
+        Name lastname = scan("Enter Lastname:",Name::new);
+        Language language = scan("Enter Language:",Language::new);
+        Location location = scan("Enter Location:",Location::new);
+        Media profilePic = scan("Enter Picture path:",Media::new);
         System.out.println("How many educational titles do you want to add?");
         int i = scanner.nextInt();
         scanner.nextLine();
-        String[] title = new String[i];
+        List<EducationalTitle> title = new ArrayList<>();
         for (int j = 0; j < i; j++) {
-            System.out.println("Enter Title");
-            title[j] = scanner.nextLine();
+            title.add(scan("Enter Title:", EducationalTitle::new));
         }
-        UserProfile profile = UserService.updateProfile(language, location, new Media(profilePic), firstname, lastname, Arrays.stream(title).map(EducationalTitle::new).toList());
-        return profile;
+        return UserService.updateProfile(language, location, profilePic, firstname, lastname, title);
     }
 
 
@@ -146,10 +124,8 @@ public class UserPresentation {
         int choice = scanner.nextInt();
         switch (choice) {
             case 1:
-                scanner.nextLine();
                 return login();
             case 2:
-                scanner.nextLine();
                 return addUser();
             case 0:
                 System.exit(0);
@@ -160,8 +136,8 @@ public class UserPresentation {
     }
 
     public static User login() {
-        System.out.println("Enter Email: ");
-        String email = scanner.nextLine();
+        Email email = scan("Enter Email", Email::new);
+        scanner.nextLine();
         System.out.println("Enter Password: ");
         String password = scanner.nextLine();
         return UserService.login(email, password);

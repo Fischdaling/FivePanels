@@ -94,13 +94,11 @@ public class CasePresentation {
         CaseVote caseVote = new CaseVote(answer);
         int knowledges = scan("How many Knowledges do you want to add?", Integer::parseInt);
 
-        Set<String> knowledgesSet = new HashSet<>();
+        Set<Knowledges> knowledgesSet = new HashSet<>();
         Knowledges.getLegalKnowledges().forEach(System.out::println);
         System.out.println();
-        scanner.nextLine();
         for (int i = 0; i < knowledges; i++) {
-            System.out.println("Enter Knowledge:");
-            knowledgesSet.add(scanner.nextLine());
+            knowledgesSet.add(scan("Enter Knowledge",Knowledges::new));
         }
         CaseService.createCase(null,UserService.findById(ownerId), title, knowledgesSet, caseContents, caseVote, members);
 
@@ -112,7 +110,7 @@ public class CasePresentation {
             isTrue(CaseService.findCaseById(caseId).getOwner().equals(userLoggedIn), () -> "You must be the owner of the case", exTypeCase);
             System.out.println(CaseService.findCaseById(caseId).getCaseVote().getAnswers() + "\n");
             System.out.println("Enter Correct Answer");
-            String answer = scanner.nextLine();
+            Answer answer = scan("Enter Correct Answer", Answer::new);
             CaseService.correctAnswer(caseId, answer);
             System.out.println(answer + " Was declared as the right Answer. Doctors that made this assumption will earn points.");
             System.out.println("Answer Voted the most was " + CaseService.findCaseById(caseId).getCaseVote().getTop3Answer());

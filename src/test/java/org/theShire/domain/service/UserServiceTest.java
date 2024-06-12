@@ -6,11 +6,10 @@
     import org.theShire.domain.exception.MedicalDoctorException;
     import org.theShire.domain.medicalDoctor.User;
     import org.theShire.domain.richType.*;
+    import org.theShire.foundation.Knowledges;
     import org.theShire.service.UserService;
 
-    import java.util.HashSet;
-    import java.util.Set;
-    import java.util.UUID;
+    import java.util.*;
 
     import static org.junit.jupiter.api.Assertions.*;
     import static org.theShire.domain.exception.MedicalDoctorException.exTypeUser;
@@ -24,15 +23,57 @@
 
         @BeforeEach
         public void setUp(){
-            Set<String> knowledges1 = new HashSet<>();
-            knowledges1.add("Test");
-            knowledges1.add("adult cardiothoracic anesthesiology");
-            user1 = UserService.createUser(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"), new Name("Bilbo"), new Name("Beutlin"), new Email("Bilbo@hobbit.orc"), new Password("VerySafe123"), new Language("Hobbitish"), new Location("Auenland"), "Bilbo Profile", knowledges1, "Fassreiter", "Meister Dieb");
-            Set<String> knowledges2 = new HashSet<>();
-            knowledges2.add("critical care or pain medicine");
-            knowledges2.add("pediatric anesthesiology");
-            user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"),  new Name("Aragorn"), new Name("Arathorn"), new Email("Aragorn@gondor.orc"), new Password("EvenSaver1234"), new Language("Gondorisch"), new Location("Gondor"), "Aragorn Profile", knowledges2, "Arathorns Sohn", "König von Gondor");
-            userLoggedIn = user1;
+            //CREATE USER1 -----------------------------------------------------------------------
+            userRepo.deleteAll();
+            caseRepo.deleteAll();
+            // Check if User1 already exists
+            UUID user1Id = UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91");
+            if (userRepo.findByID(user1Id) == null) {
+                Set<Knowledges> knowledges1 = new HashSet<>();
+                knowledges1.add(new Knowledges("Test"));
+                knowledges1.add(new Knowledges("adult cardiothoracic anesthesiology"));
+                List<EducationalTitle> educationalTitles = new ArrayList<>();
+                educationalTitles.add(new EducationalTitle("Fassreiter"));
+                educationalTitles.add(new EducationalTitle("Meister Dieb"));
+                user1 = UserService.createUser(user1Id,
+                        new Name("Bilbo"),
+                        new Name("Beutlin"),
+                        new Email("Bilbo@hobbit.orc"),
+                        new Password("VerySafe123"),
+                        new Language("Hobbitisch"),
+                        new Location("Auenland"),
+                        "Bilbo Profile",
+                        knowledges1,
+                        educationalTitles);
+            } else {
+                user1 = userRepo.findByID(user1Id);
+            }
+
+            //CREATE USER2-----------------------------------------------------------------
+
+            // Check if User2 already exists
+            UUID user2Id = UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2");
+            if (userRepo.findByID(user2Id) == null) {
+                Set<Knowledges> knowledges2 = new HashSet<>();
+                knowledges2.add(new Knowledges("critical care or pain medicine"));
+                knowledges2.add(new Knowledges("pediatric anesthesiology"));
+                List<EducationalTitle> educationalTitles2 = new ArrayList<>();
+                educationalTitles2.add(new EducationalTitle("Arathorns Sohn"));
+                educationalTitles2.add(new EducationalTitle("König von Gondor"));
+                user2 = UserService.createUser(user2Id,
+                        new Name("Aragorn"),
+                        new Name("Arathorn"),
+                        new Email("Aragorn@gondor.orc"),
+                        new Password("EvenSaver1234"),
+                        new Language("Gondorisch"),
+                        new Location("Gondor"),
+                        "Aragorn Profile",
+                        knowledges2,
+                        educationalTitles2);
+            } else {
+                user2 = userRepo.findByID(user2Id);
+            }
+
         }
 
         @AfterEach
@@ -47,22 +88,30 @@
         @Test
         public void testCreateUser_ShouldAddUserToRepo_WhenCorrectlyFilled(){
             UUID uuid = UUID.randomUUID();
-            Set<String> knowledges3 = new HashSet<>();
-            knowledges3.add("pediatric emergency medicine");
-            knowledges3.add("hand surgery");
-            User user3 = UserService.createUser(uuid, new Name("Gandalf"), new Name("Wizardo"), new Email("Gandalf@Wizardo.beard"), new Password("ICastFireBall!"), new Language("all"), new Location("world"), "Gandalf Profile", knowledges3, "The Gray", "The White", "Ainur");
+            Set<Knowledges> knowledges3 = new HashSet<>();
+            knowledges3.add(new Knowledges("pediatric emergency medicine"));
+            knowledges3.add(new Knowledges("hand surgery"));
+            List<EducationalTitle> educationalTitles3 = new ArrayList<>();
+            educationalTitles3.add(new EducationalTitle("The Gray"));
+            educationalTitles3.add(new EducationalTitle("The White"));
+            educationalTitles3.add(new EducationalTitle("Ainur"));
+            User user3 = UserService.createUser(uuid, new Name("Gandalf"), new Name("Wizardo"), new Email("Gandalf@Wizardo.beard"), new Password("ICastFireBall!"), new Language("all"), new Location("world"), "Gandalf Profile", knowledges3, educationalTitles3);
 
             assertEquals(userRepo.findByID(uuid),user3);
         }
         @Test
         public void testCreateUser_ShouldThrowMedicalDoctorException_WhenWrongParamter(){
             UUID uuid = UUID.randomUUID();
-            Set<String> knowledges3 = new HashSet<>();
-            knowledges3.add("pediatric emergency medicine");
-            knowledges3.add("hand surgery");
+            Set<Knowledges> knowledges3 = new HashSet<>();
+            knowledges3.add(new Knowledges("pediatric emergency medicine"));
+            knowledges3.add(new Knowledges("hand surgery"));
+            List<EducationalTitle> educationalTitles3 = new ArrayList<>();
+            educationalTitles3.add(new EducationalTitle("The Gray"));
+            educationalTitles3.add(new EducationalTitle("The White"));
+            educationalTitles3.add(new EducationalTitle("Ainur"));
 
             assertThrows(MedicalDoctorException.class,()->{
-                UserService.createUser(uuid, new Name(null), new Name("Wizardo"), new Email("Gandalf@Wizardo.beard"), new Password("ICastFireBall!"), new Language("all"), new Location("world"), "Gandalf Profile", knowledges3, "The Gray", "The White", "Ainur");
+                UserService.createUser(uuid, new Name(null), new Name("Wizardo"), new Email("Gandalf@Wizardo.beard"), new Password("ICastFireBall!"), new Language("all"), new Location("world"), "Gandalf Profile", knowledges3, educationalTitles3);
             });
         }
 
@@ -82,13 +131,13 @@
 
         @Test
         public void login_ShouldReturnLoggedInUser_WhenUserExistsAndPasswordEquals(){
-            User userReturned = login(user1.getEmail().value(),"VerySafe123");
+            User userReturned = login(user1.getEmail(),"VerySafe123");
             assertEquals(user1, userReturned);
         }
 
         @Test
         public void login_ShouldThrow_WhenUserExistsAndPasswordNotEquals(){
-            assertThrows(exTypeUser,()->login(user1.getEmail().value(),"VerySafe"));
+            assertThrows(exTypeUser,()->login(user1.getEmail(),"VerySafe"));
         }
 
 

@@ -23,7 +23,7 @@ public class UserRepository extends AbstractRepository<User> {
 
     public Set<User> findByName(Name name) {
         return entryMap.values().stream()
-                .filter(user -> user.getProfile().getFirstName().value().equalsIgnoreCase(name.value()))
+                .filter(user -> user.getProfile().getFirstName().equals(name))
                 .collect(Collectors.toSet());
     }
 

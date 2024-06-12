@@ -12,6 +12,7 @@ import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
+import org.theShire.foundation.Knowledges;
 import org.theShire.service.CaseService;
 import org.theShire.service.ChatService;
 import org.theShire.service.UniversalService;
@@ -49,9 +50,9 @@ public class UniversalServiceTest {
         contents.add(new Content(new Media("MY FILE")));
 
         //Create a Case with user2&user3 as member and user1 as owner
-        Set<String> knowledges4 = new HashSet<>();
-        knowledges4.add("pediatric emergency medicine");
-        knowledges4.add("critical care or pain medicine");
+        Set<Knowledges> knowledges4 = new HashSet<>();
+        knowledges4.add(new Knowledges("pediatric emergency medicine"));
+        knowledges4.add(new Knowledges("critical care or pain medicine"));
         LinkedHashSet<Answer> answers = new LinkedHashSet<>();
         Answer a1 =new Answer("Cancer");
         Answer a2 = new Answer("Ebola");
@@ -82,9 +83,13 @@ public class UniversalServiceTest {
     void saveAndLoadChat_ShouldWriteDownAllChatInReposInCSVAndThenLoadThemIn_WhenCalled(){
         UUID uuid = UUID.randomUUID();
         //CREATE USER4-----------------------------------------------------------------
-        Set<String> knowledges4 = new HashSet<>();
-        knowledges4.add("pediatric emergency medicine");
-        knowledges4.add("hand surgery");
+        Set<Knowledges> knowledges4 = new HashSet<>();
+        knowledges4.add(new Knowledges("pediatric emergency medicine"));
+        knowledges4.add(new Knowledges("hand surgery"));
+        List<EducationalTitle> educationalTitles = new ArrayList<>();
+        educationalTitles.add(new EducationalTitle("Ring Smith"));
+        educationalTitles.add(new EducationalTitle("The eye"));
+
         User user4 = UserService.createUser(uuid,
                 new Name("Sauron"),
                 new Name("Morgoth"),
@@ -94,8 +99,7 @@ public class UniversalServiceTest {
                 new Location("Mordor"),
                 "Sauron Profile pic",
                 knowledges4,
-                "Ring Smith",
-                "The Eye");
+                educationalTitles);
 
         ChatService.sendRequest(user4, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
         Chat chat = ChatService.acceptRequest(user4, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
@@ -112,9 +116,13 @@ public class UniversalServiceTest {
     void saveAndLoadUser_ShouldWriteDownAllUsersInReposInCSVAndThenLoadThemIn_WhenCalled(){
         UUID uuid = UUID.randomUUID();
         //CREATE USER4-----------------------------------------------------------------
-        Set<String> knowledges4 = new HashSet<>();
-        knowledges4.add("pediatric emergency medicine");
-        knowledges4.add("hand surgery");
+        Set<Knowledges> knowledges4 = new HashSet<>();
+        knowledges4.add(new Knowledges("pediatric emergency medicine"));
+        knowledges4.add(new Knowledges("hand surgery"));
+        List<EducationalTitle> educationalTitles = new ArrayList<>();
+        educationalTitles.add(new EducationalTitle("Ring Smith"));
+        educationalTitles.add(new EducationalTitle("The eye"));
+
         User user = UserService.createUser(uuid,
                 new Name("Sauron"),
                 new Name("Morgoth"),
@@ -124,8 +132,7 @@ public class UniversalServiceTest {
                 new Location("Mordor"),
                 "Sauron Profile pic",
                 knowledges4,
-                "Ring Smith",
-                "The Eye");
+                educationalTitles);
         ChatService.sendRequest(user, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
         Chat chat = ChatService.acceptRequest(user, userRepo.findByID(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2")));
         chat.sendMessage(new Message(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"),new Content(new ContentText("I can't"))));

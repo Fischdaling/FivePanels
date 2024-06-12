@@ -11,6 +11,7 @@ import org.theShire.domain.medicalCase.CaseVote;
 import org.theShire.domain.medicalCase.Vote;
 import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.richType.*;
+import org.theShire.foundation.Knowledges;
 import org.theShire.service.CaseService;
 import org.theShire.service.UserService;
 
@@ -31,33 +32,66 @@ public class CaseServiceTest {
 
     @BeforeEach
     public void setUp() {
-        Set<String> knowledges1 = new HashSet<>();
-        knowledges1.add("Test");
-        knowledges1.add("adult cardiothoracic anesthesiology");
-        user1 = UserService.createUser(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"), new Name("Bilbo"), new Name("Beutlin"), new Email("Bilbo@hobbit.orc"), new Password("VerySafe123"), new Language("Hobbitish"), new Location("Auenland"), "Bilbo Profile", knowledges1, "Fassreiter", "Meister Dieb");
+        //CREATE USER1 -----------------------------------------------------------------------
+        userRepo.deleteAll();
+        caseRepo.deleteAll();
+        // Check if User1 already exists
+        UUID user1Id = UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91");
+            Set<Knowledges> knowledges1 = new HashSet<>();
+            knowledges1.add(new Knowledges("Test"));
+            knowledges1.add(new Knowledges("adult cardiothoracic anesthesiology"));
+            List<EducationalTitle> educationalTitles = new ArrayList<>();
+            educationalTitles.add(new EducationalTitle("Fassreiter"));
+            educationalTitles.add(new EducationalTitle("Meister Dieb"));
+            user1 = UserService.createUser(user1Id,
+                    new Name("Bilbo"),
+                    new Name("Beutlin"),
+                    new Email("Bilbo@hobbit.orc"),
+                    new Password("VerySafe123"),
+                    new Language("Hobbitisch"),
+                    new Location("Auenland"),
+                    "Bilbo Profile",
+                    knowledges1,
+                    educationalTitles);
+
         //CREATE USER2-----------------------------------------------------------------
-        Set<String> knowledges2 = new HashSet<>();
-        knowledges2.add("critical care or pain medicine");
-        knowledges2.add("pediatric anesthesiology");
-        user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"), new Name("Aragorn"), new Name("Arathorn"), new Email("Aragorn@gondor.orc"), new Password("EvenSaver1234"), new Language("Gondorisch"), new Location("Gondor"), "Aragorn Profile", knowledges2, "Arathorns Sohn", "König von Gondor");
-        //init Content
+
+        // Check if User2 already exists
+        UUID user2Id = UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2");
+            Set<Knowledges> knowledges2 = new HashSet<>();
+            knowledges2.add(new Knowledges("critical care or pain medicine"));
+            knowledges2.add(new Knowledges("pediatric anesthesiology"));
+            List<EducationalTitle> educationalTitles2 = new ArrayList<>();
+            educationalTitles2.add(new EducationalTitle("Arathorns Sohn"));
+            educationalTitles2.add(new EducationalTitle("König von Gondor"));
+            user2 = UserService.createUser(user2Id,
+                    new Name("Aragorn"),
+                    new Name("Arathorn"),
+                    new Email("Aragorn@gondor.orc"),
+                    new Password("EvenSaver1234"),
+                    new Language("Gondorisch"),
+                    new Location("Gondor"),
+                    "Aragorn Profile",
+                    knowledges2,
+                    educationalTitles2);
+
+// Initialize content
         List<Content> contents = new ArrayList<>();
-        //add texts
+        // Add texts
         contents.add(new Content(new ContentText("My First Text")));
         contents.add(new Content(new ContentText("My Second Text")));
-        //add Media
+        // Add Media
         contents.add(new Content(new Media(200, 100, "My First Media", "200x100")));
-
         //Create a Case with user2&user3 as member and user1 as owner
-        Set<String> knowledges4 = new HashSet<>();
-        knowledges4.add("pediatric emergency medicine");
-        knowledges4.add("critical care or pain medicine");
+        Set<Knowledges> knowledges4 = new HashSet<>();
+        knowledges4.add(new Knowledges("pediatric emergency medicine"));
+        knowledges4.add(new Knowledges("critical care or pain medicine"));
         LinkedHashSet<Answer> answers = new LinkedHashSet<>();
         a1 = new Answer("Answer 1");
         answers.add(a1);
         a2 = new Answer("Answer 2");
         answers.add(a2);
-        medCase = CaseService.createCase(UUID.fromString("5a563273-bed3-4e8c-9c68-6a0229c11ce7"),user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
+        medCase = CaseService.createCase(UUID.fromString("5a563273-bed3-4e8c-9c68-6a0229c11ce7"),user1, "my First Case", knowledges4, contents, new CaseVote(answers),user2);
 
         userLoggedIn = user1;
 
@@ -68,23 +102,32 @@ public class CaseServiceTest {
     @Test
     public void testCreateCase_ShouldAddCaseToRepo_WhenCreated() {
         caseRepo.deleteAll();
-
+        // Initialize content
         List<Content> contents = new ArrayList<>();
-        //add texts
-        contents.add(new Content(new ContentText("Test")));
-        contents.add(new Content(new ContentText("TEst2")));
-        //add Media
+        // Add texts
+        contents.add(new Content(new ContentText("My First Text")));
+        contents.add(new Content(new ContentText("My Second Text")));
+        // Add Media
         contents.add(new Content(new Media(200, 100, "My First Media", "200x100")));
 
-        Set<String> knowledges4 = new HashSet<>();
-        knowledges4.add("pediatric emergency medicine");
-        knowledges4.add("critical care or pain medicine");
-        LinkedHashSet<Answer> answers = new LinkedHashSet<>();
-        answers.add(new Answer("Answer 1"));
-        answers.add(new Answer("Answer 2"));
-        Case testCase = CaseService.createCase(null,user1, "my First Case", knowledges4, contents, new CaseVote(answers), user2);
+        // Check if the case already exists
+        UUID caseId = UUID.fromString("5a563987-bed3-4e8c-9c68-6a0229c11ce7");
+            Set<Knowledges> knowledges4 = new HashSet<>();
+            knowledges4.add(new Knowledges("pediatric emergency medicine"));
+            knowledges4.add(new Knowledges("critical care or pain medicine"));
+            LinkedHashSet<Answer> answers = new LinkedHashSet<>();
+            Answer a1 = new Answer("Cancer");
+            Answer a2 = new Answer("Ebola");
+            answers.add(a1);
+            answers.add(a2);
+            medCase = CaseService.createCase(caseId, user1,
+                    "my First Case",
+                    knowledges4,
+                    contents,
+                    new CaseVote(answers),
+                    user2);
 
-        assertEquals(caseRepo.findByID(testCase.getEntityId()), testCase);
+            assertEquals(caseRepo.findByID(medCase.getEntityId()), medCase);
     }
 
     @Test
@@ -96,7 +139,7 @@ public class CaseServiceTest {
     @Test
     public void testCorrectAnswer_ShouldSetCorrectAnswer_WhenCalled() {
         userLoggedIn = user1;
-        CaseService.correctAnswer(medCase.getEntityId(), String.valueOf(a1));
+        CaseService.correctAnswer(medCase.getEntityId(), a1);
         assertTrue(medCase.isCaseDone());
     }
 
@@ -237,13 +280,27 @@ public class CaseServiceTest {
     @Test
     public void vote_ShouldThrowException_WhenUserNotMember() {
         userLoggedIn = user2;
-        if (userRepo.existsById(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"))) {
-            userRepo.deleteById(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"));
-        }
-        Set<String> knowledges3 = new HashSet<>();
-        knowledges3.add("pediatric emergency medicine");
-        knowledges3.add("hand surgery");
-        User user3 = UserService.createUser(UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2"), new Name("Gandalf"), new Name("Wizardo"), new Email("Gandalf@Wizardo.beard"), new Password("ICastFireBall!"), new Language("all"), new Location("world"), "Gandalf Profile", knowledges3, "The Gray", "The White", "Ainur");
+        //CREATE USER3-----------------------------------------------------------------
+
+        // Check if User3 already exists
+        UUID user3Id = UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2");
+            Set<Knowledges> knowledges3 = new HashSet<>();
+            knowledges3.add(new Knowledges("pediatric emergency medicine"));
+            knowledges3.add(new Knowledges("hand surgery"));
+            List<EducationalTitle> educationalTitles3 = new ArrayList<>();
+            educationalTitles3.add(new EducationalTitle("The Gray"));
+            educationalTitles3.add(new EducationalTitle("The White"));
+            educationalTitles3.add(new EducationalTitle("Ainur"));
+            User user3 = UserService.createUser(user3Id,
+                    new Name("Gandalf"),
+                    new Name("Wizardo"),
+                    new Email("Gandalf@Wizardo.beard"),
+                    new Password("ICastFireBall!"),
+                    new Language("all"),
+                    new Location("world"),
+                    "Gandalf Profile",
+                    knowledges3,
+                    educationalTitles3);
 
         List<Answer> answers = Arrays.asList(a1, a2);
         List<Double> percentages = Arrays.asList(50.0, 50.0);
@@ -264,9 +321,9 @@ public class CaseServiceTest {
     }
     @Test
     public void testCreateCase_ShouldThrowException_WhenNoContentProvided() {
-        Set<String> knowledges = new HashSet<>();
-        knowledges.add("pediatric emergency medicine");
-        knowledges.add("critical care or pain medicine");
+        Set<Knowledges> knowledges = new HashSet<>();
+        knowledges.add(new Knowledges("pediatric emergency medicine"));
+        knowledges.add(new Knowledges("critical care or pain medicine"));
         LinkedHashSet<Answer> answers = new LinkedHashSet<>();
         answers.add(new Answer("Answer 1"));
         answers.add(new Answer("Answer 2"));
@@ -278,9 +335,9 @@ public class CaseServiceTest {
 
     @Test
     public void testCreateCase_ShouldThrowException_WhenNoOwnerProvided() {
-        Set<String> knowledges = new HashSet<>();
-        knowledges.add("pediatric emergency medicine");
-        knowledges.add("critical care or pain medicine");
+        Set<Knowledges> knowledges = new HashSet<>();
+        knowledges.add(new Knowledges("pediatric emergency medicine"));
+        knowledges.add(new Knowledges("critical care or pain medicine"));
         LinkedHashSet<Answer> answers = new LinkedHashSet<>();
         answers.add(new Answer("Answer 1"));
         answers.add(new Answer("Answer 2"));

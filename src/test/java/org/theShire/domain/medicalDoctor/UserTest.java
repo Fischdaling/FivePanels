@@ -9,6 +9,7 @@ import org.theShire.domain.medicalCase.Answer;
 import org.theShire.domain.medicalCase.Case;
 import org.theShire.domain.medicalCase.CaseVote;
 import org.theShire.domain.richType.*;
+import org.theShire.foundation.Knowledges;
 import org.theShire.service.CaseService;
 import org.theShire.service.UserService;
 
@@ -16,6 +17,8 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.theShire.domain.medicalDoctor.UserRelationShip.relationShip;
+import static org.theShire.service.CaseService.caseRepo;
+import static org.theShire.service.UserService.userRepo;
 
 public class UserTest {
     User user1;
@@ -25,16 +28,58 @@ public class UserTest {
 
     @BeforeEach
     void setUp(){
+        userRepo.deleteAll();
+        caseRepo.deleteAll();
         relationShip = new HashMap<>();
-        Set<String> knowledges1 = new HashSet<>();
-        Set<String> knowledges2 = new HashSet<>();
-        knowledges1.add("Test");
-        knowledges1.add("adult cardiothoracic anesthesiology");
-        knowledges2.add("Test");
-        knowledges2.add("adult cardiothoracic anesthesiology");
-        user1 = UserService.createUser(UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91"), new Name("Bilbo"), new Name("Beutlin"), new Email("Bilbo@hobbit.orc"), new Password("VerySafe123"), new Language("Hobbitish"), new Location("Auenland"), "Bilbo Profile", knowledges1, "Fassreiter", "Meister Dieb");
-        user2 = UserService.createUser(UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2"),  new Name("Aragorn"), new Name("Arathorn"), new Email("Aragorn@gondor.orc"), new Password("EvenSaver1234"), new Language("Gondorisch"), new Location("Gondor"), "Aragorn Profile", knowledges2, "Arathorns Sohn", "König von Gondor");
+        //CREATE USER1 -----------------------------------------------------------------------
 
+        // Check if User1 already exists
+        UUID user1Id = UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91");
+        if (userRepo.findByID(user1Id) == null) {
+            Set<Knowledges> knowledges1 = new HashSet<>();
+            knowledges1.add(new Knowledges("Test"));
+            knowledges1.add(new Knowledges("adult cardiothoracic anesthesiology"));
+            List<EducationalTitle> educationalTitles = new ArrayList<>();
+            educationalTitles.add(new EducationalTitle("Fassreiter"));
+            educationalTitles.add(new EducationalTitle("Meister Dieb"));
+            user1 = UserService.createUser(user1Id,
+                    new Name("Bilbo"),
+                    new Name("Beutlin"),
+                    new Email("Bilbo@hobbit.orc"),
+                    new Password("VerySafe123"),
+                    new Language("Hobbitisch"),
+                    new Location("Auenland"),
+                    "Bilbo Profile",
+                    knowledges1,
+                    educationalTitles);
+        } else {
+            user1 = userRepo.findByID(user1Id);
+        }
+
+        //CREATE USER2-----------------------------------------------------------------
+
+        // Check if User2 already exists
+        UUID user2Id = UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2");
+        if (userRepo.findByID(user2Id) == null) {
+            Set<Knowledges> knowledges2 = new HashSet<>();
+            knowledges2.add(new Knowledges("critical care or pain medicine"));
+            knowledges2.add(new Knowledges("pediatric anesthesiology"));
+            List<EducationalTitle> educationalTitles2 = new ArrayList<>();
+            educationalTitles2.add(new EducationalTitle("Arathorns Sohn"));
+            educationalTitles2.add(new EducationalTitle("König von Gondor"));
+            user2 = UserService.createUser(user2Id,
+                    new Name("Aragorn"),
+                    new Name("Arathorn"),
+                    new Email("Aragorn@gondor.orc"),
+                    new Password("EvenSaver1234"),
+                    new Language("Gondorisch"),
+                    new Location("Gondor"),
+                    "Aragorn Profile",
+                    knowledges2,
+                    educationalTitles2);
+        } else {
+            user2 = userRepo.findByID(user2Id);
+        }
         List<Content> contents = new ArrayList<>();
         //add texts
         contents.add(new Content(new ContentText("My First Text")));
@@ -43,9 +88,9 @@ public class UserTest {
         contents.add(new Content(new Media(200, 100, "My First Media", "200x100")));
 
         //Create a Case with user2&user3 as member and user1 as owner
-        Set<String> knowledges4 = new HashSet<>();
-        knowledges4.add("pediatric emergency medicine");
-        knowledges4.add("critical care or pain medicine");
+        Set<Knowledges> knowledges4 = new HashSet<>();
+        knowledges4.add(new Knowledges("pediatric emergency medicine"));
+        knowledges4.add(new Knowledges("critical care or pain medicine"));
         LinkedHashSet<Answer> answers = new LinkedHashSet<>();
         answers.add(new Answer("Answer 1"));
         answers.add(new Answer("Answer 2"));

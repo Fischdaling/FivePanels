@@ -10,6 +10,7 @@ import org.theShire.domain.medicalDoctor.User;
 import org.theShire.domain.messenger.Chat;
 import org.theShire.domain.messenger.Message;
 import org.theShire.domain.richType.*;
+import org.theShire.foundation.Knowledges;
 import org.theShire.presentation.UserPresentation;
 
 import java.util.*;
@@ -68,9 +69,12 @@ public class UniversalService {
         // Check if User1 already exists
         UUID user1Id = UUID.fromString("bf3f660c-0c7f-48f2-bd5d-553d6eff5a91");
         if (userRepo.findByID(user1Id) == null) {
-            Set<String> knowledges1 = new HashSet<>();
-            knowledges1.add("Test");
-            knowledges1.add("adult cardiothoracic anesthesiology");
+            Set<Knowledges> knowledges1 = new HashSet<>();
+            knowledges1.add(new Knowledges("Test"));
+            knowledges1.add(new Knowledges("adult cardiothoracic anesthesiology"));
+            List<EducationalTitle> educationalTitles = new ArrayList<>();
+            educationalTitles.add(new EducationalTitle("Fassreiter"));
+            educationalTitles.add(new EducationalTitle("Meister Dieb"));
             user1 = UserService.createUser(user1Id,
                     new Name("Bilbo"),
                     new Name("Beutlin"),
@@ -80,8 +84,7 @@ public class UniversalService {
                     new Location("Auenland"),
                     "Bilbo Profile",
                     knowledges1,
-                    "Fassreiter",
-                    "Meister Dieb");
+                    educationalTitles);
         } else {
             user1 = userRepo.findByID(user1Id);
         }
@@ -91,9 +94,12 @@ public class UniversalService {
         // Check if User2 already exists
         UUID user2Id = UUID.fromString("ba0a64e5-5fc9-4768-96d2-ad21df6e94c2");
         if (userRepo.findByID(user2Id) == null) {
-            Set<String> knowledges2 = new HashSet<>();
-            knowledges2.add("critical care or pain medicine");
-            knowledges2.add("pediatric anesthesiology");
+            Set<Knowledges> knowledges2 = new HashSet<>();
+            knowledges2.add(new Knowledges("critical care or pain medicine"));
+            knowledges2.add(new Knowledges("pediatric anesthesiology"));
+            List<EducationalTitle> educationalTitles2 = new ArrayList<>();
+            educationalTitles2.add(new EducationalTitle("Arathorns Sohn"));
+            educationalTitles2.add(new EducationalTitle("König von Gondor"));
             user2 = UserService.createUser(user2Id,
                     new Name("Aragorn"),
                     new Name("Arathorn"),
@@ -103,8 +109,7 @@ public class UniversalService {
                     new Location("Gondor"),
                     "Aragorn Profile",
                     knowledges2,
-                    "Arathorns Sohn",
-                    "König von Gondor");
+                    educationalTitles2);
         } else {
             user2 = userRepo.findByID(user2Id);
         }
@@ -114,9 +119,13 @@ public class UniversalService {
         // Check if User3 already exists
         UUID user3Id = UUID.fromString("c3fc1109-be28-4bdc-8ca0-841e1fa4aee2");
         if (userRepo.findByID(user3Id) == null) {
-            Set<String> knowledges3 = new HashSet<>();
-            knowledges3.add("pediatric emergency medicine");
-            knowledges3.add("hand surgery");
+            Set<Knowledges> knowledges3 = new HashSet<>();
+            knowledges3.add(new Knowledges("pediatric emergency medicine"));
+            knowledges3.add(new Knowledges("hand surgery"));
+            List<EducationalTitle> educationalTitles3 = new ArrayList<>();
+            educationalTitles3.add(new EducationalTitle("The Gray"));
+            educationalTitles3.add(new EducationalTitle("The White"));
+            educationalTitles3.add(new EducationalTitle("Ainur"));
             user3 = UserService.createUser(user3Id,
                     new Name("Gandalf"),
                     new Name("Wizardo"),
@@ -126,8 +135,7 @@ public class UniversalService {
                     new Location("world"),
                     "Gandalf Profile",
                     knowledges3,
-                    "The Gray",
-                    "The White", "Ainur");
+                    educationalTitles3);
         } else {
             user3 = userRepo.findByID(user3Id);
         }
@@ -150,12 +158,12 @@ public class UniversalService {
         // Add Media
         contents.add(new Content(new Media(200, 100, "My First Media", "200x100")));
 
-        // Check if the case already exists //TODO CASE IS CHANGING!?!?
+        // Check if the case already exists
         UUID caseId = UUID.fromString("5a563273-bed3-4e8c-9c68-6a0229c11ce7");
         if (caseRepo.findByID(caseId) == null) {
-            Set<String> knowledges4 = new HashSet<>();
-            knowledges4.add("pediatric emergency medicine");
-            knowledges4.add("critical care or pain medicine");
+            Set<Knowledges> knowledges4 = new HashSet<>();
+            knowledges4.add(new Knowledges("pediatric emergency medicine"));
+            knowledges4.add(new Knowledges("critical care or pain medicine"));
             LinkedHashSet<Answer> answers = new LinkedHashSet<>();
             Answer a1 = new Answer("Cancer");
             Answer a2 = new Answer("Ebola");

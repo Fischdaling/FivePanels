@@ -93,14 +93,14 @@ public class UserService {
 
 
     public static User createUser(UUID uuid, Name firstname, Name lastname, Email email, Password
-            password, Language language, Location location, String picture, Set<String> specialization, String... educationalTitle) {
+            password, Language language, Location location, String picture, Set<Knowledges> specialization, List<EducationalTitle> educationalTitle) {
         if (uuid == null) {
             uuid = UUID.randomUUID();
         }
 
-        List<EducationalTitle> titles = Arrays.stream(educationalTitle).map(EducationalTitle::new).toList();
+        List<EducationalTitle> titles = educationalTitle;
         Media media = new Media(500, 400, picture, "500x400");
-        Set<Knowledges> knowledges = specialization.stream().map(Knowledges::new).collect(Collectors.toSet());
+        Set<Knowledges> knowledges = specialization;
         UserProfile profile = updateProfile(language, location, media, firstname, lastname, titles);
         User user = new User(uuid, password, email, profile, knowledges);
         userRepo.save(user);
@@ -108,8 +108,8 @@ public class UserService {
     }
 
 
-    public static User login(String email, String password) {
-        Optional<User> userOpt = userRepo.findByEmail(new Email(email));
+    public static User login(Email email, String password) {
+        Optional<User> userOpt = userRepo.findByEmail(email);
 
         isTrue(userOpt.isPresent(), () -> "User not found.", exTypeUser);
         User user = userOpt.get();
