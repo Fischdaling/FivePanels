@@ -58,67 +58,29 @@ public class Main {
 
         int choice = scanner.nextInt();
         scanner.nextLine();
-
         switch (choice) {
-            case 1:
-                UserPresentation.addUser();
-                break;
-            case 2:
-                CasePresentation.addCase();
-                break;
-            case 3:
-                ChatPresentation.openChat();
-                break;
-            case 4:
-                ScannerUtil.findAll();
-                break;
-            case 5:
-                UserPresentation.findByName();
-                break;
-            case 6:
-                CasePresentation.findCaseById();
-                break;
-            case 7:
-                UserPresentation.deleteUserById();
-                break;
-            case 8:
-                CasePresentation.deleteCaseById();
-                break;
-            case 9:
-                UserPresentation.relationCommands();
-                break;
-            case 10:
-                //TODO MODERN SWWITCH SYNTAX
-                CasePresentation.vote();
-                break;
-            case 11:
-                CasePresentation.likeCase();
-                break;
-            case 12:
-                UniversalService.saveEntry();
-                break;
-            case 13:
-                UniversalService.loadEntry();
-                break;
-            case 14:
-                UserPresentation.changeProfile();
-                break;
-            case 15:
-                CasePresentation.correctAnswer();
-                break;
-            case 16:
-                CasePresentation.removeMember();
-                break;
-            case 17:
-                CasePresentation.addMember();
-                break;
-            case 0:
+            case 1 -> UserPresentation.addUser();
+            case 2 -> CasePresentation.addCase();
+            case 3 -> ChatPresentation.openChat();
+            case 4 -> ScannerUtil.findAll();
+            case 5 -> UserPresentation.findByName();
+            case 6 -> CasePresentation.findCaseById();
+            case 7 -> UserPresentation.deleteUserById();
+            case 8 -> CasePresentation.deleteCaseById();
+            case 9 -> UserPresentation.relationCommands();
+            case 10 -> CasePresentation.vote();
+            case 11 -> CasePresentation.likeCase();
+            case 12 -> UniversalService.saveEntry();
+            case 13 -> UniversalService.loadEntry();
+            case 14 -> UserPresentation.changeProfile();
+            case 15 -> CasePresentation.correctAnswer();
+            case 16 -> CasePresentation.removeMember();
+            case 17 -> CasePresentation.addMember();
+            case 0 -> {
                 System.out.println("Goodbye");
                 userLoggedIn = UserPresentation.init();
-                break;
-            default:
-                System.out.println("Invalid choice");
-
+            }
+            default -> System.out.println("Invalid choice");
         }
     }
 }
